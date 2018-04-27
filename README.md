@@ -12,21 +12,21 @@
 
 ## Database
 
-    * Users
-        * belongsToMany Groups
-        * hasMany Permissions
-        * hasMany Posts
-    * Groups
-        * hasMany Users
-        * hasMany Permissions
-    * Permissions
-        * belongsToMany Users
-        * belongsToMany Users
-        * hasOne PermissionMode
-        * hasMany Posts
-    * Posts
-        * belongsTo Users
-        * hasMany Edits
-        * belongsToMany Permisssons
-    * PermissionModes
-        * belongsToMany Permissons
+    *Users
+        *belongsToMany Groups
+        *hasMany Permissions
+        *hasMany Posts
+    *Groups
+        *hasMany Users
+        *hasMany Permissions
+    *Permissions
+       * belongsToMany Users
+        *belongsToMany Users
+        *hasOne PermissionMode
+        *hasMany Posts
+    *Posts
+        *belongsTo Users
+        *hasMany Edits
+        *belongsToMany Permisssons
+    *PermissionModes
+        *belongsToMany Permissons
