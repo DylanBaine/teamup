@@ -1,17 +1,11 @@
 # Team Up 
-
-## Features
-    
+## Features    
     * Add Users
-
     * Add groups and assign users to groups
-
     * Add Doc pages (posts)
-
     * Manage what docs users can and cant see with permissons
 
 ## Database
-
     * Users
         * belongsToMany Groups
         * hasMany Permissions
