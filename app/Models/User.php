@@ -9,21 +9,29 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    public $with = ['groups', 'permissions', 'posts', 'edits', 'files'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $fillable = ['name', 'email', 'password'];
+
+    protected $hidden = ['password', 'remember_token'];
+
+    public function groups(){
+        return $this->belongsToMany(Models\Group::class);
+    }
+
+    public function permissions(){
+        return $this->hasMany(Models\Permission::class);
+    }
+
+    public function posts(){
+        return $this->hasMany(Models\Post::class);
+    }
+
+    public function edits(){
+        return $this->belongsTo(Models\Edit::class);
+    }
+
+    public function files(){
+        return $this->hasMany(Models\File::class);
+    }
 }

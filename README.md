@@ -24,11 +24,13 @@
         *belongsToMany Permissions
         *belongsTo Users
         *hasMany Edits
-        *belongsToMany Permisssons
+        *hasOne PostType
     *Edits
         *hasOne Users
         *belongsTo Posts
     *Files
         *belongsTo Users
         *belongsTo Groups
+    *PostTypes
+        *belongsToMany Posts
 
