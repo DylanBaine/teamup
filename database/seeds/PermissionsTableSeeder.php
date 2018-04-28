@@ -12,19 +12,20 @@ class PermissionsTableSeeder extends Seeder
     public function run()
     {
         DB::table('permissions')->insert([
-            'mode' => 'create'
+            'mode' => 'create',
         ]);
 
         DB::table('permissions')->insert([
-            'mode' => 'read'
+            'mode' => 'read',
         ]);
 
         DB::table('permissions')->insert([
-            'mode' => 'update'
+            'mode' => 'update',
         ]);
 
         DB::table('permissions')->insert([
-            'mode' => 'delete'
+            'mode' => 'delete',
         ]);
+        
     }
 }

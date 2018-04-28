@@ -1,29 +1,31 @@
 <?php
-
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    
-    public $with = ['permissions', 'users', 'edits'];
 
+    public $with = ['type'];
     protected $fillable = ['name', 'content', 'user_id'];
 
-    public function permissions(){
-        return $this->belongsToMany(Models\Permission::class);
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
     }
 
-    public function users(){
-        return $this->belongsToMany(Models\User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
-    public function edits(){
-        return $this->hasMany(Models\Edit::class);
+    public function edits()
+    {
+        return $this->hasMany(Edit::class);
     }
 
-    public function type(){
-        return $this->hasOne(Models\PostType::class);
+    public function type()
+    {
+        return $this->belongsTo(PostType::class);
     }
 }

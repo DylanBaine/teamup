@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class Posts extends Migration
 {
@@ -17,8 +17,8 @@ class Posts extends Migration
             $table->increments('id');
             $table->string('name');
             $table->longtext('content');
-            $table->integer('user_id');
-            $table->integer('post_type_id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('type_id');
             $table->timestamps();
         });
     }

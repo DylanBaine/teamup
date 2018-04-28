@@ -6,7 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostType extends Model
 {
-    public function posts(){
-        return $this->belongsToMany(Models\Post::class);
+    protected $fillable = ['name'];
+
+    public function posts()
+    {
+        return $this->hasMany(Models\Post::class);
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEditUser extends Migration
+class CreateCacheTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateEditUser extends Migration
      */
     public function up()
     {
-        Schema::create('edit_user', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+        Schema::create('cache', function (Blueprint $table) {
+            $table->string('key')->unique();
+            $table->mediumText('value');
+            $table->integer('expiration');
         });
     }
 
@@ -26,6 +27,6 @@ class CreateEditUser extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('edit_user');
+        Schema::dropIfExists('cache');
     }
 }

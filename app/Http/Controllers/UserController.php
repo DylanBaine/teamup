@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use Illuminate\Http\Request;
+use \App\Models\User;
+use \Auth;
 
-class PostController extends Controller
+class UserController extends Controller
 {
 
-    protected $posts;
+    protected $allUsers, $authUser;
     public function __construct()
     {
-
+        $this->authUser = Auth::user();
     }
     /**
      * Display a listing of the resource.
@@ -20,7 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::get();
+        return User::with(['permissions', 'posts'])->get();
     }
 
     /**
@@ -52,7 +53,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return Post::find($id);
+        return User::with(['posts', 'permissions'])->find($id);
     }
 
     /**

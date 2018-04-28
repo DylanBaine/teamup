@@ -1,20 +1,25 @@
 <?php
-
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
-    public $with = ['users', 'posts'];
-
+    public $with = ['posts', 'postTypes'];
     protected $fillable = ['mode'];
 
-    public function users(){
-        return $this->belongsToMany(Models\User::class);
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 
-    public function posts(){
-        return $this->hasMany(Models\Post::class);
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class);
+    }
+
+    public function postTypes()
+    {
+        return $this->belongsToMany(PostType::class);
     }
 }

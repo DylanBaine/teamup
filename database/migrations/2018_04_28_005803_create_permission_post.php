@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePermissionPost extends Migration
 {
@@ -15,9 +15,12 @@ class CreatePermissionPost extends Migration
     {
         Schema::create('permission_post', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('permission_id');
-            $table->integer('post_id');
+            $table->unsignedInteger('permission_id');
+            $table->unsignedInteger('post_id');
             $table->timestamps();
+
+            $table->foreign('permission_id')->references('id')->on('permissions');
+            $table->foreign('post_id')->references('id')->on('posts');
         });
     }
 
