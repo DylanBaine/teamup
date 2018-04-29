@@ -33,7 +33,7 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        $this->uploader->storeFile($request);
+        $this->uploader->storeFile($request->file);
         $this->files->create([
             'name' => $this->uplader->getFileName(),
             'slug' => $this->uploader->getFileSlug(),

@@ -2,8 +2,9 @@
 ## Features    
     *Add Users
     *Add groups and assign users to groups
-    *Add Doc pages (posts)
-    *Manage what docs users can and can't see with permissons
+    *Add Posts
+    *Manage what posts and post types that a user can edit, update, and delete.
+    *Mange what posts types a user can create.
     *Add files to share with posts
 
 ## Database
