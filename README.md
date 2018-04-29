@@ -1,49 +1,18 @@
-# Team Up 
-## Features
-
-* Add Users
-
-* Add groups and assign users to groups
-
-* Add Posts
-
-* Manage what posts and post types that a user can edit, update, and delete.
-
-* Mange what posts types a user can create.
-
-* Add files to share with posts
-
-## Database
-
-* Users
-    * belongsToMany Groups
-    * hasMany Permissions
-    * hasMany Posts
-    * belongsTo Edits
-    * hasMany Files
-
-* Groups
-    * hasMany Users
-    * hasMany Permissions
-    * hasMany Files
-
-* Permissions
-    * belongsToMany Users
-    * hasMany Posts
-
-* Posts
-    * belongsToMany Permissions
-    * belongsTo Users
-    * hasMany Edits
-    * hasOne PostType
-
-* Edits
-    * hasOne Users
-    * belongsTo Posts
-
-* Files
-    * belongsTo Users
-    * belongsTo Groups
-
-* PostTypes
-    * belongsToMany Posts
+# TeamUp (in development)
+An app for agile teams!
+## What's Cookin'
+***
+### Features
+* Self Hosted
+    * Download the source files, read the documentation, and you're good to go!
+* Groups and Permissions
+    * Create custom groups with permissions so that you can control who sees what.
+* Write Atricles, Documentation, and More!
+    * Create custom post types that fit your team.
+    * Choose which users or groups can see specific posts and post types.
+    * Attach files.
+    * Keep track of the changes to files and posts.
+* Create Tasks and manage Sprints.
+    * Create custom tasks! (Support Tickets, New Feature Developments, etc...)
+    * Assign Tasks to users or groups.
+    * Keep track of the tasks that you, or your team, is working on.
