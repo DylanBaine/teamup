@@ -3,9 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Group;
 
 class GroupController extends Controller
 {
+
+    public $groups;
+
+    public function __construct(){
+        $this->groups = Group::all();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +20,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        //
+        return $this->groups;
     }
 
     /**
@@ -23,9 +30,11 @@ class GroupController extends Controller
      */
     public function create()
     {
-        //
+        $this->groups->create([
+            'name'=>$request->name
+        ]);
     }
-
+            
     /**
      * Store a newly created resource in storage.
      *
@@ -34,7 +43,9 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->groups->create([
+            'name'=>$request->name,
+        ]);
     }
 
     /**
@@ -45,18 +56,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $this->groups->find($id);
     }
 
     /**
@@ -68,7 +68,9 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->groups->find($id)->update([
+            'name'=>$request->name
+        ]);
     }
 
     /**
@@ -79,6 +81,6 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->groups->delete($id);
     }
 }

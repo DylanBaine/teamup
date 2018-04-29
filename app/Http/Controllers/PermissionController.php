@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permission;
 use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
+
+    public $permissions;
+    public function __construct()
+    {
+        $this->permission = Permission::all();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,17 +20,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->permissons;
     }
 
     /**
@@ -34,7 +31,9 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->permissions->create([
+            'mode' => $request->mode,
+        ]);
     }
 
     /**
@@ -45,18 +44,7 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $this->permissions->find($id);
     }
 
     /**
@@ -68,7 +56,9 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->permissions->find($id)->update([
+            'mode' => $request->mode,
+        ]);
     }
 
     /**
@@ -79,6 +69,6 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->permissions->delete($id);
     }
 }

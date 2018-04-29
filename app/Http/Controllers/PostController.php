@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\TEAMUP\UpdatePost;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
 
-    protected $posts;
+    protected $files, $updatePost;
+
     public function __construct()
     {
-
+        $this->updatePost = new UpdatePost;
+        $this->posts = Post::all();
     }
     /**
      * Display a listing of the resource.
@@ -20,17 +23,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->posts;
     }
 
     /**
@@ -41,7 +34,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->posts->create([
+            'name' => $request->name,
+            'content' => $request->content,
+            'user_id' => Auth::user()->id,
+            'type_id'->$request->type,
+        ]);
     }
 
     /**
@@ -52,18 +50,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return Post::find($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $this->posts->find($id);
     }
 
     /**
@@ -75,7 +62,7 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->updatePost($request, $id);
     }
 
     /**
@@ -86,6 +73,6 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->posts->delete($id);
     }
 }

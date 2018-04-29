@@ -15,11 +15,11 @@ class CreatePermissionPostType extends Migration
     {
         Schema::create('permission_post_type', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('post_type_id');
+            $table->unsignedInteger('type_id');
             $table->unsignedInteger('permission_id');
             $table->timestamps();
 
-            $table->foreign('post_type_id')->references('id')->on('post_types');
+            $table->foreign('type_id')->references('id')->on('types');
             $table->foreign('permission_id')->references('id')->on('permissions');
         });
     }

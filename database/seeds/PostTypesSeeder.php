@@ -11,10 +11,10 @@ class PostTypesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('post_types')->insert([
+        DB::table('types')->insert([
             'name' => 'Documentation',
         ]);
-        DB::table('post_types')->insert([
+        DB::table('types')->insert([
             'name' => 'Announcement',
         ]);
 

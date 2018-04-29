@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Type;
 use Illuminate\Http\Request;
 
-class PostTypeController extends Controller
+class TypeController extends Controller
 {
+
+    protected $types;
+    public function __construct()
+    {
+        $this->types = Type::all();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,17 +20,7 @@ class PostTypeController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->types;
     }
 
     /**
@@ -34,7 +31,9 @@ class PostTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->types->create([
+            'name' => $request->name,
+        ]);
     }
 
     /**
@@ -45,18 +44,7 @@ class PostTypeController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $this->types->find($id);
     }
 
     /**
@@ -68,7 +56,9 @@ class PostTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->types->find($id)->update([
+            'name' => $request->name,
+        ]);
     }
 
     /**
@@ -79,6 +69,6 @@ class PostTypeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->types->delete($id);
     }
 }

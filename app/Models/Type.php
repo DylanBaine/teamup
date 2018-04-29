@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PostType extends Model
+class Type extends Model
 {
     protected $fillable = ['name'];
 

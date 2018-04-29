@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
+
+    protected $files, $uploader;
+
+    public function __construct()
+    {
+        $this->uploader = new FileUploader;
+        $this->files = File::all();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,17 +22,7 @@ class FileController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->files;
     }
 
     /**
@@ -34,7 +33,11 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->uploader->storeFile($request);
+        $this->files->create([
+            'name' => $this->uplader->getFileName(),
+            'slug' => $this->uploader->getFileSlug(),
+        ]);
     }
 
     /**
@@ -45,18 +48,7 @@ class FileController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $this->files - find($id);
     }
 
     /**
@@ -68,7 +60,12 @@ class FileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->uploader->storeFile($request->file);
+        $this->files->find($id)->update([
+            'name' => $this->uplader->getFileName(),
+            'slug' => $this->uploader->getFileSlug(),
+        ]);
+
     }
 
     /**
@@ -79,6 +76,6 @@ class FileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->files->delte($id);
     }
 }

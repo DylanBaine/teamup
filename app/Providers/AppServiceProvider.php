@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\ServiceProvider;
 use Schema;
 
@@ -14,6 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        User::observe(new \App\Observers\UserObserver);
+        Post::observe(new \App\Observers\PostObserver);
         Schema::defaultStringLength(191);
     }
 

@@ -20,6 +20,6 @@ class Permission extends Model
 
     public function postTypes()
     {
-        return $this->belongsToMany(PostType::class);
+        return $this->belongsToMany(Type::class, 'permission_post_type');
     }
 }

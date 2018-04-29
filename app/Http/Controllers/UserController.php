@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Models\User;
-use \Auth;
 
 class UserController extends Controller
 {
 
-    protected $allUsers, $authUser;
+    protected $allUsers;
     public function __construct()
     {
-        $this->authUser = Auth::user();
+        $this->users = User::all();
     }
     /**
      * Display a listing of the resource.
@@ -21,30 +20,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::with(['permissions', 'posts'])->get();
-    }
+        return $this->users->with(['permissions', 'posts'])->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
     /**
      * Display the specified resource.
      *
@@ -53,18 +31,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::with(['posts', 'permissions'])->find($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $this->users->with(['posts', 'permissions'])->find($id);
     }
 
     /**
@@ -76,7 +43,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->users->find($id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
     }
 
     /**
@@ -87,6 +58,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->users->destroy($id);
     }
 }
