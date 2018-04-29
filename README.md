@@ -41,9 +41,9 @@
     * hasOne Users
     * belongsTo Posts
 
-*Files
-    *belongsTo Users
-    *belongsTo Groups
+* Files
+    * belongsTo Users
+    * belongsTo Groups
 
-*PostTypes
+* PostTypes
     * belongsToMany Posts
