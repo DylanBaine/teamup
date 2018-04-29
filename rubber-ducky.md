@@ -1,17 +1,23 @@
 # What to do to TeamUp 
 ## Features
 
-* Add Users 
+* Manage Users and Groups
+    * Add groups and assign users to groups.
+    * Assign Permissions.
+    * CRUD
 
-* Add groups and assign users to groups
+* Posts
+    * CRUD
+    * Manage which groups or users can Read, Update, or Delete Posts and Post Types.
 
-* Add Posts
+* Files
+    * CRUD
+    * Manage which groups or users can Read, Update, or Delete Files.
 
-* Manage what posts and post types that a user can edit, update, and delete.
-
-* Mange what posts types a user can create.
-
-* Add files to share with posts
+* Tasks
+    * CRUD
+    * Assign to Users or Groups
+    * Manage which groups or users can Read, Update, or Delete Tasks.
 
 ## Database
 
@@ -47,3 +53,7 @@
 
 * PostTypes &#10004;
     * belongsToMany Posts &#10003;
+
+* Tasts
+    * belongsToMany Users
+    * belongsToMany Groups
