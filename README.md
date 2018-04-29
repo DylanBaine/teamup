@@ -1,49 +1,49 @@
 # Team Up 
 ## Features
 
-    * Add Users
+* Add Users
 
-    * Add groups and assign users to groups
+* Add groups and assign users to groups
 
-    * Add Posts
+* Add Posts
 
-    * Manage what posts and post types that a user can edit, update, and delete.
+* Manage what posts and post types that a user can edit, update, and delete.
 
-    * Mange what posts types a user can create.
-    
-    * Add files to share with posts
+* Mange what posts types a user can create.
+
+* Add files to share with posts
 
 ## Database
 
-    * Users
-        * belongsToMany Groups
-        * hasMany Permissions
-        * hasMany Posts
-        * belongsTo Edits
-        * hasMany Files
+* Users
+    * belongsToMany Groups
+    * hasMany Permissions
+    * hasMany Posts
+    * belongsTo Edits
+    * hasMany Files
 
-    * Groups
-        * hasMany Users
-        * hasMany Permissions
-        * hasMany Files
+* Groups
+    * hasMany Users
+    * hasMany Permissions
+    * hasMany Files
 
-    * Permissions
-        * belongsToMany Users
-        * hasMany Posts
+* Permissions
+    * belongsToMany Users
+    * hasMany Posts
 
-    * Posts
-        * belongsToMany Permissions
-        * belongsTo Users
-        * hasMany Edits
-        * hasOne PostType
+* Posts
+    * belongsToMany Permissions
+    * belongsTo Users
+    * hasMany Edits
+    * hasOne PostType
 
-    * Edits
-        * hasOne Users
-        * belongsTo Posts
+* Edits
+    * hasOne Users
+    * belongsTo Posts
 
-    *Files
-        *belongsTo Users
-        *belongsTo Groups
+*Files
+    *belongsTo Users
+    *belongsTo Groups
 
-    *PostTypes
-        * belongsToMany Posts
+*PostTypes
+    * belongsToMany Posts
