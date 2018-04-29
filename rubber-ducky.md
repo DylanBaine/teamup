@@ -1,7 +1,7 @@
-# Team Up 
+# What to do to TeamUp 
 ## Features
 
-* Add Users
+* Add Users 
 
 * Add groups and assign users to groups
 
@@ -15,35 +15,35 @@
 
 ## Database
 
-* Users
-    * belongsToMany Groups
-    * hasMany Permissions
-    * hasMany Posts
-    * belongsTo Edits
-    * hasMany Files
+* Users &#10004;
+    * belongsToMany Groups &#10003;
+    * hasMany Permissions &#10003;
+    * hasMany Posts &#10003;
+    * belongsTo Edits &#10003;
+    * hasMany Files &#10003;
 
-* Groups
-    * hasMany Users
-    * hasMany Permissions
-    * hasMany Files
+* Groups &#10004;
+    * hasMany Users &#10003;
+    * hasMany Permissions &#10003;
+    * hasMany Files &#10003;
 
-* Permissions
-    * belongsToMany Users
-    * hasMany Posts
+* Permissions &#10004;
+    * belongsToMany Users &#10003;
+    * hasMany Posts &#10003;
 
-* Posts
-    * belongsToMany Permissions
-    * belongsTo Users
-    * hasMany Edits
-    * hasOne PostType
+* Posts &#10004;
+    * belongsToMany Permissions &#10003;
+    * belongsTo Users &#10003;
+    * hasMany Edits &#10003;
+    * hasOne PostType &#10003;
 
-* Edits
-    * hasOne Users
-    * belongsTo Posts
+* Edits &#10004;
+    * hasOne Users &#10003;
+    * belongsTo Posts &#10003;
 
-* Files
-    * belongsTo Users
-    * belongsTo Groups
+* Files &#10004;
+    * belongsTo Users &#10003;
+    * belongsTo Groups &#10003;
 
-* PostTypes
-    * belongsToMany Posts
+* PostTypes &#10004;
+    * belongsToMany Posts &#10003;
