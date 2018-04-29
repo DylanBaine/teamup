@@ -12,6 +12,7 @@ An app for agile teams!
     * Attach files.
     * Keep track of the changes to files and posts.
 * Create Tasks and manage Sprints.
+    * Control what groups or users can do with tasks.
     * Create custom tasks! (Support Tickets, New Feature Developments, etc...)
     * Assign Tasks to users or groups.
     * Keep track of the tasks that you, or your team, is working on.
