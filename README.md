@@ -34,4 +34,3 @@
         *belongsTo Groups
     *PostTypes
         * belongsToMany Posts
-
