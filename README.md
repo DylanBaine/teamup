@@ -1,5 +1,6 @@
 # Team Up 
-## Features    
+## Features
+
     * Add Users
     * Add groups and assign users to groups
     * Add Posts
@@ -8,6 +9,7 @@
     * Add files to share with posts
 
 ## Database
+
     * Users
         * belongsToMany Groups
         * hasMany Permissions
