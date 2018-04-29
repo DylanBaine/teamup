@@ -1,7 +1,6 @@
 # TeamUp (in development)
 An app for agile teams!
 ## What's Cookin'
-***
 ### Features
 * Self Hosted
     * Download the source files, read the documentation, and you're good to go!
