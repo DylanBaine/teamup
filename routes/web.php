@@ -18,3 +18,8 @@ Route::get('/', function () {
 Route::resource('users', 'UserController');
 Route::resource('posts', 'PostController');
 Route::resource('types', 'TypeController');
+Route::resource('files', 'FileController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

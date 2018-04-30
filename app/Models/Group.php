@@ -19,4 +19,5 @@ class Group extends Model
     public function files(){
         return $this->hasMany(Models\File::class);
     }
+
 }

@@ -1,95 +1,80 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
+@extends('layouts.app')
+    @section('content')
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-4">
+                    <form action="files" method="POST" enctype="multipart/form-data">
+                        {{csrf_field()}}
+                        <div class="form-group">
+                            <label for="filename">
+                                File Name
+                            </label>
+                            <input type="text" id="filename" name="file_name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="file">
+                                File
+                            </label>
+                            <input type="file" id="file" name="file" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                Save
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div class="col-md-2">
+                <ul class="navbar-nav">
+                    @foreach($fileTypes as $link)
+                        <li>
+                            @if($link->files->count())
+                                <a class="nav-link ml-auto" href="#{{$link->slug}}">{{$link->name}}</a>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
                 </div>
             </div>
+            @if(isset($fileTypes))
+                <div class="text-center">
+                    @foreach($fileTypes as $type)
+                        @if($type->files->count())
+                            <section id="{{$type->slug}}" class="file-collection">
+                                <header>
+                                    <h1>{{$type->name}}</h1>
+                                </header>
+                                <div class="row">
+                                    @foreach($type->files as $file)
+                                        <div class="col-md-3">
+                                            @if($type->name == 'Images')
+                                                <a href="{{$file->slug}}" class="nav-link">
+                                                    <img width="100%" src="{{$file->slug}}" alt="{{$file->name}}">
+                                                </a>
+                                                <form action="{{url('files/'.$file->id)}}" method="POST">
+                                                    {{csrf_field()}}
+                                                    {{method_field('delete')}}
+                                                    <button class="btn btn-danger btn-block">Delete</button>
+                                                </form>
+                                            @else
+                                                <div class="text-center card">
+                                                    <h3>{{$file->name}}</h3>
+                                                    <a href="{{$file->slug}}" download="{{$file->name}}" class="btn btn-success btn-block">Download</a>
+                                                    <form action="{{url('files/'.$file->id)}}" method="POST">
+                                                        {{csrf_field()}}
+                                                        {{method_field('delete')}}
+                                                        <button class="btn btn-danger btn-block">Delete</button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </section>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
         </div>
-    </body>
-</html>
+    @endsection

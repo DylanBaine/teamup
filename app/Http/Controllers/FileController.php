@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
+use App\Models\MimeType;
+use App\TEAMUP\FileUpload;
+use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
 
     protected $files, $uploader;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->uploader = new FileUploader;
+        $this->uploader = new FileUpload($request);
         $this->files = File::all();
     }
     /**
@@ -22,7 +26,10 @@ class FileController extends Controller
      */
     public function index()
     {
-        return $this->files;
+        $fileTypes = MimeType::with(['files' => function ($files) {
+            $files->where('user_id', Auth::user()->id);
+        }])->get();
+        return view('welcome', compact('fileTypes'));
     }
 
     /**
@@ -33,11 +40,18 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        $this->uploader->storeFile($request->file);
-        $this->files->create([
-            'name' => $this->uplader->getFileName(),
-            'slug' => $this->uploader->getFileSlug(),
+        $uploader = $this->uploader;
+        $uploader->storeFile();
+        $file = Auth::user()->files()->create([
+            'name' => $uploader->getFileName(),
+            'slug' => $uploader->getFileSlug(),
+            'hash_name' => $uploader->getFileHashName(),
         ]);
+        MimeType::firstOrCreate([
+            'name' => $uploader->getFileMimeType(),
+            'slug' => str_slug($uploader->getFileMimeType()),
+        ])->files()->save($file);
+        return redirect()->back();
     }
 
     /**
@@ -48,7 +62,7 @@ class FileController extends Controller
      */
     public function show($id)
     {
-        return $this->files - find($id);
+        return $this->files->find($id);
     }
 
     /**
@@ -60,12 +74,13 @@ class FileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->uploader->storeFile($request->file);
+        $uploader = $this->uploader;
+        $this->uploader->storeFile();
         $this->files->find($id)->update([
-            'name' => $this->uplader->getFileName(),
-            'slug' => $this->uploader->getFileSlug(),
+            'name' => $uploader->getFileName(),
+            'slug' => $uploader->getFileSlug(),
+            'hash_name' => $uploader->getFileHashName(),
         ]);
-
     }
 
     /**
@@ -76,6 +91,9 @@ class FileController extends Controller
      */
     public function destroy($id)
     {
-        $this->files->delte($id);
+        $file = $this->files->find($id);
+        Storage::disk('public')->delete('files/' . $file->hash_name);
+        $file->delete();
+        return redirect()->back();
     }
 }
