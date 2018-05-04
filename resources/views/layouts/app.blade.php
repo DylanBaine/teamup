@@ -21,9 +21,6 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <style>
-        body{
-            min-height: 200vh;
-        }
         .file-collection{
             padding: 20px 0;
         }
@@ -52,6 +49,22 @@
         }
         .file-collection:nth-last-of-type(even) a{
             border: solid 1px white;
+        }
+        .pos-ref{
+            position: relative;
+        }
+        .overflowable{
+            position: absolute;
+            top: 0;
+            height: 80vh;
+            overflow: auto;
+        }
+        .overflowable .card{
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .padded{
+            padding: 10px;
         }
     </style>
 </head>

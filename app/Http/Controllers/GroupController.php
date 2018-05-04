@@ -3,16 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\User;
+//use App\TEAMUP\AssertIsSet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
 
-    public $groups;
+    private $groups, $assertDB, $users;
 
     public function __construct()
     {
         $this->groups = Group::all();
+        //$this->assertDb = new AssertIsSet('groups');
+        $this->users = User::all();
+    }
+
+    public function addUser(Request $request, $user)
+    {
+        $group = Group::find($request->group);
+        $user = User::find($user);
+        $group->users()->save($user);
+        return redirect()->back();
+    }
+
+    public function removeUser($group, $user)
+    {
+        DB::table('group_user')->where('user_id', $user)->where('group_id', $group)->delete();
+        return redirect()->back();
     }
     /**
      * Display a listing of the resource.
@@ -21,7 +40,9 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return $this->groups;
+        $groups = $this->groups;
+        $users = $this->users;
+        return view('groups.index', compact('groups', 'users'));
     }
 
     /**
@@ -32,9 +53,11 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $this->groups->create([
+        Group::create([
             'name' => $request->name,
         ]);
+        //return $this->assertDb->has('id', $group->id);
+        return redirect()->back();
     }
 
     /**
@@ -45,7 +68,8 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        return $this->groups->find($id);
+        $group = $this->groups->find($id);
+        return view('groups.show', compact('group'));
     }
 
     /**

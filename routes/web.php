@@ -19,6 +19,9 @@ Route::resource('users', 'UserController');
 Route::resource('posts', 'PostController');
 Route::resource('types', 'TypeController');
 Route::resource('files', 'FileController');
+Route::resource('groups', 'GroupController');
+Route::post('groups/manage/users/{user}', 'GroupController@addUser');
+Route::delete('groups/{group}/remove/{user}', 'GroupController@removeUser');
 
 Auth::routes();
 

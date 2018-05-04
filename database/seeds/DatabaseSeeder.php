@@ -11,12 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //$this->call(UsersSeeder::class);
+        $this->call(UsersSeeder::class);
+        $this->call(GroupsSeeder::class);
         $this->call(PermissionsTableSeeder::class);
         $this->call(PostTypesSeeder::class);
-        factory(App\Models\User::class, 1)->create([
-            'name'=>'Dylan',
-            'email'=>'dylan.baine@yahoo.com'
-        ]);
     }
 }

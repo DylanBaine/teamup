@@ -29,7 +29,7 @@ class FileController extends Controller
         $fileTypes = MimeType::with(['files' => function ($files) {
             $files->where('user_id', Auth::user()->id);
         }])->get();
-        return view('welcome', compact('fileTypes'));
+        return view('files.index', compact('fileTypes'));
     }
 
     /**

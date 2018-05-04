@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Group;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 class User extends Authenticatable
 {
@@ -15,6 +17,18 @@ class User extends Authenticatable
     public function groups()
     {
         return $this->belongsToMany(Group::class);
+    }
+
+    public function availableGroups()
+    {
+        $allGroups = Group::all();
+        $available = new Collection([]);
+        foreach ($allGroups as $group) {
+            if ($group->availableToUser($this)) {
+                $available[] = $group;
+            }
+        }
+        return $available;
     }
 
     public function permissions()
