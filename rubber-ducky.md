@@ -1,7 +1,7 @@
 # What to do to TeamUp 
 ## Features
 
-* Manage Users and Groups
+* Users
     * CRUD
 
 * Posts
