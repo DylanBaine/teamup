@@ -2,8 +2,6 @@
 ## Features
 
 * Manage Users and Groups
-    * Add groups and assign users to groups.
-    * Assign Permissions.
     * CRUD
 
 * Posts
@@ -23,6 +21,11 @@
     * CRUD
     * Assign To User &#10003;
     * Unassign from User &#10003;
+
+* Permissions
+    * CRUD  
+    * Assign To User
+    * Unassign from User
 
 ## Database
 
