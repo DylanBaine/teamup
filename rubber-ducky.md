@@ -19,6 +19,11 @@
     * Assign to Users or Groups
     * Manage which groups or users can Read, Update, or Delete Tasks.
 
+* Groups
+    * CRUD
+    * Assign To User &#10003;
+    * Unassign from User &#10003;
+
 ## Database
 
 * Users &#10004;
