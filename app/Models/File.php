@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class File extends Model
 {
-    public $with = ['users', 'groups', 'mimeType'];
+    public $with = ['users', 'groups'];
     protected $fillable = ['name', 'slug', 'type', 'hash_name'];
 
     public function users()
@@ -18,8 +18,13 @@ class File extends Model
         return $this->belongsTo(Group::class);
     }
 
-    public function mimeType()
+    public function ype()
     {
-        return $this->belongsTo(MimeType::class);
+        return $this->belongsTo(Type::class);
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
     }
 }

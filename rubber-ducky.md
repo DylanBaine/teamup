@@ -51,12 +51,14 @@ This is where I write out, and keep up with, business rules and designs for futu
     * belongsToMany Posts
     * belongsToMany Files
     * belongsToMany Tasks
+    * belongsToMany Types
+    * belongsToMany MimeTypes
 
 * Posts &#10004;
     * belongsToMany Permissions &#10003;
     * belongsTo Users &#10003;
     * hasMany Edits &#10003;
-    * hasOne PostType &#10003;
+    * hasOne Type &#10003;
 
 * Edits &#10004;
     * hasOne Users &#10003;
@@ -66,12 +68,16 @@ This is where I write out, and keep up with, business rules and designs for futu
     * belongsTo Users &#10003;
     * belongsTo Groups &#10003;
     * belongsToMany Permissions
+    * hasOne Type &#10003;
 
-* PostTypes &#10004;
-    * belongsToMany Posts &#10003;
+* Types &#10004;
+    * belongsTo Files &#10003;
+    * belongsTo Tickets
+    * belongsTo Posts &#10003;
     * belongsToMany Permissions
 
 * Tasks
     * belongsTo Users
     * belongsTo Groups
     * belongsToMany Permissions
+    * hasOne Type

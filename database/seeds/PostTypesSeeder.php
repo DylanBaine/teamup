@@ -13,9 +13,11 @@ class PostTypesSeeder extends Seeder
     {
         DB::table('types')->insert([
             'name' => 'Documentation',
+            'slug' => 'documentations',
         ]);
         DB::table('types')->insert([
             'name' => 'Announcement',
+            'slug' => 'announcements',
         ]);
 
     }

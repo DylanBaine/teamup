@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTypesTable extends Migration
+class CreatePermissionTask extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,16 @@ class CreateTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('types', function (Blueprint $table) {
+        Schema::create('permission_task', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('slug')->nullable();
+            $table->unsignedInteger('task_id');
+            $table->unsignedInteger('permission_id');
             $table->timestamps();
+
+            $table->foreign('task_id')->references('id')->on('tasks');
+            $table->foreign('permission_id')->references('id')->on('permissions');
         });
+
     }
 
     /**
@@ -28,6 +32,6 @@ class CreateTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('types');
+        /* Schema::dropIfExists('permission_task'); */
     }
 }

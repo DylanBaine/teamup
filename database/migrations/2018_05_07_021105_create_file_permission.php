@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTypesTable extends Migration
+class CreateFilePermission extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreateTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('types', function (Blueprint $table) {
+        Schema::create('file_permission', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('slug')->nullable();
+            $table->unsignedInteger('file_id');
+            $table->unsignedInteger('permission_id');
             $table->timestamps();
+
+            $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('permission_id')->references('id')->on('permissions');
         });
     }
 
@@ -28,6 +31,6 @@ class CreateTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('types');
+        Schema::dropIfExists('file_permission');
     }
 }

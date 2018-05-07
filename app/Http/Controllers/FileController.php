@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
-use App\Models\MimeType;
+use App\Models\Type;
 use App\TEAMUP\FileUpload;
 use Auth;
 use Illuminate\Http\Request;
@@ -26,7 +26,7 @@ class FileController extends Controller
      */
     public function index()
     {
-        $fileTypes = MimeType::with(['files' => function ($files) {
+        $fileTypes = Type::with(['files' => function ($files) {
             $files->where('user_id', Auth::user()->id);
         }])->get();
         return view('files.index', compact('fileTypes'));
@@ -47,7 +47,7 @@ class FileController extends Controller
             'slug' => $uploader->getFileSlug(),
             'hash_name' => $uploader->getFileHashName(),
         ]);
-        MimeType::firstOrCreate([
+        Type::firstOrCreate([
             'name' => $uploader->getFileMimeType(),
             'slug' => str_slug($uploader->getFileMimeType()),
         ])->files()->save($file);
