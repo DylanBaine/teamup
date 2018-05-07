@@ -33,7 +33,7 @@ This is where I write out, and keep up with, business rules and designs for futu
 
 * Users
     * belongsToMany Groups &#10003;
-    * hasMany Permissions &#10003;
+    * belongsToMany Permissions &#10003;
     * hasMany Posts &#10003;
     * belongsTo Edits &#10003;
     * hasMany Files &#10003;
@@ -41,13 +41,16 @@ This is where I write out, and keep up with, business rules and designs for futu
 
 * Groups &#10004;
     * hasMany Users &#10003;
-    * hasMany Permissions &#10003;
+    * belongsToMany Permissions &#10003;
     * hasMany Files &#10003;
     * hasMany Tasks
 
 * Permissions &#10004;
     * belongsToMany Users &#10003;
-    * hasMany Posts &#10003;
+    * belongsToMany Groups
+    * belongsToMany Posts
+    * belongsToMany Files
+    * belongsToMany Tasks
 
 * Posts &#10004;
     * belongsToMany Permissions &#10003;
@@ -62,10 +65,13 @@ This is where I write out, and keep up with, business rules and designs for futu
 * Files &#10004;
     * belongsTo Users &#10003;
     * belongsTo Groups &#10003;
+    * belongsToMany Permissions
 
 * PostTypes &#10004;
     * belongsToMany Posts &#10003;
+    * belongsToMany Permissions
 
 * Tasks
     * belongsTo Users
     * belongsTo Groups
+    * belongsToMany Permissions
