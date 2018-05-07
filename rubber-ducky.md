@@ -1,4 +1,5 @@
 # What to do to TeamUp 
+This is where I write out, and keep up with, business rules and designs for future features.
 ## Features
 
 * Users
@@ -9,13 +10,14 @@
     * Manage which groups or users can Read, Update, or Delete Posts and Post Types.
 
 * Files
-    * CRUD
+    * CRUD &#10003;
     * Manage which groups or users can Read, Update, or Delete Files.
 
 * Tasks
     * CRUD
     * Assign to Users or Groups
     * Manage which groups or users can Read, Update, or Delete Tasks.
+    * Only Users or Users in Group assigned to task can manage the given task.
 
 * Groups
     * CRUD
@@ -29,17 +31,19 @@
 
 ## Database
 
-* Users &#10004;
+* Users
     * belongsToMany Groups &#10003;
     * hasMany Permissions &#10003;
     * hasMany Posts &#10003;
     * belongsTo Edits &#10003;
     * hasMany Files &#10003;
+    * hasMany Tasks
 
 * Groups &#10004;
     * hasMany Users &#10003;
     * hasMany Permissions &#10003;
     * hasMany Files &#10003;
+    * hasMany Tasks
 
 * Permissions &#10004;
     * belongsToMany Users &#10003;
@@ -62,6 +66,6 @@
 * PostTypes &#10004;
     * belongsToMany Posts &#10003;
 
-* Tasts
-    * belongsToMany Users
-    * belongsToMany Groups
+* Tasks
+    * belongsTo Users
+    * belongsTo Groups
