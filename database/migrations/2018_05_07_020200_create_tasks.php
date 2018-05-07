@@ -17,7 +17,7 @@ class CreateTasks extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('group_id')->nullable();
-            $table->unsignedInteger('task_type_id');
+            $table->unsignedInteger('type_id');
             $table->unsignedInteger('parent_task_id')->nullable();
 
             $table->string('name');
@@ -28,7 +28,7 @@ class CreateTasks extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('group_id')->references('id')->on('groups');
             $table->foreign('parent_task_id')->references('id')->on('tasks');
-            $table->foreign('task_type_id')->references('id')->on('task_types');
+            $table->foreign('type_id')->references('id')->on('types');
 
         });
 
