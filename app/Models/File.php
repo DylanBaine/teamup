@@ -18,13 +18,13 @@ class File extends Model
         return $this->belongsTo(Group::class);
     }
 
-    public function ype()
+    public function type()
     {
         return $this->belongsTo(Type::class);
     }
 
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class);
+        return $this->morphToMany(Permission::class, 'permissable');
     }
 }

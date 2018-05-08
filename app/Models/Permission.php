@@ -10,32 +10,32 @@ class Permission extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->morphedByMany(User::class, 'permissable');
     }
 
     public function groups()
     {
-        return $this->belongsToMany(Group::class);
+        return $this->morphedByMany(Group::class, 'permissable');
     }
 
     public function posts()
     {
-        return $this->belongsToMany(Post::class);
+        return $this->morphedByMany(Post::class, 'permissable');
     }
 
     public function types()
     {
-        return $this->belongsToMany(Type::class);
+        return $this->morphedByMany(Type::class, 'permissable');
     }
 
     public function files()
     {
-        return $this->belongsToMany(File::class);
+        return $this->morphedByMany(File::class, 'permissable');
     }
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class);
+        return $this->morphedByMany(Task::class, 'permissable');
     }
 
 }
