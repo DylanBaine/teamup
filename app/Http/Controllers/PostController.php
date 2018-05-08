@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\TEAMUP\UpdatePost;
 use Illuminate\Http\Request;
+use Auth;
+use App\Models\Type;
 
 class PostController extends Controller
 {
@@ -34,12 +36,20 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        Post::create([
+        $post = Auth::user()->posts()->create([
             'name' => $request->name,
             'content' => $request->content,
-            'user_id' => \Auth::user()->id,
-            'type_id' => $request->type_id,
         ]);
+        if ($request->type_id) {
+            $type = Type::findOrFail($request->type_id);
+        } else {
+            $type->Type::firstOrCreate([
+                'name' => $request->type_name,
+                'slug' => str_slug($request->type_name),
+                'model' => 'Post',
+            ]);
+        }
+        $type->posts()->save($post);
         return redirect()->back();
     }
 

@@ -33,32 +33,31 @@ This is where I write out, and keep up with, business rules and designs for futu
 
 * Users
     * belongsToMany Groups &#10003;
-    * belongsToMany Permissions &#10003;
+    * morphToMany Permissions &#10003;
     * hasMany Posts &#10003;
     * belongsTo Edits &#10003;
     * hasMany Files &#10003;
     * hasMany Tasks
 
-* Groups &#10004;
+* Groups
     * hasMany Users &#10003;
-    * belongsToMany Permissions &#10003;
+    * morphToMany Permissions &#10003;
     * hasMany Files &#10003;
     * hasMany Tasks
 
-* Permissions &#10004;
-    * belongsToMany Users &#10003;
-    * belongsToMany Groups
-    * belongsToMany Posts
-    * belongsToMany Files
-    * belongsToMany Tasks
-    * belongsToMany Types
-    * belongsToMany MimeTypes
+* Permissions
+    * morphedByMany Users &#10003;
+    * morphedByMany Groups
+    * morphedByMany Posts
+    * morphedByMany Files
+    * morphedByMany Tasks
+    * morphedByMany Types
 
 * Posts &#10004;
-    * belongsToMany Permissions &#10003;
+    * morphToMany Permissions &#10003;
     * belongsTo Users &#10003;
     * hasMany Edits &#10003;
-    * hasOne Type &#10003;
+    * morphTo Type &#10003;
 
 * Edits &#10004;
     * hasOne Users &#10003;
@@ -67,17 +66,17 @@ This is where I write out, and keep up with, business rules and designs for futu
 * Files &#10004;
     * belongsTo Users &#10003;
     * belongsTo Groups &#10003;
-    * belongsToMany Permissions
-    * hasOne Type &#10003;
+    * morphToMany Permissions
+    * morphTo Type &#10003;
 
 * Types &#10004;
     * belongsTo Files &#10003;
-    * belongsTo Tickets
+    * belongsTo Tickets &#10003;
     * belongsTo Posts &#10003;
-    * belongsToMany Permissions
+    * morphToMany Permissions &#10003;
 
 * Tasks
-    * belongsTo Users
-    * belongsTo Groups
-    * belongsToMany Permissions
-    * hasOne Type
+    * belongsTo Users &#10003;
+    * belongsTo Groups &#10003;
+    * morphToMany Permissions &#10003;
+    * morphTo Type &#10003;

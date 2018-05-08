@@ -20,7 +20,7 @@ class TypeController extends Controller
      */
     public function index()
     {
-        $types = $this->types;
+        $types = $this->types->where('model', 'Post')->all();
         return view('types.index', compact('types'));
     }
 
@@ -32,9 +32,11 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        $this->types->create([
+        Type::create([
             'name' => $request->name,
+            'model' => $request->model,
         ]);
+        return redirect()->back();
     }
 
     /**

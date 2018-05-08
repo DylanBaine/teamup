@@ -18,7 +18,7 @@ class Posts extends Migration
             $table->string('name');
             $table->longtext('content');
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('type_id');
+            $table->unsignedInteger('type_id')->nullable();
             $table->timestamps();
 
         });

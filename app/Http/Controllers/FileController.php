@@ -26,7 +26,7 @@ class FileController extends Controller
      */
     public function index()
     {
-        $fileTypes = Type::with(['files' => function ($files) {
+        $fileTypes = Type::where('model', 'File')->with(['files' => function ($files) {
             $files->where('user_id', Auth::user()->id);
         }])->get();
         return view('files.index', compact('fileTypes'));
@@ -50,6 +50,7 @@ class FileController extends Controller
         Type::firstOrCreate([
             'name' => $uploader->getFileMimeType(),
             'slug' => str_slug($uploader->getFileMimeType()),
+            'model' => 'File',
         ])->files()->save($file);
         return redirect()->back();
     }
