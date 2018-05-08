@@ -8,9 +8,13 @@ class Type extends Model
 {
     protected $fillable = ['name', 'slug'];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
     public function posts()
     {
-        return $this->hasMany(Models\Post::class);
+        return $this->hasMany(Post::class);
     }
 
     public function files()

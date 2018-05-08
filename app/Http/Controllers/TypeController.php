@@ -11,7 +11,7 @@ class TypeController extends Controller
     protected $types;
     public function __construct()
     {
-        $this->types = Type::all();
+        $this->types = Type::with('posts')->get();
     }
     /**
      * Display a listing of the resource.
@@ -20,7 +20,8 @@ class TypeController extends Controller
      */
     public function index()
     {
-        return $this->types;
+        $types = $this->types;
+        return view('types.index', compact('types'));
     }
 
     /**
@@ -42,9 +43,10 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        return $this->types->find($id);
+        $type = $this->types->where('slug', $slug)->first();
+        return view('types.show', compact('type'));
     }
 
     /**

@@ -7,7 +7,12 @@ class Post extends Model
 {
 
     public $with = ['type'];
-    protected $fillable = ['name', 'content', 'user_id'];
+    protected $fillable = ['name', 'content', 'user_id', 'type_id'];
+
+    public function belongsToUser()
+    {
+        return $this->user_id == \Auth::user()->id;
+    }
 
     public function permissions()
     {

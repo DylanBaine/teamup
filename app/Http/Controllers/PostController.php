@@ -14,7 +14,7 @@ class PostController extends Controller
     public function __construct()
     {
         $this->updatePost = new UpdatePost;
-        $this->posts = Post::all();
+        $this->posts = Post::get();
     }
     /**
      * Display a listing of the resource.
@@ -34,12 +34,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->posts->create([
+        Post::create([
             'name' => $request->name,
             'content' => $request->content,
-            'user_id' => Auth::user()->id,
-            'type_id'->$request->type,
+            'user_id' => \Auth::user()->id,
+            'type_id' => $request->type_id,
         ]);
+        return redirect()->back();
     }
 
     /**
@@ -50,7 +51,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return $this->posts->find($id);
+        $post = $this->posts->find($id);
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -73,6 +75,7 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $this->posts->delete($id);
+        $this->posts->find($id)->delete();
+        return redirect()->back();
     }
 }
