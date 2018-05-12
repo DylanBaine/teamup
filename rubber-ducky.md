@@ -39,25 +39,25 @@ This is where I write out, and keep up with, business rules and designs for futu
     * hasMany Files &#10003;
     * hasMany Tasks
 
-* Groups
+* Groups 
     * hasMany Users &#10003;
     * morphToMany Permissions &#10003;
     * hasMany Files &#10003;
     * hasMany Tasks
 
-* Permissions
+* Permissions &#10004;
     * morphedByMany Users &#10003;
-    * morphedByMany Groups
-    * morphedByMany Posts
-    * morphedByMany Files
-    * morphedByMany Tasks
-    * morphedByMany Types
+    * morphedByMany Groups &#10003;
+    * morphedByMany Posts &#10003;
+    * morphedByMany Files &#10003;
+    * morphedByMany Tasks &#10003;
+    * morphedByMany Types &#10003;
 
 * Posts &#10004;
     * morphToMany Permissions &#10003;
     * belongsTo Users &#10003;
     * hasMany Edits &#10003;
-    * morphTo Type &#10003;
+    * hasOne Type &#10003;
 
 * Edits &#10004;
     * hasOne Users &#10003;
@@ -67,7 +67,7 @@ This is where I write out, and keep up with, business rules and designs for futu
     * belongsTo Users &#10003;
     * belongsTo Groups &#10003;
     * morphToMany Permissions
-    * morphTo Type &#10003;
+    * hasOne Type &#10003;
 
 * Types &#10004;
     * belongsTo Files &#10003;
@@ -79,4 +79,5 @@ This is where I write out, and keep up with, business rules and designs for futu
     * belongsTo Users &#10003;
     * belongsTo Groups &#10003;
     * morphToMany Permissions &#10003;
-    * morphTo Type &#10003;
+    * hasOne Type &#10003;
+    + hasOne ParanetTask &#10003;
