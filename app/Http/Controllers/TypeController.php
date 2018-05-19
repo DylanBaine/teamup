@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Type;
+use App\TEAMUP\Repositories\TypesRepository as Repo;
 use Illuminate\Http\Request;
 
 class TypeController extends Controller
 {
 
-    protected $types;
+    protected $types, $repo;
     public function __construct()
     {
         $this->types = Type::with('posts')->get();
+        $this->repo = new Repo;
     }
     /**
      * Display a listing of the resource.
@@ -20,8 +22,13 @@ class TypeController extends Controller
      */
     public function index()
     {
-        $types = $this->types->where('model', 'Post')->all();
-        return view('types.index', compact('types'));
+        $model = \Request::get('model');
+        if ($model == null) {
+            $types = $this->types;
+        } else {
+            $types = $this->repo->get($model);
+        }
+        return view('types.index', compact('types', 'model'));
     }
 
     /**
@@ -32,8 +39,10 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
+        $slug = $request->slug ? $request->slug : str_slug($request->name);
         Type::create([
             'name' => $request->name,
+            'slug' => $slug,
             'model' => $request->model,
         ]);
         return redirect()->back();
@@ -48,7 +57,8 @@ class TypeController extends Controller
     public function show($slug)
     {
         $type = $this->types->where('slug', $slug)->first();
-        return view('types.show', compact('type'));
+        $model = $type->model;
+        return view('types.show', compact('type', 'model'));
     }
 
     /**

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\TEAMUP\UpdatePost;
-use Illuminate\Http\Request;
-use Auth;
 use App\Models\Type;
+use App\TEAMUP\UpdatePost;
+use Auth;
+use Illuminate\Http\Request;
+use App\TEAMUP\Repositories\TypesRepository;
 
 class PostController extends Controller
 {
@@ -15,6 +16,7 @@ class PostController extends Controller
 
     public function __construct()
     {
+        $this->typeRepo = new TypesRepository;
         $this->updatePost = new UpdatePost;
         $this->posts = Post::get();
     }
@@ -25,7 +27,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        return $this->posts;
+        $posts = $this->posts;
+        $types = $this->typeRepo->get('posts');
+        $model = 'Post';
+        return view('types.index', compact('posts', 'types', 'model'));
     }
 
     /**

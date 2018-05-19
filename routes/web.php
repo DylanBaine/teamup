@@ -15,14 +15,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('users', 'UserController');
-Route::resource('posts', 'PostController');
-Route::resource('types', 'TypeController');
-Route::resource('files', 'FileController');
-Route::resource('groups', 'GroupController');
-Route::post('groups/manage/users/{user}', 'GroupController@addUser');
-Route::delete('groups/{group}/remove/{user}', 'GroupController@removeUser');
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware('auth')->group(function () {
+    Route::prefix('/home')->group(function () {
+        Route::get('/', 'HomeController@index')->name('home');
+        Route::resource('users', 'UserController');
+        Route::resource('posts', 'PostController');
+        Route::resource('types', 'TypeController');
+        Route::resource('files', 'FileController');
+        Route::resource('groups', 'GroupController');
+        Route::post('groups/manage/users/{user}', 'GroupController@addUser');
+        Route::delete('groups/{group}/remove/{user}', 'GroupController@removeUser');
+    });
+});
