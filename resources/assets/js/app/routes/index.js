@@ -1,5 +1,5 @@
-import Foo from '../../pages/Foo.vue';
+import Login from '../../views/auth/Login.vue';
 const routes = [
-    { path: '/foo', component: Foo },
+    { path: '/login', component: Login },
 ]
 export default routes;

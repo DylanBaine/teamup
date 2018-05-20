@@ -1,19 +1,24 @@
 <?php
 // Return the layout view when visiting the app
 Route::get('/', function () {
+    $user = App\Models\User::find(1);
+    //Auth::login($user);
+    //Auth::logout();
     return view('layouts.app');
 });
 
 // Return the session user
-Route::get('/auth-user', function () {
+Route::get('/auth/user', function () {
     return Auth::user();
 });
 
 // Handle all search methods
 Route::get('/search', 'SearchController');
 
-// Include all laravel auth routes
-Auth::routes();
+// Include all laravel auth routes if needed
+//Auth::routes();
+// Overwrite laravel auth routes for cusotom api login and logout
+include 'authRoutes.php';
 // Include api routes for users module
 include 'userRoutes.php';
 // Include api routes for posts module

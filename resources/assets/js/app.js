@@ -1,11 +1,13 @@
 require('./bootstrap');
-import Group from './app/models/Group';
 import User from './app/models/User';
+import AuthMiddleware from './app/middleware/AuthMiddleware';
 const app = new Vue({
     el: '#app',
     router,
     data: {
-        AuthUser: {},
+        user: {},
+        middleware: {},
+        AuthUser: "",
         dialog: false,
         drawer: null,
         userLinks: [],
@@ -42,14 +44,20 @@ const app = new Vue({
             { icon: 'keyboard', text: 'Go to the old version' }
         ]
     },
+    watch: {
+        $route() {
+            this.middleware.check();
+        }
+    },
     created() {
-
+        this.user = new User(this);
+        this.middleware = new AuthMiddleware(this);
     },
     mounted() {
-        let user = new User(this);
-        user.getLoggedIn();
+        this.middleware.check();
+        this.user.getLoggedIn();
     },
     methods: {
 
-    }
+    },
 });
