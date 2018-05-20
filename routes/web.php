@@ -1,31 +1,26 @@
 <?php
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
- */
-
+// Return the layout view when visiting the app
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.app');
 });
 
+// Return the session user
+Route::get('/auth-user', function () {
+    return Auth::user();
+});
+
+// Handle all search methods
+Route::get('/search', 'SearchController');
+
+// Include all laravel auth routes
 Auth::routes();
-
-Route::middleware('auth')->group(function () {
-    Route::prefix('/home')->group(function () {
-        Route::get('/', 'HomeController@index')->name('home');
-        Route::resource('users', 'UserController');
-        Route::resource('posts', 'PostController');
-        Route::resource('types', 'TypeController');
-        Route::resource('files', 'FileController');
-        Route::resource('groups', 'GroupController');
-        Route::post('groups/manage/users/{user}', 'GroupController@addUser');
-        Route::delete('groups/{group}/remove/{user}', 'GroupController@removeUser');
-    });
-});
+// Include api routes for users module
+include 'userRoutes.php';
+// Include api routes for posts module
+include 'postRoutes.php';
+// Include api routes for types module
+include 'typeRoutes.php';
+// Include api routes for files module
+include 'fileRoutes.php';
+// Include api routes for groups module
+include 'groupRoutes.php';

@@ -2,13 +2,16 @@
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 
-// Variables
-@import "variables";
+// Icons 
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import '~vuetify/dist/vuetify';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+// Variables
+@import "overwrites";
+
+[v-cloak]{
+    display: none;
 }

@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return $this->users->with(['permissions', 'posts'])->get();
+        return $this->users;
 
     }
     /**
@@ -31,7 +31,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return $this->users->with(['posts', 'permissions'])->find($id);
+        return $this->users->find($id);
     }
 
     /**

@@ -4,127 +4,201 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
-
-    <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    <style>
-        .file-collection{
-            padding: 20px 0;
-        }
-        .file-collection img{
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .file-collection .row{
-            justify-content: center
-        }
-        .file-collection header{
-            text-align: left;
-            margin-left: 20px;
-        }
-        .file-collection h3{
-                margin: 10px;
-        }
-        .file-collection a{
-            border: solid 1px lightgrey;
-            border-radius: 5px;
-        }
-        .file-collection:nth-last-of-type(even){
-            background-color: lightgrey;
-            border-radius: 10px;
-        }
-        .file-collection:nth-last-of-type(even) a{
-            border: solid 1px white;
-        }
-        .pos-ref{
-            position: relative;
-        }
-        .overflowable{
-            position: absolute;
-            top: 0;
-            height: 80vh;
-            overflow: auto;
-        }
-        .overflowable .card{
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-        .padded{
-            padding: 10px;
-        }
-    </style>
+    <script>
+    const url = "{{ url('') }}";
+    </script>
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        @foreach($allTypes as $type)
-                            <li class="nav-item">
-                                <a href="{{url('home/types/'.$type->slug)}}" class="nav-link">{{$type->name}}</a>
-                            </li>
-                        @endforeach
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{url('home/groups')}}">Groups</a>
-                        </li>
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                            <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
+    <div id="app" v-cloak>
+        <v-app id="inspire">
+            <v-navigation-drawer
+                :clipped="$vuetify.breakpoint.lgAndUp"
+                v-model="drawer"
+                fixed
+                app
+            >
+                <v-list dense>
+                <template v-for="item in items">
+                    <v-layout
+                    v-if="item.heading"
+                    :key="item.heading"
+                    row
+                    align-center
+                    >
+                        <v-flex xs6>
+                            <v-subheader v-if="item.heading">
+                            @{{ item.heading }}
+                            </v-subheader>
+                        </v-flex>
+                        <v-flex xs6 class="text-xs-center">
+                            <a href="#!" class="body-2 black--text">EDIT</a>
+                        </v-flex>
+                    </v-layout>
+                    <v-list-group
+                    v-else-if="item.children"
+                    v-model="item.model"
+                    :key="item.text"
+                    :prepend-icon="item.model ? item.icon : item['icon-alt']"
+                    append-icon=""
+                    >
+                        <v-list-tile slot="activator">
+                            <v-list-tile-content>
+                            <v-list-tile-title>
+                                @{{ item.text }}
+                            </v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile
+                            v-for="(child, i) in item.children"
+                            :key="i"
+                            to="foo"
+                        >
+                            <v-list-tile-action v-if="child.icon">
+                            <v-icon>@{{ child.icon }}</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                            <v-list-tile-title>
+                                @{{ child.text }}
+                            </v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                    </v-list-group>
+                    <v-list-tile v-else :key="item.text" @click="">
+                        <v-list-tile-action>
+                            <v-icon>@{{ item.icon }}</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                            @{{ item.text }}
+                            </v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </template>
+                </v-list>
+            </v-navigation-drawer>
+            <v-toolbar
+                :clipped-left="$vuetify.breakpoint.lgAndUp"
+                color="primary"
+                dark
+                app
+                fixed
+            >
+                <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+                <span class="hidden-sm-and-down">@{{AuthUser.name}}</span>
+                </v-toolbar-title>
+                <v-text-field
+                flat
+                solo-inverted
+                prepend-icon="search"
+                label="Search"
+                class="hidden-sm-and-down"
+                ></v-text-field>
+                <v-spacer></v-spacer>
+                <v-btn icon>
+                <v-icon>apps</v-icon>
+                </v-btn>
+                <v-btn icon>
+                <v-icon>notifications</v-icon>
+                </v-btn>
+                <v-btn icon large>
+                <v-avatar size="32px" tile>
+                    <img
+                    src="https://vuetifyjs.com/static/doc-images/logo.svg"
+                    alt="Vuetify"
+                    >
+                </v-avatar>
+                </v-btn>
+            </v-toolbar>
+            <v-content>
+                <v-container fluid fill-height>
+                    <v-layout justify-center align-center>
+                        <router-view></router-view>
+                    </v-layout>
+                </v-container>
+            </v-content>
+            <v-btn
+                fab
+                bottom
+                right
+                color="pink"
+                dark
+                fixed
+                @click.stop="dialog = !dialog"
+            >
+                <v-icon>add</v-icon>
+            </v-btn>
+            <v-dialog v-model="dialog" width="800px">
+                <v-card>
+                <v-card-title
+                    class="grey lighten-4 py-4 title"
+                >
+                    Create contact
+                </v-card-title>
+                <v-container grid-list-sm class="pa-4">
+                    <v-layout row wrap>
+                    <v-flex xs12 align-center justify-space-between>
+                        <v-layout align-center>
+                        <v-avatar size="40px" class="mr-3">
+                            <img
+                            src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"
+                            alt=""
+                            >
+                        </v-avatar>
+                        <v-text-field
+                            placeholder="Name"
+                        ></v-text-field>
+                        </v-layout>
+                    </v-flex>
+                    <v-flex xs6>
+                        <v-text-field
+                        prepend-icon="business"
+                        placeholder="Company"
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs6>
+                        <v-text-field
+                        placeholder="Job title"
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field
+                        prepend-icon="mail"
+                        placeholder="Email"
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field
+                        type="tel"
+                        prepend-icon="phone"
+                        placeholder="(000) 000 - 0000"
+                        mask="phone"
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field
+                        prepend-icon="notes"
+                        placeholder="Notes"
+                        ></v-text-field>
+                    </v-flex>
+                    </v-layout>
+                </v-container>
+                <v-card-actions>
+                    <v-btn flat color="primary">More</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
+                    <v-btn flat @click="dialog = false">Save</v-btn>
+                </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-app>
     </div>
+    <script src="{{asset('js/app.js')}}"></script>
 </body>
 </html>

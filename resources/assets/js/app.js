@@ -1,22 +1,60 @@
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
-
-window.Vue = require('vue');
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
+import Group from './app/models/Group';
+import User from './app/models/User';
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    router,
+    data: {
+        AuthUser: {},
+        thing: {},
+        thing2: {},
+        dialog: false,
+        drawer: null,
+        userLinks: [],
+        items: [
+            { icon: 'contacts', text: 'Contacts' },
+            { icon: 'history', text: 'Frequently contacted' },
+            { icon: 'content_copy', text: 'Duplicates' },
+            {
+                icon: 'keyboard_arrow_up',
+                'icon-alt': 'keyboard_arrow_down',
+                text: 'Labels',
+                model: true,
+                children: [
+                    { icon: 'add', text: 'Create label' }
+                ]
+            },
+            {
+                icon: 'keyboard_arrow_up',
+                'icon-alt': 'keyboard_arrow_down',
+                text: 'More',
+                model: false,
+                children: [
+                    { text: 'Import' },
+                    { text: 'Export' },
+                    { text: 'Print' },
+                    { text: 'Undo changes' },
+                    { text: 'Other contacts' }
+                ]
+            },
+            { icon: 'settings', text: 'Settings' },
+            { icon: 'chat_bubble', text: 'Send feedback' },
+            { icon: 'help', text: 'Help' },
+            { icon: 'phonelink', text: 'App downloads' },
+            { icon: 'keyboard', text: 'Go to the old version' }
+        ]
+    },
+    created() {
+    },
+    mounted() {
+        let user = new User(this);
+        user.create({
+            name: 'dylan'
+        });
+        user.where('id', 1, 'thing');
+        user.loggedIn();
+    },
+    methods: {
+
+    }
 });
