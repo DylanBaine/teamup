@@ -1,17 +1,17 @@
 class Model {
     constructor() {
         this.model = this.constructor.name;
-        this.modelPlural = this.model.toLowerCase() + "s";
-        this.modelBaseRoute = `${url}/${this.modelPlural}`;
+        this.modelUrl = this.model.toLowerCase() + "s";
+        this.modelBaseRoute = `${url}/${this.modelUrl}`;
     }
 
     /**
-     * Search for a model in the database
+     * Search the model in the database
+     * @param {string} variable the property the result is to be stored in
      * @param {string} param parameter we are searching for
-     * @param {sting or integer} value value of the parameter
-     * @param {string} variable the property the result is being stored in
+     * @param {sting|integer} value value of the parameter
      */
-    where(param, value, variable) {
+    where(variable, param, value) {
         return axios.get(`${url}/search/?model=${this.model}&param=${param}&value=${value}`)
             .then(res => {
                 this.$[variable] = res.data;
@@ -20,7 +20,7 @@ class Model {
 
     /**
      * Get all of the records or a specific record of a given model
-     * @param {string} variable the variable to populate with the fetched data
+     * @param {string} variable the property the result is to be stored in
      * @param {integer|nullable} id the id of the specific rcord you want to return
      */
     get(variable, id = null) {

@@ -5,7 +5,7 @@ class User extends Model {
         this.$ = instance;
     }
 
-    loggedIn() {
+    getLoggedIn() {
         return axios.get('auth-user').then(res => {
             this.$.AuthUser = res.data;
         });

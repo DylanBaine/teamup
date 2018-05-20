@@ -976,21 +976,21 @@ var Model = function () {
         _classCallCheck(this, Model);
 
         this.model = this.constructor.name;
-        this.modelPlural = this.model.toLowerCase() + "s";
-        this.modelBaseRoute = url + '/' + this.modelPlural;
+        this.modelUrl = this.model.toLowerCase() + "s";
+        this.modelBaseRoute = url + '/' + this.modelUrl;
     }
 
     /**
-     * Search for a model in the database
+     * Search the model in the database
+     * @param {string} variable the property the result is to be stored in
      * @param {string} param parameter we are searching for
-     * @param {sting or integer} value value of the parameter
-     * @param {string} variable the property the result is being stored in
+     * @param {sting|integer} value value of the parameter
      */
 
 
     _createClass(Model, [{
         key: 'where',
-        value: function where(param, value, variable) {
+        value: function where(variable, param, value) {
             var _this = this;
 
             return axios.get(url + '/search/?model=' + this.model + '&param=' + param + '&value=' + value).then(function (res) {
@@ -1000,7 +1000,7 @@ var Model = function () {
 
         /**
          * Get all of the records or a specific record of a given model
-         * @param {string} variable the variable to populate with the fetched data
+         * @param {string} variable the property the result is to be stored in
          * @param {integer|nullable} id the id of the specific rcord you want to return
          */
 
@@ -1089,8 +1089,6 @@ var app = new Vue({
     router: router,
     data: {
         AuthUser: {},
-        thing: {},
-        thing2: {},
         dialog: false,
         drawer: null,
         userLinks: [],
@@ -1111,11 +1109,7 @@ var app = new Vue({
     created: function created() {},
     mounted: function mounted() {
         var user = new __WEBPACK_IMPORTED_MODULE_1__app_models_User__["a" /* default */](this);
-        user.create({
-            name: 'dylan'
-        });
-        user.where('id', 1, 'thing');
-        user.loggedIn();
+        user.getLoggedIn();
     },
 
     methods: {}
@@ -40578,9 +40572,6 @@ if (inBrowser && window.Vue) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_Foo_vue__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_Foo_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__pages_Foo_vue__);
-var path = function path(component) {
-    return '../../pages/' + component;
-};
 
 var routes = [{ path: '/foo', component: __WEBPACK_IMPORTED_MODULE_0__pages_Foo_vue___default.a }];
 /* harmony default export */ __webpack_exports__["a"] = (routes);
@@ -58493,8 +58484,8 @@ var User = function (_Model) {
     }
 
     _createClass(User, [{
-        key: 'loggedIn',
-        value: function loggedIn() {
+        key: 'getLoggedIn',
+        value: function getLoggedIn() {
             var _this2 = this;
 
             return axios.get('auth-user').then(function (res) {

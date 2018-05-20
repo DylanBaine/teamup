@@ -6,8 +6,6 @@ const app = new Vue({
     router,
     data: {
         AuthUser: {},
-        thing: {},
-        thing2: {},
         dialog: false,
         drawer: null,
         userLinks: [],
@@ -45,14 +43,11 @@ const app = new Vue({
         ]
     },
     created() {
+
     },
     mounted() {
         let user = new User(this);
-        user.create({
-            name: 'dylan'
-        });
-        user.where('id', 1, 'thing');
-        user.loggedIn();
+        user.getLoggedIn();
     },
     methods: {
 
