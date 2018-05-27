@@ -12,7 +12,7 @@ class TypesRepository
 
     public function get($model)
     {
-        return Type::where('model', $model)->get();
+        return Type::where('model', 'App\Models\\' . $model)->get();
     }
 
     public function post()

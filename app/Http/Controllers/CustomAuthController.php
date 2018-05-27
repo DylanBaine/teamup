@@ -18,7 +18,7 @@ class CustomAuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            $response = [Auth::user()];
+            $response = Auth::user()->load('permissions', 'groups');
         } else {
             $response = ['success' => false, 'error' => 'I\'m sorry... This info didn\'t match up... Try again.'];
         }

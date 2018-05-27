@@ -1,11 +1,29 @@
 <template>
-	<v-app id="inspire">
+	<v-app :dark="dark" id="inspire">
 		<v-navigation-drawer
 			:clipped="$vuetify.breakpoint.lgAndUp"
 			v-model="drawer"
 			fixed
 			app>
 			<v-list dense>
+				<v-toolbar dark color="primary darken-1">
+					<v-spacer></v-spacer>
+					<v-btn icon>
+						<v-icon>apps</v-icon>
+					</v-btn>
+					<v-btn icon>
+						<v-icon>notifications</v-icon>
+					</v-btn>
+					<v-btn icon large>
+						<v-avatar size="32px" tile>
+							<img
+							src="https://vuetifyjs.com/static/doc-images/logo.svg"
+							alt="Vuetify"
+							>
+						</v-avatar>
+					</v-btn>
+					<v-spacer></v-spacer>
+				</v-toolbar>
 				<template v-for="permission in $user.permissions('read')">
 					<v-list-tile
 						:to="`/${type.slug}`"
@@ -75,19 +93,11 @@
 				class="hidden-sm-and-down"
 			></v-text-field>
 			<v-spacer></v-spacer>
+			<v-btn icon @click="dark = !dark">
+				<v-icon>highlight</v-icon>
+			</v-btn>
 			<v-btn icon @click="$user.logout()">
-				<v-icon>apps</v-icon>
-			</v-btn>
-			<v-btn icon>
-				<v-icon>notifications</v-icon>
-			</v-btn>
-			<v-btn icon large>
-				<v-avatar size="32px" tile>
-					<img
-					src="https://vuetifyjs.com/static/doc-images/logo.svg"
-					alt="Vuetify"
-					>
-				</v-avatar>
+				<v-icon>close</v-icon>
 			</v-btn>
 		</v-toolbar>
 		<v-content>
@@ -97,16 +107,6 @@
 				</v-layout>
 			</v-container>
 		</v-content>
-		<v-btn
-			fab
-			bottom
-			right
-			color="pink"
-			dark
-			fixed
-			@click.stop="dialog = !dialog">
-			<v-icon>add</v-icon>
-		</v-btn>
 		<v-dialog v-model="dialog" width="800px">
 			<v-card v-for="permission in $user.permissions('create')" :key="permission.id">
 				<v-card-text>
@@ -130,7 +130,8 @@ export default {
   data() {
     return {
       dialog: false,
-      drawer: true
+      drawer: true,
+      dark: true
     };
   },
   mounted() {},

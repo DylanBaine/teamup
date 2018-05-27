@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Edit extends Model
 {
-    public $with = ['users', 'posts'];
+    //public $with = ['users', 'posts'];
     protected $fillable = ['user_id', 'post_id', 'details'];
 
     public function users()

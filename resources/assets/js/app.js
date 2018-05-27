@@ -11,7 +11,7 @@ const app = new Vue({
     },
     watch: {
         $route() {
-
+            document.documentElement.scrollTop = 0;
         },
         $user() {
             return new User(this, 'user');

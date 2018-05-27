@@ -1,16 +1,14 @@
 <template>
-    <v-dialog v-model="showing">
+    <v-dialog v-model="showing" persistent>
         <v-card>
             <v-toolbar dark color="primary">
                 <v-btn icon to="/groups/">
                     <v-icon>chevron_left</v-icon>
                 </v-btn>
-            </v-toolbar>
-            <v-card-title class="grey lighten-2">
                 <h2 class="title">
                     Create a new group.
                 </h2>
-            </v-card-title>
+            </v-toolbar>
         </v-card>
     </v-dialog>
 </template>

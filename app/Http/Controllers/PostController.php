@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Type;
+use App\TEAMUP\Repositories\TypesRepository;
 use App\TEAMUP\UpdatePost;
 use Auth;
 use Illuminate\Http\Request;
-use App\TEAMUP\Repositories\TypesRepository;
 
 class PostController extends Controller
 {
@@ -66,8 +66,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->posts->find($id);
-        return view('posts.show', compact('post'));
+        return $this->posts->find($id);
     }
 
     /**

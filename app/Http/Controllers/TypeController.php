@@ -28,7 +28,7 @@ class TypeController extends Controller
         } else {
             $types = $this->repo->get($model);
         }
-        return view('types.index', compact('types', 'model'));
+        return $types;
     }
 
     /**

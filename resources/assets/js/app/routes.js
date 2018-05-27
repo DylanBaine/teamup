@@ -8,9 +8,9 @@ import CreateGroup from '../views/groups/create.vue';
 import ShowGroup from '../views/groups/show.vue';
 
 // Post Views
-//import PostType from '../views/posts/index.vue';
-//import Post from '../views/posts/show.vue';
-//import CreatePost from '../views/posts/create.vue';
+import PostType from '../views/posts/index.vue';
+import Post from '../views/posts/show.vue';
+import CreatePost from '../views/posts/create.vue';
 
 const routes = [
     { path: '/', component: Home },
@@ -20,5 +20,11 @@ const routes = [
             { path: ':group', component: ShowGroup },
         ]
     },
+    {
+        path: '/:type', component: PostType, children: [
+            { path: 'create', component: CreatePost },
+            { path: ':post', component: Post },
+        ]
+    }
 ]
 export default routes;
