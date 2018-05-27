@@ -40,9 +40,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = $this->groups;
-        $users = $this->users;
-        return view('groups.index', compact('groups', 'users'));
+        return Group::get();
     }
 
     /**

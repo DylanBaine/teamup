@@ -26,10 +26,26 @@ window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
-import routes from './app/routes/index';
+import routes from './app/routes';
 window.router = new VueRouter({
     routes
 });
 
 import Vuetify from 'vuetify';
 Vue.use(Vuetify);
+
+Vue.component('application', require('./views/Application.vue'));
+Vue.component('login', require('./views/auth/Login.vue'));
+Vue.component('loader', require('./components/Loader.vue'));
+
+
+Array.prototype.hasProp = function (needle, haystack) {
+    for (let i = 0; i < this.length; i++) {
+        var el = this[i];
+        console.log(el);
+        if (needle == el[haystack]) {
+            return true;
+        }
+    }
+    return false;
+}

@@ -1,8 +1,21 @@
 class Model {
-    constructor() {
+    constructor(route, store) {
+        this.postUrl = `${url}/${route.post}`;
+        this.getUrl = `${url}/${route.get}`;
+        this.instance = store.instance;
+        this.store = store.store;
         this.model = this.constructor.name;
-        this.modelUrl = this.model.toLowerCase() + "s";
-        this.modelBaseRoute = `${url}/${this.modelUrl}`;
+    }
+
+    _set_(data) {
+        this.instance[this.store] = data;
+    }
+    _get_(data) {
+        return this.instance[this.store][data];
+    }
+
+    showLoader(message = '') {
+        this.instance.$root.$refs.app.$refs.loader.run(message);
     }
 
     /**
@@ -11,24 +24,39 @@ class Model {
      * @param {string} param parameter we are searching for
      * @param {sting|integer} value value of the parameter
      */
-    where(variable, param, value) {
+    where(param, value) {
         return axios.get(`${url}/search/?model=${this.model}&param=${param}&value=${value}`)
             .then(res => {
-                this.$[variable] = res.data;
+                this._set_(res.data);
             });
     }
 
     /**
-     * Get all of the records or a specific record of a given model
-     * @param {string} variable the property the result is to be stored in
-     * @param {integer|nullable} id the id of the specific rcord you want to return
+     * Find the first record that matches the parameter give.
+     * @param {sting} param the parameter in the database we are searching for.
+     * @param {value} value the value the parameter should match
      */
-    get(variable, id = null) {
-        var route = id == null ? this.modelBaseRoute : `${this.modelBaseRoute}/${id}`;
-        return axios.get(route)
+    find(param, value) {
+        this.showLoader(`Loading...`);
+        return axios.get(`${url}/search/?model=${this.model}&param=${param}&value=${value}`)
             .then(res => {
-                this.$[variable] = res.data
+                this.showLoader();
+                this._set_(res.data[0]);
             });
+    }
+
+    /**
+     * Get all of the records of a given model
+     */
+    get() {
+        return axios.get(this.getUrl)
+            .then(res => {
+                this._set_(res.data);
+            });
+    }
+
+    has(relation) {
+        return this._get_(relation);
     }
 
     /**

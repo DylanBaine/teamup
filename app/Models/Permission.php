@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
-    public $with = ['posts', 'postTypes'];
+    public $with = ['types'];
     protected $fillable = ['mode'];
 
     public function users()
@@ -20,12 +20,12 @@ class Permission extends Model
 
     public function posts()
     {
-        return $this->morphedByMany(Post::class, 'permissable');
+        return $this->morphedByMany(Post::class, 'permissable')->take(10);
     }
 
     public function types()
     {
-        return $this->morphedByMany(Type::class, 'permissable');
+        return $this->morphedByMany(Type::class, 'permissable')->take(10);
     }
 
     public function files()

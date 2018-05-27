@@ -1,36 +1,42 @@
 import Model from '../library/Model';
 class User extends Model {
-    constructor(instance) {
-        super();
-        this.$ = instance;
+    constructor(instance, store) {
+        super({
+            post: 'users',
+            get: 'users',
+        }, { instance, store });
         this.root = instance.$root;
     }
 
-    getLoggedIn() {
-        return axios.get(url + '/auth/user').then(res => {
-            this.$.AuthUser = res.data;
-            this.user = res.data;
-        });
-    }
-
     login(user) {
+        this.instance.showLoader('Logging you in...');
         return axios.post(url + '/auth/login', user)
             .then(res => {
-                this.root.$router.push('/');
-                this.$.handleResponse(res.data.user, res.data.error);
+                this.instance.showLoader();
+                this.root.user = res.data;
             });
     }
 
     logout() {
+        this.instance.showLoader('Logging you out...');
         return axios.post(url + '/auth/logout')
             .then(res => {
-                this.root.$router.push('/login');
-                this.root.AuthUser = "";
+                this.instance.showLoader();
+                this.root.user = false;
             })
     }
 
-    exists() {
-        return this.$.AuthUser.email !== null;
+    permissions(mode = null) {
+        if (mode !== null) {
+            return this.has('permissions').filter(permission => permission.mode == mode);
+        } else {
+            return this.has('permissions');
+        }
+    }
+
+    can(action, type) {
+        var permission = this.permissions(action);
+        return permission[0].types.hasProp(type, 'slug');
     }
 
 }

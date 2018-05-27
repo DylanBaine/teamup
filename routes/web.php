@@ -4,7 +4,8 @@ Route::get('/', function () {
     $user = App\Models\User::find(1);
     //Auth::login($user);
     //Auth::logout();
-    return view('layouts.app');
+    $user = Auth::user() ? Auth::user()->load('groups', 'permissions') : false;
+    return view('layouts.app', compact('user'));
 });
 
 // Return the session user

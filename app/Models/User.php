@@ -10,13 +10,13 @@ use Illuminate\Support\Collection;
 class User extends Authenticatable
 {
     use Notifiable;
-    // public $with = ['permissions', 'posts'];
+    //public $with = ['permissions', 'groups'];
     protected $fillable = ['name', 'email', 'password'];
     protected $hidden = ['password', 'remember_token'];
 
     public function groups()
     {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsToMany(Group::class)->take(5);
     }
 
     public function availableGroups()
@@ -33,7 +33,7 @@ class User extends Authenticatable
 
     public function permissions()
     {
-        return $this->morphToMany(Permission::class, 'permissable');
+        return $this->morphToMany(Permission::class, 'permissable')->take(5);
     }
 
     public function posts()
