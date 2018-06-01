@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 class User extends Authenticatable
 {
     use Notifiable;
-    //public $with = ['permissions', 'groups'];
     protected $fillable = ['name', 'email', 'password'];
     protected $hidden = ['password', 'remember_token'];
 
@@ -33,9 +32,14 @@ class User extends Authenticatable
 
     public function permissions()
     {
-        return $this->morphToMany(Permission::class, 'permissable')->take(5);
+        return $this->hasMany(Permission::class);
     }
-
+/*
+public function permissions()
+{
+return $this->morphToMany(Permission::class, 'permissable')->take(5);
+}
+ */
     public function posts()
     {
         return $this->hasMany(Post::class);
@@ -49,5 +53,10 @@ class User extends Authenticatable
     public function files()
     {
         return $this->hasMany(File::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
     }
 }

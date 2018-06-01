@@ -28,7 +28,7 @@ class User extends Model {
 
     permissions(mode = null) {
         if (mode !== null) {
-            return this.has('permissions').filter(permission => permission.mode == mode);
+            return this.has('permissions').filter(permission => permission.permission_mode.name == mode);
         } else {
             return this.has('permissions');
         }

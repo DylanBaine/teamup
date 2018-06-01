@@ -13,6 +13,7 @@
                         <v-card-title class="grey lighten-2">
                             <h2 class="title black--text">
                                 {{post.name}}
+                                <h6 class="mt-1 subheading black--text">{{post.content.length}} characters</h6>
                             </h2>
                         </v-card-title>
                         <v-card-text>

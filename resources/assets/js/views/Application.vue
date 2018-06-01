@@ -28,9 +28,9 @@
 					<v-list-tile
 						:to="`/${type.slug}`"
 						v-for="type in permission.types"
-						:key="type.id">
+						:key="type.model">
 						<v-list-tile-action>
-							<v-icon size="15px">chrome_reader_mode</v-icon>
+							<v-icon size="15px">{{type.icon}}</v-icon>
 						</v-list-tile-action>
 						<v-list-tile-content>
 							<v-list-tile-title>
@@ -39,40 +39,6 @@
 						</v-list-tile-content>
 					</v-list-tile>
 				</template>
-				<v-list-group>
-					<v-list-tile slot="activator">
-						<v-list-tile-action>
-							<v-icon>group</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							Groups
-						</v-list-tile-content>
-					</v-list-tile>
-					<v-list-tile v-for="group in user.groups" :key="group.id" :to="`/groups/${group.id}`">
-						<v-list-tile-action>
-							<v-icon>group</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							{{group.name}}
-						</v-list-tile-content>
-					</v-list-tile>
-					<v-list-tile to="/groups/">
-						<v-list-tile-action>
-							<v-icon>remove_red_eye</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							All Groups
-						</v-list-tile-content>
-					</v-list-tile>
-					<v-list-tile v-if="$user.can('create', 'groups')" to="/groups/create">
-						<v-list-tile-action>
-							<v-icon>add</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							Create Group
-						</v-list-tile-content>
-					</v-list-tile>
-				</v-list-group>
 			</v-list>
 		</v-navigation-drawer>
 		<v-toolbar
@@ -134,7 +100,9 @@ export default {
       dark: true
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.$user.can("read", "tasks"));
+  },
   props: ["user"],
   computed: {
     $user() {

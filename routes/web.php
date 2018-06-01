@@ -4,7 +4,7 @@ Route::get('/', function () {
     $user = App\Models\User::find(1);
     //Auth::login($user);
     //Auth::logout();
-    $user = Auth::user() ? Auth::user()->load('groups', 'permissions') : false;
+    $user = Auth::user() ? Auth::user()->load('groups', 'permissions', 'tasks') : false;
     return view('layouts.app', compact('user'));
 });
 
