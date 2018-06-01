@@ -46,12 +46,7 @@ This is where I write out, and keep up with, business rules and designs for futu
     * hasMany Tasks
 
 * Permissions &#10004;
-    * morphedByMany Users &#10003;
-    * morphedByMany Groups &#10003;
-    * morphedByMany Posts &#10003;
-    * morphedByMany Files &#10003;
-    * morphedByMany Tasks &#10003;
-    * morphedByMany Types &#10003;
+    * belongsTo Types
 
 * Posts &#10004;
     * morphToMany Permissions &#10003;

@@ -26,15 +26,14 @@
 				</v-toolbar>
 				<template v-for="permission in $user.permissions('read')">
 					<v-list-tile
-						:to="`/${type.slug}`"
-						v-for="type in permission.types"
-						:key="type.model">
+						:to="`/${permission.type.slug}`"
+						:key="permission.type.id">
 						<v-list-tile-action>
-							<v-icon size="15px">{{type.icon}}</v-icon>
+							<v-icon size="15px">{{permission.type.icon}}</v-icon>
 						</v-list-tile-action>
 						<v-list-tile-content>
 							<v-list-tile-title>
-								{{ type.name }}
+								{{ permission.type.name }}
 							</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
@@ -101,7 +100,8 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$user.can("read", "tasks"));
+    var thing = this.$user.can("update", "documentations");
+    console.log(thing);
   },
   props: ["user"],
   computed: {

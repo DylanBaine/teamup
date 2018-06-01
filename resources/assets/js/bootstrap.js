@@ -42,7 +42,6 @@ Vue.component('loader', require('./components/Loader.vue'));
 Array.prototype.hasProp = function (needle, haystack) {
     for (let i = 0; i < this.length; i++) {
         var el = this[i];
-        console.log(el);
         if (needle == el[haystack]) {
             return true;
         }

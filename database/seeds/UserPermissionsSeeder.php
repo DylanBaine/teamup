@@ -15,6 +15,7 @@ class UserPermissionsSeeder extends Seeder
         $dylan = 1;
         $taskOnly = 2;
         $groupOnly = 3;
+        $docsOnly = 4;
         // Permission modes
         $create = 1;
         $read = 2;
@@ -49,6 +50,8 @@ class UserPermissionsSeeder extends Seeder
         $this->make($taskOnly, $read, $tasks);
 
         $this->make($groupOnly, $read, $groups);
+
+        $this->make($docsOnly, $read, $documentation);
 
     }
 

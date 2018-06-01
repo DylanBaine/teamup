@@ -4,7 +4,9 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Post::class, function (Faker $faker) {
     return [
-        'name' => $faker->title(),
-        'content' => $faker->text(),
+        'user_id' => rand(1, 4),
+        'type_id' => rand(1, 2),
+        'name' => ucwords($faker->sentence(1)),
+        'content' => $faker->paragraph(40),
     ];
 });

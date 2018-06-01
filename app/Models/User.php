@@ -34,12 +34,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Permission::class);
     }
-/*
-public function permissions()
-{
-return $this->morphToMany(Permission::class, 'permissable')->take(5);
-}
- */
+
     public function posts()
     {
         return $this->hasMany(Post::class);

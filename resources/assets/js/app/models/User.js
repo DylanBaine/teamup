@@ -28,15 +28,17 @@ class User extends Model {
 
     permissions(mode = null) {
         if (mode !== null) {
-            return this.has('permissions').filter(permission => permission.permission_mode.name == mode);
+            return this.has('permissions').filter(permission => permission.mode.name == mode);
         } else {
             return this.has('permissions');
         }
     }
 
     can(action, type) {
-        var permission = this.permissions(action);
-        return permission[0].types.hasProp(type, 'slug');
+        var permissions = this.permissions(action);
+        return permissions.filter((permission) => {
+            return permission.type.slug == type;
+        }).length > 0;
     }
 
 }

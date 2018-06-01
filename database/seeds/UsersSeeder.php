@@ -16,12 +16,17 @@ class UsersSeeder extends Seeder
             'email' => 'baine@tu.com',
         ]);
         factory(App\Models\User::class, 1)->create([
-            'name' => 'Only Documentation',
-            'email' => 'docs@tu.com',
-        ]);
-        factory(App\Models\User::class, 1)->create([
             'name' => 'Only Tasks',
             'email' => 'tasks@tu.com',
+        ]);
+        factory(App\Models\User::class, 1)->create([
+            'name' => 'Only Groups',
+            'email' => 'groups@tu.com',
+        ]);
+
+        factory(App\Models\User::class, 1)->create([
+            'name' => 'Only Documentation',
+            'email' => 'docs@tu.com',
         ]);
 
         factory(App\Models\User::class, 50)->create();

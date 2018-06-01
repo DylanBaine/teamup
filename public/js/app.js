@@ -813,7 +813,7 @@ var User = function (_Model) {
 
             if (mode !== null) {
                 return this.has('permissions').filter(function (permission) {
-                    return permission.permission_mode.name == mode;
+                    return permission.mode.name == mode;
                 });
             } else {
                 return this.has('permissions');
@@ -822,8 +822,10 @@ var User = function (_Model) {
     }, {
         key: 'can',
         value: function can(action, type) {
-            var permission = this.permissions(action);
-            return permission[0].types.hasProp(type, 'slug');
+            var permissions = this.permissions(action);
+            return permissions.filter(function (permission) {
+                return permission.type.slug == type;
+            }).length > 0;
         }
     }]);
 
@@ -1822,7 +1824,6 @@ Vue.component('loader', __webpack_require__(86));
 Array.prototype.hasProp = function (needle, haystack) {
     for (var i = 0; i < this.length; i++) {
         var el = this[i];
-        console.log(el);
         if (needle == el[haystack]) {
             return true;
         }
@@ -60843,7 +60844,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -60855,7 +60855,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
   mounted: function mounted() {
-    console.log(this.$user.can("read", "tasks"));
+    var thing = this.$user.can("update", "documentations");
+    console.log(thing);
   },
 
   props: ["user"],
@@ -60947,16 +60948,19 @@ var render = function() {
               ),
               _vm._v(" "),
               _vm._l(_vm.$user.permissions("read"), function(permission) {
-                return _vm._l(permission.types, function(type) {
-                  return _c(
+                return [
+                  _c(
                     "v-list-tile",
-                    { key: type.model, attrs: { to: "/" + type.slug } },
+                    {
+                      key: permission.type.id,
+                      attrs: { to: "/" + permission.type.slug }
+                    },
                     [
                       _c(
                         "v-list-tile-action",
                         [
                           _c("v-icon", { attrs: { size: "15px" } }, [
-                            _vm._v(_vm._s(type.icon))
+                            _vm._v(_vm._s(permission.type.icon))
                           ])
                         ],
                         1
@@ -60968,7 +60972,7 @@ var render = function() {
                           _c("v-list-tile-title", [
                             _vm._v(
                               "\n\t\t\t\t\t\t\t" +
-                                _vm._s(type.name) +
+                                _vm._s(permission.type.name) +
                                 "\n\t\t\t\t\t\t"
                             )
                           ])
@@ -60978,7 +60982,7 @@ var render = function() {
                     ],
                     1
                   )
-                })
+                ]
               })
             ],
             2
