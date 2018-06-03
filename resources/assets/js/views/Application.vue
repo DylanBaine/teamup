@@ -5,25 +5,22 @@
 			v-model="drawer"
 			fixed
 			app>
-			<v-list dense>
+			<v-list style="padding: 0;">
 				<v-toolbar dark color="primary darken-1">
 					<v-spacer></v-spacer>
+					<v-btn icon to="/">
+						<v-icon>home</v-icon>
+					</v-btn>
 					<v-btn icon>
 						<v-icon>apps</v-icon>
 					</v-btn>
 					<v-btn icon>
 						<v-icon>notifications</v-icon>
 					</v-btn>
-					<v-btn icon large>
-						<v-avatar size="32px" tile>
-							<img
-							src="https://vuetifyjs.com/static/doc-images/logo.svg"
-							alt="Vuetify"
-							>
-						</v-avatar>
-					</v-btn>
 					<v-spacer></v-spacer>
 				</v-toolbar>
+			</v-list>
+			<v-list dense>
 				<template v-for="permission in $user.permissions('read')">
 					<v-list-tile
 						:to="`/${permission.type.slug}`"
@@ -85,6 +82,17 @@
 				</v-card-text>
 			</v-card>
 		</v-dialog>
+		<v-btn
+			v-if="$route.params && $user.can('create', $route.params.type)"
+			fab
+			bottom
+			right
+			color="pink"
+			dark
+			fixed
+			:to="`/${$route.params.type}/create`">
+			<v-icon>add</v-icon>
+		</v-btn>
 		<loader ref="loader"></loader>
 	</v-app>
 </template>
@@ -100,7 +108,7 @@ export default {
     };
   },
   mounted() {
-    var thing = this.$user.can("update", "documentations");
+    var thing = this.$user.can("create", "groups");
     console.log(thing);
   },
   props: ["user"],

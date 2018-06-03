@@ -11,6 +11,8 @@ import ShowGroup from '../views/groups/show.vue';
 import Tasks from '../views/tasks/index.vue';
 import CreateTask from '../views/tasks/create.vue';
 import ShowTask from '../views/tasks/show.vue';
+import ManageTask from '../views/tasks/manage.vue';
+import EditTask from '../views/tasks/edit.vue';
 
 // Post Views
 import PostType from '../views/posts/index.vue';
@@ -29,6 +31,17 @@ const routes = [
         path: '/tasks', component: Tasks, children: [
             { path: 'create', component: CreateTask },
             { path: ':task', component: ShowTask },
+        ]
+    },
+    {
+        path: '/tasks/:task/manage', component: ManageTask, children: [
+            { path: 'edit', component: CreateTask, meta: { editing: true } },
+            { path: 'add-task', component: CreateTask },
+            {
+                path: ':child', component: ShowTask, children: [
+                    { path: 'edit', component: CreateTask, meta: { editing: true } },
+                ]
+            },
         ]
     },
     {

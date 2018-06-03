@@ -3,12 +3,7 @@
     <router-view></router-view>
     <v-container fluid>
       <header class=" text-xs-center">
-        <h1 class="display-4">
-          Welcome back, {{user.name}}!
-        </h1>
-        <h2 class="display-3">
-          Eventually we will put relevent content here...
-        </h2>
+        <icon-selector style="width: 400px" label="Select an icon" v-model="selected"></icon-selector>
       </header>
     </v-container>
   </v-layout>
@@ -19,7 +14,8 @@ import Group from "../app/models/Group";
 export default {
   data() {
     return {
-      user: ""
+      user: "",
+      selected: ""
     };
   },
   computed: {},

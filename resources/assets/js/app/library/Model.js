@@ -24,10 +24,14 @@ class Model {
      * @param {string} param parameter we are searching for
      * @param {sting|integer} value value of the parameter
      */
-    where(param, value) {
+    where(param, value, first = null) {
         return axios.get(`${url}/search/?model=${this.model}&param=${param}&value=${value}`)
             .then(res => {
-                this._set_(res.data);
+                if (first == null) {
+                    this._set_(res.data);
+                } else {
+                    this._set_(res.data[0]);
+                }
             });
     }
 
@@ -36,12 +40,21 @@ class Model {
      * @param {sting} param the parameter in the database we are searching for.
      * @param {value} value the value the parameter should match
      */
-    find(param, value) {
+    /*     find(param, value) {
+            this.showLoader(`Loading...`);
+            return axios.get(`${url}/search/?model=${this.model}&param=${param}&value=${value}`)
+                .then(res => {
+                    this.showLoader();
+                    this._set_(res.data[0]);
+                });
+        } */
+
+    find(id) {
         this.showLoader(`Loading...`);
-        return axios.get(`${url}/search/?model=${this.model}&param=${param}&value=${value}`)
+        return axios.get(`${this.getUrl}/${id}`)
             .then(res => {
                 this.showLoader();
-                this._set_(res.data[0]);
+                this._set_(res.data);
             });
     }
 
@@ -49,8 +62,10 @@ class Model {
      * Get all of the records of a given model
      */
     get() {
+        this.showLoader(`Loading...`);
         return axios.get(this.getUrl)
             .then(res => {
+                this.showLoader();
                 this._set_(res.data);
             });
     }
@@ -67,7 +82,16 @@ class Model {
         var config = {
             headers: { 'Content-Type': 'multipart/FormData' }
         };
-        return axios.post(this.modelBaseRoute, data, config);
+        this.showLoader('Saving...');
+        console.log(this.postUrl)
+        return axios.post(this.postUrl, data)
+            .then(res => {
+                this.showLoader();
+                this.get();
+            }).catch(err => {
+                this.showLoader();
+                console.log(err.message);
+            });
     }
 
     /**
@@ -79,7 +103,7 @@ class Model {
         var config = {
             headers: { 'Content-Type': 'multipart/FormData' }
         };
-        return axios.put(`${this.modelBaseRoute}/${id}`, data, config);
+        return axios.put(`${this.postUrl}/${id}`, data);
     }
 
     /**
@@ -87,7 +111,7 @@ class Model {
      * @param {integer} id id of the record to delete
      */
     delete(id) {
-        return axios.post(`${this.modelBaseRoute}/${id}`, {
+        return axios.post(`${this.postUrl}/${id}`, {
             _method: 'delete'
         })
     }

@@ -6,7 +6,7 @@ $factory->define(App\Models\Post::class, function (Faker $faker) {
     return [
         'user_id' => rand(1, 4),
         'type_id' => rand(1, 2),
-        'name' => ucwords($faker->sentence(1)),
-        'content' => $faker->paragraph(40),
+        'name' => ucwords($faker->sentence()),
+        'content' => $faker->paragraph(),
     ];
 });

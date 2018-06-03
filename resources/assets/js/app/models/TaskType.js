@@ -1,11 +1,11 @@
 import Model from '../library/Model';
-class Type extends Model {
+class TaskType extends Model {
     constructor(instance, store) {
         super({
-            post: 'types?model=Post',
-            get: 'types?model=Post',
+            post: 'types?model=Task',
+            get: 'types?model=Task',
         }, { instance, store });
         this.root = instance.$root;
     }
 }
-export default Type;
+export default TaskType;

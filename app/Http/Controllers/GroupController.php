@@ -15,7 +15,7 @@ class GroupController extends Controller
 
     public function __construct()
     {
-        $this->groups = Group::all();
+        $this->groups = Group::all()->load('users');
         //$this->assertDb = new AssertIsSet('groups');
         $this->users = User::all();
     }
@@ -40,7 +40,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return Group::get();
+        return $this->groups;
     }
 
     /**
@@ -66,8 +66,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $group = $this->groups->find($id);
-        return view('groups.show', compact('group'));
+        return $this->groups->find($id);
     }
 
     /**

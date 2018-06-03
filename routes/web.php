@@ -1,9 +1,6 @@
 <?php
 // Return the layout view when visiting the app
 Route::get('/', function () {
-    $user = App\Models\User::find(1);
-    //Auth::login($user);
-    //Auth::logout();
     $user = Auth::user() ? Auth::user()->load('groups', 'permissions', 'tasks') : false;
     return view('layouts.app', compact('user'));
 });
@@ -30,3 +27,5 @@ include 'typeRoutes.php';
 include 'fileRoutes.php';
 // Include api routes for groups module
 include 'groupRoutes.php';
+// include api routes for tasks module
+include 'taskRoutes.php';

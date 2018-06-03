@@ -8,6 +8,7 @@ const app = new Vue({
         user: window.__set_user__,
         middleware: {},
         userLinks: [],
+        icons: require('./app/library/Icons.json'),
     },
     watch: {
         $route() {

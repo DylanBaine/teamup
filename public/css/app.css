@@ -15217,3 +15217,27 @@ table.table tfoot tr td {
   display: none;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
+.padded {
+  padding: 10px;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.bottom {
+  bottom: 16px;
+}
+
+.left {
+  left: 16px;
+}
+
+.right {
+  right: 16px;
+}
+

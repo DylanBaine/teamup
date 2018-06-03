@@ -45,7 +45,7 @@ export default {
   methods: {
     init() {
       this.showing = true;
-      this.$post.find("id", this.$route.params.post);
+      this.$post.find(this.$route.params.post);
     }
   }
 };

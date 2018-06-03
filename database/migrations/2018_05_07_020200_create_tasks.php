@@ -17,12 +17,13 @@ class CreateTasks extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('group_id')->nullable();
-            $table->unsignedInteger('type_id');
+            $table->unsignedInteger('type_id')->nullable();
             $table->unsignedInteger('parent_id')->nullable();
 
             $table->string('name');
             $table->longText('description');
             $table->integer('percent_finished');
+            $table->string('icon')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

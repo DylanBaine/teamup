@@ -8,7 +8,16 @@
                 <h2 class="title">
                     {{group.name}}
                 </h2>
-            </v-toolbar>          
+            </v-toolbar>
+            <v-card-text>
+              <v-list>
+                <v-list-tile v-for="user in group.users" :key="user.key" :to="`/users/${user.id}`">
+                  <v-list-tile-content>
+                    {{user.name}}
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-card-text>
         </v-card>
     </v-dialog>
 </template>
@@ -33,7 +42,7 @@ export default {
   methods: {
     init() {
       this.showing = true;
-      this.$group.find("id", this.$route.params.group);
+      this.$group.find(this.$route.params.group);
     }
   }
 };

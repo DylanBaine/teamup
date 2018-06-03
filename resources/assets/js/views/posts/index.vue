@@ -23,22 +23,12 @@
                 </v-flex>
             </v-layout>
         </section>
-		<v-btn
-            v-if="$user.can('create', $route.params.type)"
-			fab
-			bottom
-			right
-			color="pink"
-			dark
-			fixed
-			:to="`/${$route.params.type}/create`">
-			<v-icon>add</v-icon>
-		</v-btn>
     </v-container>
 </template>
 
 <script>
 import Type from "../../app/models/PostType";
+import User from "../../app/models/User";
 export default {
   data() {
     return {
@@ -50,7 +40,7 @@ export default {
       return new Type(this, "type");
     },
     $user() {
-      return this.$root.$refs.app.$user;
+      return new User(this.$root, "user");
     }
   },
   watch: {
@@ -64,7 +54,7 @@ export default {
   methods: {
     init() {
       if (this.type == null || this.type.slug != this.$route.params.type) {
-        this.$type.find("slug", this.$route.params.type);
+        this.$type.where("slug", this.$route.params.type, "first");
       }
     }
   }
