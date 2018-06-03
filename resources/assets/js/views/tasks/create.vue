@@ -92,9 +92,6 @@ export default {
   computed: {
     $types() {
       return new TaskType(this, "types");
-    },
-    $tasks() {
-      return new Task(this, "parentOptions");
     }
   },
   mounted() {
@@ -106,7 +103,7 @@ export default {
       if (this.editing) {
         this.task = this.$parent.task;
       }
-      this.$tasks.get();
+      this.parentOptions = this.$parent.tasks;
       this.$types.get().then(res => {
         this.showing = true;
       });

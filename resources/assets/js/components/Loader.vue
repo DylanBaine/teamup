@@ -2,7 +2,7 @@
 	<v-fade-transition>
 		<div id="container" v-if="showing">
 			<div id="loader">
-				<v-progress-circular :size="50" indeterminate color="primary"></v-progress-circular>
+				<v-progress-circular :size="70" indeterminate color="primary"></v-progress-circular>
 				<h2 class="title">{{message}}</h2>
 			</div>
 		</div>
@@ -34,7 +34,6 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.3);
 }
 #loader {
   position: fixed;

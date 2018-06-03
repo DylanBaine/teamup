@@ -42,9 +42,7 @@ export default {
   },
   watch: {
     $route() {
-      if (!this.tasks.length) {
-        this.init();
-      }
+      if (!this.$route.params.task) this.init();
     }
   },
   computed: {

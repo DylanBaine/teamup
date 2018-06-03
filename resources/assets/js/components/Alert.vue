@@ -1,5 +1,5 @@
 <template>
-<div class="fixed bottom left" style="z-index:900;">
+<div class="fixed top left" style="z-index:900;">
     <div class="alert-container">
         <v-snackbar
             v-for="(alert, i) in alerts"
@@ -7,9 +7,10 @@
             :class="`white--text`"
             :color="alert.type"
             :value="alert.showing"
+            top
             :timeout="alert.to !== null ? 7000 : 3500">
             <div class="inner">
-                <v-icon class="mr-3">{{alert.type}}</v-icon>
+                <v-icon class="mr-3" color="white">{{alert.type}}</v-icon>
                 <h4 class="subheading">{{alert.message.length >= 100 ? alert.message.substr(0, 150) + '...' : alert.message}}</h4>
                 <v-btn v-if="alert.to !== null" :to="alert.to" small flat color="white">See More</v-btn>
             </div>

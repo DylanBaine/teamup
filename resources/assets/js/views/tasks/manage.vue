@@ -48,12 +48,13 @@ export default {
   data() {
     return {
       task: "",
-      types: []
+      types: [],
+      tasks: []
     };
   },
   watch: {
     $route() {
-      this.init();
+      if (!this.$route.params.child) this.init();
     }
   },
   computed: {
@@ -74,6 +75,7 @@ export default {
     init() {
       this.showing = true;
       this.$task.find(this.$route.params.task);
+      this.$tasks.get();
     }
   }
 };

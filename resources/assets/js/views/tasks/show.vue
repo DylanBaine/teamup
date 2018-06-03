@@ -56,7 +56,8 @@ export default {
   data() {
     return {
       task: "",
-      showing: false
+      showing: false,
+      tasks: ""
     };
   },
   watch: {
@@ -74,6 +75,7 @@ export default {
   },
   methods: {
     init() {
+      this.tasks = this.$parent.tasks;
       if (this.$route.params.child) {
         this.$task.find(this.$route.params.child).then(res => {
           this.showing = true;

@@ -42394,9 +42394,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   watch: {
     $route: function $route() {
-      if (!this.tasks.length) {
-        this.init();
-      }
+      if (!this.$route.params.task) this.init();
     }
   },
   computed: {
@@ -61555,7 +61553,7 @@ exports = module.exports = __webpack_require__(14)(false);
 
 
 // module
-exports.push([module.i, "\n#container {\r\n  z-index: 999;\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100vw;\r\n  height: 100vh;\r\n  background-color: rgba(255, 255, 255, 0.3);\n}\n#loader {\r\n  position: fixed;\r\n  width: 200px;\r\n  bottom: 0;\r\n  left: 0;\r\n  text-align: center;\n}\r\n", ""]);
+exports.push([module.i, "\n#container {\r\n  z-index: 999;\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100vw;\r\n  height: 100vh;\n}\n#loader {\r\n  position: fixed;\r\n  width: 200px;\r\n  bottom: 0;\r\n  left: 0;\r\n  text-align: center;\n}\r\n", ""]);
 
 // exports
 
@@ -61612,7 +61610,7 @@ var render = function() {
             { attrs: { id: "loader" } },
             [
               _c("v-progress-circular", {
-                attrs: { size: 50, indeterminate: "", color: "primary" }
+                attrs: { size: 70, indeterminate: "", color: "primary" }
               }),
               _vm._v(" "),
               _c("h2", { staticClass: "title" }, [_vm._v(_vm._s(_vm.message))])
@@ -61799,9 +61797,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   computed: {
     $types: function $types() {
       return new __WEBPACK_IMPORTED_MODULE_0__app_Models_TaskType__["a" /* default */](this, "types");
-    },
-    $tasks: function $tasks() {
-      return new __WEBPACK_IMPORTED_MODULE_1__app_models_Task__["a" /* default */](this, "parentOptions");
     }
   },
   mounted: function mounted() {
@@ -61816,7 +61811,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (this.editing) {
         this.task = this.$parent.task;
       }
-      this.$tasks.get();
+      this.parentOptions = this.$parent.tasks;
       this.$types.get().then(function (res) {
         _this.showing = true;
       });
@@ -62175,7 +62170,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       task: "",
-      showing: false
+      showing: false,
+      tasks: ""
     };
   },
 
@@ -62197,6 +62193,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this = this;
 
+      this.tasks = this.$parent.tasks;
       if (this.$route.params.child) {
         this.$task.find(this.$route.params.child).then(function (res) {
           _this.showing = true;
@@ -62894,13 +62891,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       task: "",
-      types: []
+      types: [],
+      tasks: []
     };
   },
 
   watch: {
     $route: function $route() {
-      this.init();
+      if (!this.$route.params.child) this.init();
     }
   },
   computed: {
@@ -62922,6 +62920,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       this.showing = true;
       this.$task.find(this.$route.params.task);
+      this.$tasks.get();
     }
   }
 });
@@ -63067,6 +63066,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -63143,7 +63143,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "fixed bottom left", staticStyle: { "z-index": "900" } },
+    { staticClass: "fixed top left", staticStyle: { "z-index": "900" } },
     [
       _c(
         "div",
@@ -63157,6 +63157,7 @@ var render = function() {
               attrs: {
                 color: alert.type,
                 value: alert.showing,
+                top: "",
                 timeout: alert.to !== null ? 7000 : 3500
               }
             },
@@ -63165,9 +63166,11 @@ var render = function() {
                 "div",
                 { staticClass: "inner" },
                 [
-                  _c("v-icon", { staticClass: "mr-3" }, [
-                    _vm._v(_vm._s(alert.type))
-                  ]),
+                  _c(
+                    "v-icon",
+                    { staticClass: "mr-3", attrs: { color: "white" } },
+                    [_vm._v(_vm._s(alert.type))]
+                  ),
                   _vm._v(" "),
                   _c("h4", { staticClass: "subheading" }, [
                     _vm._v(
