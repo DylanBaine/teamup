@@ -10,6 +10,7 @@ class TaskController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permissions');
         $this->tasks = Task::all()->load('type', 'children');
     }
     /**

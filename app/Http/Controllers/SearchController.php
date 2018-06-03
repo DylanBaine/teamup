@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
+    public function __construct(){
+        $this->middleware('permissions');
+    }
     public function __invoke()
     {
         $model = '\App\Models\\' . \Request::get('model');
