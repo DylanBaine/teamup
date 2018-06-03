@@ -1,1 +1,9 @@
-
+.alert-container .snack{
+  position: static;
+  margin-top: 10px;
+}
+.alert-container .snack__content{
+  justify-content: normal !important;
+  height: auto;
+  padding: 0;
+}

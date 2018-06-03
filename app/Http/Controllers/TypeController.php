@@ -13,8 +13,6 @@ class TypeController extends Controller
     public function __construct()
     {
         $this->types = Type::with('posts')->get();
-        $this->middleware('permissions');
-
         $this->repo = new Repo;
     }
     /**

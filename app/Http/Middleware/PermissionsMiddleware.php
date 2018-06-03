@@ -16,14 +16,35 @@ class PermissionsMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $basePath = explode('/', $request->path())[0];
+        $afterSlash = explode('/', $request->path())[0];
+        $basePath = explode('?', $afterSlash)[0];
+        $user = Auth::user()->load('permissions');
+        if ($basePath === 'search') {
+            return $this->handleSearchController($request, $next);
+        } else {
+            foreach ($user->permissions as $permission) {
+                if ($permission->mode->name == 'read' && $permission->type->slug == $basePath) {
+                    return $next($request);
+                }
+            }
+        }
+        return $this->abortMessage();
+    }
+
+    private function handleSearchController($request, $next)
+    {
+        $modelPath = $request->get('value');
         $user = Auth::user()->load('permissions');
         foreach ($user->permissions as $permission) {
-            if ($permission->mode->name == 'read' && $permission->type->slug == $basePath) {
+            if ($permission->mode->name == 'read' && $permission->type->slug == $modelPath) {
                 return $next($request);
             }
         }
-        return response()->json(['noPermissions' => true]);
+        return $this->abortMessage();
 
+    }
+    private function abortMessage()
+    {
+        return abort(403, 'Im sorry... You don\'t have permission to access this page...');
     }
 }

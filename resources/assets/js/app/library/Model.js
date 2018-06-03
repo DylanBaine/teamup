@@ -18,6 +18,18 @@ class Model {
         this.instance.$root.$refs.app.$refs.loader.run(message);
     }
 
+    alert(message) {
+        this.instance.$root.$refs.app.$refs.alert.run(message, 'error');
+    }
+
+    successfullyAdded() {
+        this.instance.$root.$refs.app.$refs.alert.run('Successfully added...', 'info');
+    }
+
+    successfullyUpdated() {
+        this.instance.$root.$refs.app.$refs.alert.run('Successfully updated...', 'info');
+    }
+
     /**
      * Search the model in the database
      * @param {string} variable the property the result is to be stored in
@@ -25,13 +37,18 @@ class Model {
      * @param {sting|integer} value value of the parameter
      */
     where(param, value, first = null) {
+        this.showLoader('Loading...');
         return axios.get(`${url}/search/?model=${this.model}&param=${param}&value=${value}`)
             .then(res => {
+                this.showLoader();
                 if (first == null) {
                     this._set_(res.data);
                 } else {
                     this._set_(res.data[0]);
                 }
+            }).catch(err => {
+                this.showLoader();
+                this.alert(err.response.data.message);
             });
     }
 
@@ -55,6 +72,9 @@ class Model {
             .then(res => {
                 this.showLoader();
                 this._set_(res.data);
+            }).catch(err => {
+                this.showLoader();
+                this.alert(err.response.data.message);
             });
     }
 
@@ -67,6 +87,9 @@ class Model {
             .then(res => {
                 this.showLoader();
                 this._set_(res.data);
+            }).catch(err => {
+                this.showLoader();
+                this.alert(err.response.data.message);
             });
     }
 
@@ -86,11 +109,13 @@ class Model {
         console.log(this.postUrl)
         return axios.post(this.postUrl, data)
             .then(res => {
+                this.successfullyAdded();
                 this.showLoader();
                 this.get();
             }).catch(err => {
+                this.alert(err.response.data.message);
                 this.showLoader();
-                console.log(err.message);
+                console.log(err.response.data.message);
             });
     }
 
@@ -103,7 +128,15 @@ class Model {
         var config = {
             headers: { 'Content-Type': 'multipart/FormData' }
         };
-        return axios.put(`${this.postUrl}/${id}`, data);
+        this.showLoader('Updating...');
+        return axios.put(`${this.postUrl}/${id}`, data)
+            .then(res => {
+                this.showLoader();
+                this.successfullyUpdated();
+            }).catch(err => {
+                this.showLoader();
+                this.alert(err.response.data.message);
+            });;
     }
 
     /**
@@ -111,9 +144,13 @@ class Model {
      * @param {integer} id id of the record to delete
      */
     delete(id) {
+        this.showLoader('Deleting...');
         return axios.post(`${this.postUrl}/${id}`, {
             _method: 'delete'
-        })
+        }).catch(err => {
+            this.showLoader();
+            this.alert(err.response.data.message);
+        });
     }
 }
 export default Model;

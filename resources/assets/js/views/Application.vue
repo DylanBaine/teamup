@@ -94,6 +94,7 @@
 			<v-icon>add</v-icon>
 		</v-btn>
 		<loader ref="loader"></loader>
+    <alerts ref="alert"></alerts>
 	</v-app>
 </template>
 

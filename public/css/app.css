@@ -15213,6 +15213,19 @@ table.table tfoot tr td {
   }
 }
 
+.alert-container .snack {
+  position: static;
+  margin-top: 10px;
+}
+
+.alert-container .snack__content {
+  -webkit-box-pack: normal !important;
+      -ms-flex-pack: normal !important;
+          justify-content: normal !important;
+  height: auto;
+  padding: 0;
+}
+
 [v-cloak] {
   display: none;
 }
