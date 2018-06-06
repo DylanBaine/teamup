@@ -5,7 +5,7 @@
       All Groups
     </h1>
     <v-layout row wrap>
-      <v-flex md6 v-for="group in groups" :key="group.key">
+      <v-flex md6 v-for="group in groups.collection" :key="group.key">
         <v-card ripple :to="`/groups/${group.id}`">
           <v-card-title class="grey lighten-2">
             <h2 class="title black--text">
@@ -51,7 +51,8 @@ export default {
   },
   methods: {
     init() {
-      this.$groups.get();
+      this.groups = new Group().get();
+      //this.$groups.get();
     }
   }
 };

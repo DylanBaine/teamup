@@ -26,11 +26,6 @@ class CreateTasks extends Migration
             $table->string('icon')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('group_id')->references('id')->on('groups');
-            $table->foreign('parent_id')->references('id')->on('tasks');
-            $table->foreign('type_id')->references('id')->on('types');
-
         });
 
     }

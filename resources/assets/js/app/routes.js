@@ -1,5 +1,5 @@
 // User Views
-import Login from '../views/auth/Login.vue';
+import Login from '../views/Login.vue';
 import Home from '../views/Home.vue';
 
 // Group Views
@@ -13,6 +13,7 @@ import CreateTask from '../views/tasks/create.vue';
 import ShowTask from '../views/tasks/show.vue';
 import ManageTask from '../views/tasks/manage.vue';
 import EditTask from '../views/tasks/edit.vue';
+import TaskSettings from '../views/tasks/settings.vue';
 
 // Post Views
 import PostType from '../views/posts/index.vue';
@@ -20,6 +21,7 @@ import Post from '../views/posts/show.vue';
 import CreatePost from '../views/posts/create.vue';
 
 const routes = [
+    { path: '/login', component: Login },
     { path: '/', component: Home },
     {
         path: '/groups', component: Groups, children: [
@@ -37,6 +39,7 @@ const routes = [
         path: '/tasks/:task/manage', component: ManageTask, children: [
             { path: 'edit', component: CreateTask, meta: { editing: true } },
             { path: 'add-task', component: CreateTask },
+            { path: 'settings', component: TaskSettings },
             {
                 path: ':child', component: ShowTask, children: [
                     { path: 'edit', component: CreateTask, meta: { editing: true } },

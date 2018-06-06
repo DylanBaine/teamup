@@ -17,17 +17,27 @@ class Model {
     showLoader(message = '') {
         this.instance.$root.$refs.app.$refs.loader.run(message);
     }
+    alert(message, type) {
+        if (message == "Pleas log back in to continue working...") {
+            return this.instance.$root.$refs.app.$refs.alert.run(message, 'error', 'login');
+        }
+        this.instance.$root.$refs.app.$refs.alert.run(message, type);
+    }
 
-    alert(message) {
-        this.instance.$root.$refs.app.$refs.alert.run(message, 'error');
+    showError(message) {
+        this.alert(message, 'error');
     }
 
     successfullyAdded() {
-        this.instance.$root.$refs.app.$refs.alert.run('Successfully added...', 'info');
+        this.alert('Successfully added...', 'info');
     }
 
     successfullyUpdated() {
-        this.instance.$root.$refs.app.$refs.alert.run('Successfully updated...', 'info');
+        this.alert('Successfully updated...', 'info');
+    }
+
+    successfullyDeleted() {
+        this.instance.$root.$refs.app.$refs.alert.run('Task was successfully deleted...', 'info');
     }
 
     /**
@@ -48,7 +58,7 @@ class Model {
                 }
             }).catch(err => {
                 this.showLoader();
-                this.alert(err.response.data.message);
+                this.showError(err.response.data.message);
             });
     }
 
@@ -74,7 +84,7 @@ class Model {
                 this._set_(res.data);
             }).catch(err => {
                 this.showLoader();
-                this.alert(err.response.data.message);
+                this.showError(err.response.data.message);
             });
     }
 
@@ -89,7 +99,7 @@ class Model {
                 this._set_(res.data);
             }).catch(err => {
                 this.showLoader();
-                this.alert(err.response.data.message);
+                this.showError(err.response.data.message);
             });
     }
 
@@ -106,14 +116,13 @@ class Model {
             headers: { 'Content-Type': 'multipart/FormData' }
         };
         this.showLoader('Saving...');
-        console.log(this.postUrl)
         return axios.post(this.postUrl, data)
             .then(res => {
                 this.successfullyAdded();
                 this.showLoader();
                 this.get();
             }).catch(err => {
-                this.alert(err.response.data.message);
+                this.showError(err.response.data.message);
                 this.showLoader();
                 console.log(err.response.data.message);
             });
@@ -135,7 +144,7 @@ class Model {
                 this.successfullyUpdated();
             }).catch(err => {
                 this.showLoader();
-                this.alert(err.response.data.message);
+                this.showError(err.response.data.message);
             });;
     }
 
@@ -147,9 +156,12 @@ class Model {
         this.showLoader('Deleting...');
         return axios.post(`${this.postUrl}/${id}`, {
             _method: 'delete'
+        }).then(res => {
+            this.showLoader();
+            this.successfullyDeleted();
         }).catch(err => {
             this.showLoader();
-            this.alert(err.response.data.message);
+            this.showError(err.response.data.message);
         });
     }
 }

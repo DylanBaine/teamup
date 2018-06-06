@@ -20,17 +20,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return response()->json(Task::where('parent_id', null)->with('children', 'type')->get());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json(Task::where('parent_id', 0)->orWhere('parent_id', null)->with('children', 'type')->get());
     }
 
     /**
@@ -49,7 +39,7 @@ class TaskController extends Controller
         $t->user_id = $request->parent_id;
         $t->icon = $request->icon;
         $t->percent_finished = 0;
-        $t->save();
+        return response()->json(['success' => $t->save()]);
     }
 
     /**
@@ -102,6 +92,13 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $task = Task::find($id);
+        if($task->parent_id == null || $task->parent_id == 0){
+            foreach($task->children()->get() as $child){
+                $child->parent_id = 0;
+                $child->save();
+            }
+        }
+        $task->delete();
     }
 }

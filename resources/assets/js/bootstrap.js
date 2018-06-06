@@ -32,7 +32,17 @@ window.router = new VueRouter({
 });
 
 import Vuetify from 'vuetify';
-Vue.use(Vuetify);
+import colors from 'vuetify/es5/util/colors';
+Vue.use(Vuetify, {
+    theme: {
+        primary: colors.teal.lighten1.toString(),
+        accent: colors.pink.base.toString(),
+        error: colors.red.base.toString(),
+        warning: colors.orange.accent3.toString(),
+        success: colors.green.accent4.toString(),
+    }
+});
+console.log(colors);
 
 Vue.component('application', require('./views/Application.vue'));
 Vue.component('login', require('./views/auth/Login.vue'));

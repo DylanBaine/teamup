@@ -92,6 +92,9 @@ export default {
   computed: {
     $types() {
       return new TaskType(this, "types");
+    },
+    $tasks() {
+      return new Task(this.$parent, "tasks");
     }
   },
   mounted() {

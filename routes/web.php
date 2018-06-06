@@ -29,3 +29,14 @@ include 'fileRoutes.php';
 include 'groupRoutes.php';
 // include api routes for tasks module
 include 'taskRoutes.php';
+
+Route::post('/settings', function () {
+    $querys = request()->query();
+    $keys = collect([]);
+    $values = collect([]);
+    foreach ($querys as $key => $value) {
+        $keys->push($key);
+        $values->push($value);
+    }
+    dd($values);
+});

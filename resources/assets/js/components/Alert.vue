@@ -1,5 +1,5 @@
 <template>
-<div class="fixed top left" style="z-index:900;">
+<div class="fixed top right" style="z-index:900;">
     <div class="alert-container">
         <v-snackbar
             v-for="(alert, i) in alerts"

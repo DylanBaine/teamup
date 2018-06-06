@@ -18,6 +18,9 @@ class PermissionsMiddleware
     {
         $afterSlash = explode('/', $request->path())[0];
         $basePath = explode('?', $afterSlash)[0];
+        if (!Auth::check()) {
+            return abort(401, "Pleas log back in to continue working...");
+        }
         $user = Auth::user()->load('permissions');
         if ($basePath === 'search') {
             return $this->handleSearchController($request, $next);

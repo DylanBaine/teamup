@@ -4,26 +4,35 @@
     <v-dialog v-model="showing" persistent>
         <v-card>
             <v-toolbar dark color="primary">
-                <v-btn icon :to="$route.params.child ? `/tasks/${task.parent_id}/manage/` : `/tasks`">
+                <v-btn ref="exit" icon :to="$route.params.child ? `/tasks/${task.parent_id}/manage/` : `/tasks`">
                     <v-icon>chevron_left</v-icon>
                 </v-btn>
                 <h2 class="title">
                     {{task.name}}
                 </h2>
                 <v-spacer></v-spacer>
-                <v-btn
-                    v-if="!$route.params.child"
-                    :to="task.parent_id ? `/tasks/${task.parent_id}/manage/${task.id}` : `/tasks/${$route.params.task}/manage`" 
-                    color="success">
-                Manage
-                </v-btn>
-                <v-btn
-                    v-else
-                    icon
-                    :to="`/tasks/${task.parent_id}/manage/${task.id}/edit`"
-                    color="success">
-                    <v-icon>edit</v-icon>
-                </v-btn>
+                <div v-if="!$route.params.child">
+                    <v-btn
+                        :to="task.parent_id ? `/tasks/${task.parent_id}/manage/${task.id}` : `/tasks/${$route.params.task}/manage`" 
+                        color="success">
+                    Manage
+                    </v-btn>
+                </div>
+                <div v-else>
+                    <v-btn
+                        icon
+                        @click="remove(task.id)"
+                        color="warning">
+                        <v-icon>delete_forever</v-icon>
+                    </v-btn>
+                    <v-btn
+                        icon
+                        :to="`/tasks/${task.parent_id}/manage/${task.id}/edit`"
+                        color="success">
+                        <v-icon>edit</v-icon>
+                    </v-btn>
+
+                </div>
             </v-toolbar>
             <v-card-text>
                 <p>
@@ -85,6 +94,10 @@ export default {
           this.showing = true;
         });
       }
+    },
+    remove(id) {
+      this.$refs.exit.$el.click();
+      this.$parent.remove(id);
     }
   }
 };

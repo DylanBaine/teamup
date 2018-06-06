@@ -5,13 +5,18 @@
         All Tasks
     </h1>
     <v-layout row wrap>
-      <v-flex md6 v-for="task in tasks.filter(task=>{return task.parent_id == null})" :key="task.key">
-        <v-card ripple :to="`/tasks/${task.id}`">
-          <v-card-title class="grey lighten-2">
-            <h2 class="title black--text">
-              {{task.name}} ({{task.type.name}})
-              <v-icon color="black">{{task.icon}}</v-icon>
-            </h2>
+      <v-flex md6 v-for="task in tasks" :key="task.key">
+        <v-card ripple :to="`/tasks/${task.id}/manage`">
+          <v-card-title :class="task.parent_id == 0 ? 'blue lighten-2' : 'grey lighten-2'">
+            <div>
+              <h2 class="title black--text">
+                {{task.name}} ({{task.type_id ? task.type.name : 'No type yet...'}})
+                <v-icon color="black">{{task.icon}}</v-icon>
+              </h2>
+              <h3 class="subheading mt-1 black--text" v-if="task.parent_id == 0">
+                Previously a child task.
+              </h3>
+            </div>
           </v-card-title>
         </v-card>
       </v-flex>
@@ -43,6 +48,9 @@ export default {
   watch: {
     $route() {
       if (!this.$route.params.task) this.init();
+    },
+    previewing() {
+      return this.preview();
     }
   },
   computed: {
