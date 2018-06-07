@@ -8,8 +8,16 @@ class Task extends Model {
         this.root = instance.$root;
     }
 
+    subscribeUserToTask(data) {
+        return axios.post(`${this.postUrl}&action=subscribe-user-to-task`, data).then(res => {
+            this.alert('You subscribed a user to a row in this task!', 'info');
+        }).catch(err => {
+            this.alert(err.response.data.message, 'error');
+        });
+    }
+
     addColumn(column) {
-        axios.post(`${this.postUrl}&action=add-clumn`, column).then(res => {
+        return axios.post(`${this.postUrl}&action=add-column`, column).then(res => {
             this.alert('Added a new column!', 'info');
         }).catch(err => {
             this.alert(err.response.data.message, 'error')
@@ -17,7 +25,7 @@ class Task extends Model {
     }
 
     subscribeUserToColumn(data) {
-        axios.post(`${this.postUrl}&action=subscribe-user`, data).then(res => {
+        return axios.post(`${this.postUrl}&action=subscribe-user-to-column`, data).then(res => {
             this.alert('You subscribed a user to a row in this task!', 'info');
         }).catch(err => {
             this.alert(err.response.data.message, 'error');

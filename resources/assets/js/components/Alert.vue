@@ -30,6 +30,7 @@ export default {
   watch: {},
   methods: {
     run(message, type, to = null) {
+      if (type === "error") this.$root.errors = true;
       this.count++;
       this.alerts.push({
         message: message,
@@ -37,6 +38,9 @@ export default {
         type: type,
         to: to
       });
+      setTimeout(() => {
+        this.$root.errors = false;
+      }, 1000);
     }
   }
 };

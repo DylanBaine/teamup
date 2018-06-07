@@ -55,7 +55,12 @@
                             <v-list>
                                 <v-list-tile v-for="subbed in subs" :key="subbed.key">
                                     <v-list-tile-content>
-                                        {{subbed.name}}
+                                        <v-list-tile-title>
+                                            {{subbed.name}}
+                                        </v-list-tile-title>
+                                        <v-list-tile-sub-title v-if="subbed.subscriptions && subbed.subscriptions.length">
+                                            <b>Notifications:</b> <span v-for="(sub, key) in subbed.subscriptions" :key="key"><span v-if="key != 0">|</span> {{sub.name}} </span>
+                                        </v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action v-if="columns.length">
                                         <v-menu>
@@ -68,7 +73,7 @@
                                                 </v-card-title>
                                                 <div ref="scrollMe" class="scroll-me">
                                                     <v-list ref="columnList">
-                                                        <v-list-tile v-for="column in columns" :key="column.position" @click="subscribeUserToColumn(subbed.id, column.name)">
+                                                        <v-list-tile v-for="column in columns" :key="column.position" @click="subscribeUserToColumn(subbed, column.name)">
                                                             <v-list-tile-content>
                                                                 {{column.name}}
                                                             </v-list-tile-content>
@@ -150,28 +155,45 @@ export default {
       this.showing = true;
     },
     addColumn() {
-      new TaskSetting(this, "task").addColumn(this.newColumn);
-      this.columns.push(this.newColumn);
-      this.newColumn = {
-        name: "",
-        position: this.columns.length + 1
-      };
+      new TaskSetting(this, "task").addColumn(this.newColumn).then(() => {
+        if (!this.$root.errors) {
+          this.columns.push(this.newColumn);
+          this.newColumn = {
+            name: "",
+            position: this.columns.length + 1
+          };
+        }
+      });
     },
     addSub() {
-      new TaskSetting(this, "task").create({
-        user_id: this.newSub.id
-      });
-      this.subs.push(this.newSub);
-      this.search = "";
-      this.newSub = {
-        name: ""
-      };
+      new TaskSetting(this, "task")
+        .subscribeUserToTask({
+          user_id: this.newSub.id
+        })
+        .then(() => {
+          if (!this.$root.errors) {
+            this.newSub.subscriptions = [];
+            this.subs.push(this.newSub);
+            this.search = "";
+            this.newSub = {
+              name: ""
+            };
+          }
+        });
     },
     subscribeUserToColumn(user, column) {
-      new TaskSetting(this, "task").subscribeUserToColumn({
-        user_id: user,
-        column: column
-      });
+      if (!user.subscriptions) user.subscriptions = [];
+      new TaskSetting(this, "task")
+        .subscribeUserToColumn({
+          user_id: user.id,
+          column: column
+        })
+        .then(() => {
+          if (!this.$root.errors) {
+            user.subscriptions.push({ name: column });
+            this.$mount();
+          }
+        });
     }
   }
 };

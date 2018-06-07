@@ -42,4 +42,17 @@ class Task extends Model
     {
         return $this->hasMany(Task::class, 'parent_id');
     }
+
+    public function settings($name = null)
+    {
+        if ($name != null) {
+            return $this->morphMany(Setting::class, 'settable')->where('name', $name);
+        }
+        return $this->morphMany(Setting::class, 'settable');
+    }
+
+    public function setColumnsAttribute()
+    {
+        return $this->settings('column');
+    }
 }

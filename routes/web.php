@@ -30,7 +30,9 @@ include 'groupRoutes.php';
 // include api routes for tasks module
 include 'taskRoutes.php';
 
-Route::post('/settings', function () {
+include 'settingRoutes.php';
+
+Route::post('/test', function () {
     $querys = request()->query();
     $keys = collect([]);
     $values = collect([]);

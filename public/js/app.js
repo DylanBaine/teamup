@@ -1816,7 +1816,8 @@ var app = new Vue({
         user: window.__set_user__,
         middleware: {},
         userLinks: [],
-        icons: __webpack_require__(116)
+        icons: __webpack_require__(116),
+        errors: false
     },
     watch: {
         $route: function $route() {
@@ -63741,8 +63742,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   watch: {},
   methods: {
     run: function run(message, type) {
+      var _this = this;
+
       var to = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
+      if (type === "error") this.$root.errors = true;
       this.count++;
       this.alerts.push({
         message: message,
@@ -63750,6 +63754,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         type: type,
         to: to
       });
+      setTimeout(function () {
+        _this.$root.errors = false;
+      }, 1000);
     }
   }
 });
@@ -64076,6 +64083,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -64118,27 +64130,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.showing = true;
     },
     addColumn: function addColumn() {
-      new __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__["a" /* default */](this, "task").addColumn(this.newColumn);
-      this.columns.push(this.newColumn);
-      this.newColumn = {
-        name: "",
-        position: this.columns.length + 1
-      };
+      var _this = this;
+
+      new __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__["a" /* default */](this, "task").addColumn(this.newColumn).then(function () {
+        if (!_this.$root.errors) {
+          _this.columns.push(_this.newColumn);
+          _this.newColumn = {
+            name: "",
+            position: _this.columns.length + 1
+          };
+        }
+      });
     },
     addSub: function addSub() {
-      new __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__["a" /* default */](this, "task").create({
+      var _this2 = this;
+
+      new __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__["a" /* default */](this, "task").subscribeUserToTask({
         user_id: this.newSub.id
+      }).then(function () {
+        if (!_this2.$root.errors) {
+          _this2.newSub.subscriptions = [];
+          _this2.subs.push(_this2.newSub);
+          _this2.search = "";
+          _this2.newSub = {
+            name: ""
+          };
+        }
       });
-      this.subs.push(this.newSub);
-      this.search = "";
-      this.newSub = {
-        name: ""
-      };
     },
     subscribeUserToColumn: function subscribeUserToColumn(user, column) {
+      var _this3 = this;
+
+      if (!user.subscriptions) user.subscriptions = [];
       new __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__["a" /* default */](this, "task").subscribeUserToColumn({
-        user_id: user,
+        user_id: user.id,
         column: column
+      }).then(function () {
+        if (!_this3.$root.errors) {
+          user.subscriptions.push({ name: column });
+          _this3.$mount();
+        }
       });
     }
   }
@@ -64373,13 +64404,54 @@ var render = function() {
                                     "v-list-tile",
                                     { key: subbed.key },
                                     [
-                                      _c("v-list-tile-content", [
-                                        _vm._v(
-                                          "\n                                    " +
-                                            _vm._s(subbed.name) +
-                                            "\n                                "
-                                        )
-                                      ]),
+                                      _c(
+                                        "v-list-tile-content",
+                                        [
+                                          _c("v-list-tile-title", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(subbed.name) +
+                                                "\n                                    "
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          subbed.subscriptions &&
+                                          subbed.subscriptions.length
+                                            ? _c(
+                                                "v-list-tile-sub-title",
+                                                [
+                                                  _c("b", [
+                                                    _vm._v("Notifications:")
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _vm._l(
+                                                    subbed.subscriptions,
+                                                    function(sub, key) {
+                                                      return _c(
+                                                        "span",
+                                                        { key: key },
+                                                        [
+                                                          key != 0
+                                                            ? _c("span", [
+                                                                _vm._v("|")
+                                                              ])
+                                                            : _vm._e(),
+                                                          _vm._v(
+                                                            " " +
+                                                              _vm._s(sub.name) +
+                                                              " "
+                                                          )
+                                                        ]
+                                                      )
+                                                    }
+                                                  )
+                                                ],
+                                                2
+                                              )
+                                            : _vm._e()
+                                        ],
+                                        1
+                                      ),
                                       _vm._v(" "),
                                       _vm.columns.length
                                         ? _c(
@@ -64447,7 +64519,7 @@ var render = function() {
                                                                         $event
                                                                       ) {
                                                                         _vm.subscribeUserToColumn(
-                                                                          subbed.id,
+                                                                          subbed,
                                                                           column.name
                                                                         )
                                                                       }
@@ -64853,25 +64925,36 @@ var Task = function (_Model) {
     }
 
     _createClass(Task, [{
-        key: 'addColumn',
-        value: function addColumn(column) {
+        key: 'subscribeUserToTask',
+        value: function subscribeUserToTask(data) {
             var _this2 = this;
 
-            axios.post(this.postUrl + '&action=add-clumn', column).then(function (res) {
-                _this2.alert('Added a new column!', 'info');
+            return axios.post(this.postUrl + '&action=subscribe-user-to-task', data).then(function (res) {
+                _this2.alert('You subscribed a user to a row in this task!', 'info');
             }).catch(function (err) {
                 _this2.alert(err.response.data.message, 'error');
             });
         }
     }, {
-        key: 'subscribeUserToColumn',
-        value: function subscribeUserToColumn(data) {
+        key: 'addColumn',
+        value: function addColumn(column) {
             var _this3 = this;
 
-            axios.post(this.postUrl + '&action=subscribe-user', data).then(function (res) {
-                _this3.alert('You subscribed a user to a row in this task!', 'info');
+            return axios.post(this.postUrl + '&action=add-column', column).then(function (res) {
+                _this3.alert('Added a new column!', 'info');
             }).catch(function (err) {
                 _this3.alert(err.response.data.message, 'error');
+            });
+        }
+    }, {
+        key: 'subscribeUserToColumn',
+        value: function subscribeUserToColumn(data) {
+            var _this4 = this;
+
+            return axios.post(this.postUrl + '&action=subscribe-user-to-column', data).then(function (res) {
+                _this4.alert('You subscribed a user to a row in this task!', 'info');
+            }).catch(function (err) {
+                _this4.alert(err.response.data.message, 'error');
             });
         }
     }]);
