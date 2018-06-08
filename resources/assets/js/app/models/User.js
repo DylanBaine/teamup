@@ -9,14 +9,17 @@ class User extends Model {
     }
 
     login(user) {
-        this.instance.showLoader('Logging you in...');
+        this.instance.showLoader('Logging you in...')
         return axios.post(url + '/auth/login', user)
             .then(res => {
+                this.instance.showLoader();
                 if (this.instance.$root.$route.path == '/login') {
                     this.instance.$root.$router.push('/');
                 }
-                this.instance.showLoader();
                 this.root.user = res.data;
+            }).catch(err => {
+                this.instance.showLoader();
+                this.instance.error = err.response.data.message;
             });
     }
 

@@ -523,7 +523,7 @@ var Model = function () {
         key: 'alert',
         value: function alert(message, type) {
             if (message == "Pleas log back in to continue working...") {
-                return this.instance.$root.$refs.app.$refs.alert.run(message, 'error', 'login');
+                return this.instance.$root.$refs.app.$refs.alert.run(message, 'error', '/login');
             }
             this.instance.$root.$refs.app.$refs.alert.run(message, type);
         }
@@ -744,11 +744,14 @@ var User = function (_Model) {
 
             this.instance.showLoader('Logging you in...');
             return axios.post(url + '/auth/login', user).then(function (res) {
+                _this2.instance.showLoader();
                 if (_this2.instance.$root.$route.path == '/login') {
                     _this2.instance.$root.$router.push('/');
                 }
-                _this2.instance.showLoader();
                 _this2.root.user = res.data;
+            }).catch(function (err) {
+                _this2.instance.showLoader();
+                _this2.instance.error = err.response.data.message;
             });
         }
     }, {
@@ -43384,6 +43387,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -43398,7 +43408,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   watch: {
     $route: function $route() {
+      this.fam = false;
       if (!this.$route.params.child && !this.$route.meta.editing) this.init();
+    },
+    task: function task() {
+      this.columnItems();
     }
   },
   computed: {
@@ -43418,21 +43432,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     init: function init() {
-      var _this = this;
-
       this.showing = true;
       this.$task.find(this.$route.params.task);
-      this.$tasks.get().then(function (res) {
-        if (!_this.task.name) {
-          _this.$router.push("/tasks");
-        }
-      });
+      this.$tasks.get();
     },
     remove: function remove(id) {
-      var _this2 = this;
+      var _this = this;
 
       this.$task.delete(id).then(function (res) {
-        _this2.init();
+        _this.init();
+      });
+    },
+    columnItems: function columnItems() {
+      var _this2 = this;
+
+      this.task.columns.forEach(function (column) {
+        column.children = _this2.task.children.filter(function (child) {
+          return child.parent_id == column.id;
+        });
       });
     }
   }
@@ -43448,6 +43465,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "container" },
     [
       _c("router-view"),
       _vm._v(" "),
@@ -43459,59 +43477,79 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-layout",
-            { attrs: { row: "", wrap: "" } },
-            _vm._l(_vm.task.children, function(child) {
+            { staticStyle: { width: "100%" }, attrs: { row: "", wrap: "" } },
+            _vm._l(_vm.task.columns, function(column) {
               return _c(
                 "v-flex",
-                { key: child.key, attrs: { md3: "" } },
+                { key: column.key, attrs: { md3: "" } },
                 [
                   _c(
                     "v-card",
-                    {
-                      attrs: {
-                        to:
-                          "/tasks/" +
-                          _vm.$route.params.task +
-                          "/manage/" +
-                          child.id
-                      }
-                    },
+                    { staticStyle: { "min-height": "50vh", height: "100%" } },
                     [
                       _c("v-card-title", [
-                        _c("div", [
-                          _c(
-                            "h2",
-                            { staticClass: "title" },
-                            [
-                              _c("v-icon", [_vm._v(_vm._s(child.icon))]),
-                              _vm._v(
-                                " " +
-                                  _vm._s(child.name) +
-                                  "\n                            "
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("h3", { staticClass: "subheading" }, [
-                            _vm._v(
-                              "                            \n                                " +
-                                _vm._s(child.percent_finished) +
-                                "% finished\n                            "
-                            )
-                          ])
+                        _c("h2", { staticClass: "title" }, [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(column.value) +
+                              "\n                  "
+                          )
                         ])
                       ]),
                       _vm._v(" "),
-                      _c("v-card-text", [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(child.description) +
-                            "\n                    "
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _vm._l(column.children, function(child) {
+                        return _c(
+                          "v-card",
+                          {
+                            key: child.id,
+                            staticClass:
+                              "primary darken-1 ml-2 mr-2 mb-2 mt-2 elevation-6 white--text",
+                            attrs: {
+                              to:
+                                "/tasks/" +
+                                _vm.$route.params.task +
+                                "/manage/" +
+                                child.id
+                            }
+                          },
+                          [
+                            _c("v-card-title", [
+                              _c("div", [
+                                _c(
+                                  "h2",
+                                  { staticClass: "title" },
+                                  [
+                                    _c(
+                                      "v-icon",
+                                      { attrs: { color: "white" } },
+                                      [_vm._v(_vm._s(child.icon))]
+                                    ),
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(child.name) +
+                                        "\n                              "
+                                    )
+                                  ],
+                                  1
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("v-card-text", [
+                              _vm._v(
+                                "\n                          " +
+                                  _vm._s(child.description) +
+                                  "\n                      "
+                              )
+                            ])
+                          ],
+                          1
                         )
-                      ])
+                      })
                     ],
-                    1
+                    2
                   )
                 ],
                 1
@@ -62942,7 +62980,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -63022,6 +63060,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -63034,11 +63076,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         password: ""
       },
       model: {},
-      error: ""
+      error: "",
+      fresh: false
     };
   },
 
-  watch: {},
+  watch: {
+    error: function error() {
+      var _this = this;
+
+      setTimeout(function () {
+        _this.error = false;
+      }, 2000);
+    }
+  },
   created: function created() {},
   mounted: function mounted() {
     this.model = new __WEBPACK_IMPORTED_MODULE_0__app_models_User__["a" /* default */](this);
@@ -63069,90 +63120,97 @@ var render = function() {
   return _c(
     "v-app",
     [
-      _c(
-        "v-layout",
-        { attrs: { "justify-center": "", "align-center": "" } },
-        [
-          _c(
-            "v-card",
-            { attrs: { width: "800px" } },
-            [
-              _vm.error
-                ? _c("v-alert", { attrs: { type: "error", value: true } }, [
-                    _c("h3", { staticClass: "text-xs-center" }, [
-                      _vm._v(
-                        "\r\n                  " +
-                          _vm._s(_vm.error) +
-                          "\r\n              "
-                      )
-                    ])
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "v-form",
-                {
-                  attrs: { valid: _vm.valid },
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      _vm.login()
+      _c("v-layout", { attrs: { "justify-center": "", "align-center": "" } }, [
+        _c(
+          "div",
+          [
+            _c(
+              "v-card",
+              { attrs: { width: "800px" } },
+              [
+                _c(
+                  "v-form",
+                  {
+                    attrs: { valid: _vm.valid },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        _vm.login()
+                      }
                     }
-                  }
-                },
-                [
-                  _c("v-card-text", [
+                  },
+                  [
+                    _c("v-card-text", [
+                      _c(
+                        "div",
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Email", type: "email" },
+                            model: {
+                              value: _vm.user.email,
+                              callback: function($$v) {
+                                _vm.$set(_vm.user, "email", $$v)
+                              },
+                              expression: "user.email"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: { label: "Password", type: "password" },
+                            model: {
+                              value: _vm.user.password,
+                              callback: function($$v) {
+                                _vm.$set(_vm.user, "password", $$v)
+                              },
+                              expression: "user.password"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ]),
+                    _vm._v(" "),
                     _c(
-                      "div",
+                      "v-card-actions",
                       [
-                        _c("v-text-field", {
-                          attrs: { label: "Email", type: "email" },
-                          model: {
-                            value: _vm.user.email,
-                            callback: function($$v) {
-                              _vm.$set(_vm.user, "email", $$v)
-                            },
-                            expression: "user.email"
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("v-text-field", {
-                          attrs: { label: "Password", type: "password" },
-                          model: {
-                            value: _vm.user.password,
-                            callback: function($$v) {
-                              _vm.$set(_vm.user, "password", $$v)
-                            },
-                            expression: "user.password"
-                          }
-                        })
+                        _c(
+                          "v-btn",
+                          { attrs: { type: "submit", color: "primary" } },
+                          [_vm._v("Login")]
+                        )
                       ],
                       1
                     )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c(
-                        "v-btn",
-                        { attrs: { type: "submit", color: "primary" } },
-                        [_vm._v("Login")]
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-fade-transition",
+              [
+                _vm.error
+                  ? _c("v-alert", { attrs: { type: "error", value: true } }, [
+                      _c("h3", { staticClass: "text-xs-center" }, [
+                        _vm._v(
+                          "\r\n                  " +
+                            _vm._s(_vm.error) +
+                            "\r\n              "
+                        )
+                      ])
+                    ])
+                  : _vm._e()
+              ],
+              1
+            )
+          ],
+          1
+        )
+      ]),
       _vm._v(" "),
       _c("loader", { ref: "loader" })
     ],
@@ -63419,7 +63477,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n#icon-input[data-v-979ea322] {\r\n  height: 130px;\r\n  overflow: auto;\r\n  overflow-x: hidden;\r\n  padding: 0;\r\n  border-radius: 5px;\r\n  width: 100%;\r\n  margin: 0;\n}\nlabel[data-v-979ea322] {\r\n  padding-left: 10px;\n}\r\n/* width */\n[data-v-979ea322]::-webkit-scrollbar {\r\n  width: 10px;\n}\r\n\r\n/* Track */\n[data-v-979ea322]::-webkit-scrollbar-track {\r\n  background: transparent;\n}\r\n\r\n/* Handle */\n[data-v-979ea322]::-webkit-scrollbar-thumb {\r\n  background: rgba(160, 160, 193, 0.263);\n}\r\n\r\n/* Handle on hover */\n[data-v-979ea322]::-webkit-scrollbar-thumb:hover {\r\n  background: rgba(160, 160, 193, 0.563);\n}\r\n", ""]);
+exports.push([module.i, "\n#icon-input[data-v-979ea322] {\r\n  height: 130px;\r\n  overflow: auto;\r\n  overflow-x: hidden;\r\n  padding: 0;\r\n  border-radius: 5px;\r\n  width: 100%;\r\n  margin: 0;\n}\nlabel[data-v-979ea322] {\r\n  padding-left: 10px;\n}\r\n", ""]);
 
 // exports
 
@@ -63973,6 +64031,7 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_models_User__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_models_Task__ = __webpack_require__(5);
 //
 //
 //
@@ -64088,6 +64147,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
@@ -64099,15 +64164,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       users: [],
       showing: false,
       newColumn: {
-        name: "",
-        position: 1
+        value: ""
       },
-      columns: [],
       newSub: {},
       subs: []
     };
   },
 
+  computed: {
+    $task: function $task() {
+      return new __WEBPACK_IMPORTED_MODULE_2__app_models_Task__["a" /* default */](this, "task");
+    },
+    $setting: function $setting() {
+      return new __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__["a" /* default */](this, "task");
+    },
+    newColumnPosition: function newColumnPosition() {
+      return this.task.columns.length + 1;
+    }
+  },
   watch: {
     columns: function columns() {
       var el = this.$refs.scrollMe;
@@ -64117,7 +64191,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log(list.clientHeight);
     },
     search: function search() {
-      if (this.search.length > 2) new __WEBPACK_IMPORTED_MODULE_0__app_models_User__["a" /* default */](this, "users").where("name", this.search);
+      if (this.search && this.search.length > 2) new __WEBPACK_IMPORTED_MODULE_0__app_models_User__["a" /* default */](this, "users").where("name", this.search);
     }
   },
   mounted: function mounted() {
@@ -64126,49 +64200,61 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     init: function init() {
-      if (this.task == "") this.$router.push("/tasks/" + this.$route.params.task + "/manage");
+      if (this.task == "") this.$task.find(this.$route.params.task);
       this.showing = true;
     },
     addColumn: function addColumn() {
       var _this = this;
 
-      new __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__["a" /* default */](this, "task").addColumn(this.newColumn).then(function () {
+      this.$setting.addColumn({
+        value: this.newColumn.value,
+        position: this.newColumnPosition
+      }).then(function () {
         if (!_this.$root.errors) {
-          _this.columns.push(_this.newColumn);
+          _this.$task.find(_this.$route.params.task);
           _this.newColumn = {
-            name: "",
-            position: _this.columns.length + 1
+            value: "",
+            position: _this.newColumnPosition
           };
         }
       });
     },
-    addSub: function addSub() {
+    removeColumn: function removeColumn(column) {
       var _this2 = this;
 
-      new __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__["a" /* default */](this, "task").subscribeUserToTask({
+      this.$setting.removeColumn(column).then(function () {
+        if (!_this2.$root.errors) {
+          _this2.$task.find(_this2.$route.params.task);
+        }
+      });
+    },
+    addSub: function addSub() {
+      var _this3 = this;
+
+      this.$setting.subscribeUserToTask({
         user_id: this.newSub.id
       }).then(function () {
-        if (!_this2.$root.errors) {
-          _this2.newSub.subscriptions = [];
-          _this2.subs.push(_this2.newSub);
-          _this2.search = "";
-          _this2.newSub = {
+        if (!_this3.$root.errors) {
+          _this3.newSub.subscriptions = [];
+          _this3.subs.push(_this3.newSub);
+          _this3.search = "";
+          _this3.newSub = {
             name: ""
           };
         }
       });
     },
     subscribeUserToColumn: function subscribeUserToColumn(user, column) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (!user.subscriptions) user.subscriptions = [];
-      new __WEBPACK_IMPORTED_MODULE_1__app_models_TaskSetting__["a" /* default */](this, "task").subscribeUserToColumn({
+      this.$setting.subscribeUserToColumn({
         user_id: user.id,
         column: column
       }).then(function () {
-        if (!_this3.$root.errors) {
+        if (!_this4.$root.errors) {
           user.subscriptions.push({ name: column });
-          _this3.$mount();
+          _this4.$mount();
         }
       });
     }
@@ -64273,7 +64359,7 @@ var render = function() {
                 { attrs: { row: "", wrap: "" } },
                 [
                   _c("v-flex", { attrs: { md4: "" } }, [
-                    _vm.columns.length
+                    _vm.task.columns && _vm.task.columns.length
                       ? _c(
                           "div",
                           { ref: "scrollMe", staticClass: "scroll-me" },
@@ -64289,7 +64375,7 @@ var render = function() {
                             _c(
                               "v-list",
                               { ref: "columnList" },
-                              _vm._l(_vm.columns, function(column) {
+                              _vm._l(_vm.task.columns, function(column) {
                                 return _c(
                                   "v-list-tile",
                                   { key: column.position },
@@ -64297,10 +64383,39 @@ var render = function() {
                                     _c("v-list-tile-content", [
                                       _vm._v(
                                         "\n                                    " +
-                                          _vm._s(column.name) +
+                                          _vm._s(column.value) +
                                           "\n                                "
                                       )
                                     ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-list-tile-action",
+                                      [
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            attrs: {
+                                              icon: "",
+                                              flat: "",
+                                              small: "",
+                                              color: "grey"
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                _vm.removeColumn(column.id)
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("v-icon", [
+                                              _vm._v("delete_forever")
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
                                     _vm._v(" "),
                                     _c(
                                       "v-list-tile-action",
@@ -64347,11 +64462,11 @@ var render = function() {
                             }
                           },
                           model: {
-                            value: _vm.newColumn.name,
+                            value: _vm.newColumn.value,
                             callback: function($$v) {
-                              _vm.$set(_vm.newColumn, "name", $$v)
+                              _vm.$set(_vm.newColumn, "value", $$v)
                             },
-                            expression: "newColumn.name"
+                            expression: "newColumn.value"
                           }
                         }),
                         _vm._v(" "),
@@ -64453,7 +64568,8 @@ var render = function() {
                                         1
                                       ),
                                       _vm._v(" "),
-                                      _vm.columns.length
+                                      _vm.task.columns &&
+                                      _vm.task.columns.length
                                         ? _c(
                                             "v-list-tile-action",
                                             [
@@ -64507,7 +64623,7 @@ var render = function() {
                                                               refInFor: true
                                                             },
                                                             _vm._l(
-                                                              _vm.columns,
+                                                              _vm.task.columns,
                                                               function(column) {
                                                                 return _c(
                                                                   "v-list-tile",
@@ -64520,7 +64636,7 @@ var render = function() {
                                                                       ) {
                                                                         _vm.subscribeUserToColumn(
                                                                           subbed,
-                                                                          column.name
+                                                                          column.value
                                                                         )
                                                                       }
                                                                     }
@@ -64532,7 +64648,7 @@ var render = function() {
                                                                         _vm._v(
                                                                           "\n                                                            " +
                                                                             _vm._s(
-                                                                              column.name
+                                                                              column.value
                                                                             ) +
                                                                             "\n                                                        "
                                                                         )
@@ -64956,6 +65072,11 @@ var Task = function (_Model) {
             }).catch(function (err) {
                 _this4.alert(err.response.data.message, 'error');
             });
+        }
+    }, {
+        key: 'removeColumn',
+        value: function removeColumn(column) {
+            return axios.post(this.postUrl + '&action=remove-column&arg=' + column);
         }
     }]);
 

@@ -1,24 +1,34 @@
 <?php
 namespace App\TEAMUP\BLL;
 
-use App\Models\Task;
+use App\Models\Setting;
 
 trait TaskLogic
 {
 
-    function addColumn($request)
+    function addColumn()
     {
-        dd($request);
+        Setting::create([
+            'name' => 'column',
+            'value' => request('value'),
+            'position' => request('position'),
+            'settable_id' => request()->query('id'),
+            'settable_type' => 'App\Models\\' . request()->query('model'),
+        ]);
     }
 
-    function subscribeUserToColumn($request)
+    function removeColumn($id)
     {
-        dd($request);
+        $setting = Setting::where('id', $id)->first();
+        $setting->delete();
     }
 
-    function subscribeUserToTask($request)
+    function subscribeUserToColumn()
     {
-        dd($request);
+    }
+
+    function subscribeUserToTask()
+    {
     }
 
 }

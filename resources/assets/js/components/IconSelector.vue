@@ -64,24 +64,5 @@ export default {
 label {
   padding-left: 10px;
 }
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: rgba(160, 160, 193, 0.263);
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(160, 160, 193, 0.563);
-}
 </style>
 

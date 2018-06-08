@@ -1,29 +1,36 @@
 <template>
-  <div>
+  <div class="container">
       <router-view></router-view>
       <v-container grid-list-lg>
           <header>
               <h1>{{task.name}}</h1>
           </header>
-          <v-layout row wrap>
-              <v-flex md3 v-for="child in task.children" :key="child.key">
-                  <v-card :to="`/tasks/${$route.params.task}/manage/${child.id}`">
-                      <v-card-title>
-                          <div>
-                              <h2 class="title">
-                                  <v-icon>{{child.icon}}</v-icon> {{child.name}}
-                              </h2>
-                              <h3 class="subheading">                            
-                                  {{child.percent_finished}}% finished
-                              </h3>
-                          </div>
-                      </v-card-title>
-                      <v-card-text>
-                          {{child.description}}
-                      </v-card-text>
-                  </v-card>
+            <v-layout row wrap style="width:100%;">
+              <v-flex md3 v-for="column in task.columns" :key="column.key">
+                <v-card style="min-height: 50vh; height: 100%;" class>
+                  <v-card-title>
+                    <h2 class="title">
+                      {{column.value}}
+                    </h2>
+                  </v-card-title>
+                  <v-divider></v-divider>
+                    <v-card v-for="child in column.children" :key="child.id" 
+                        :to="`/tasks/${$route.params.task}/manage/${child.id}`" 
+                        class="primary darken-1 ml-2 mr-2 mb-2 mt-2 elevation-6 white--text">
+                        <v-card-title>
+                            <div>
+                                <h2 class="title">
+                                    <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}
+                                </h2>
+                            </div>
+                        </v-card-title>
+                        <v-card-text>
+                            {{child.description}}
+                        </v-card-text>
+                    </v-card>
+                </v-card>
               </v-flex>
-          </v-layout>
+            </v-layout>
           <v-slide-x-transition>
             <v-btn
               v-if="!fam"
@@ -91,7 +98,11 @@ export default {
   },
   watch: {
     $route() {
+      this.fam = false;
       if (!this.$route.params.child && !this.$route.meta.editing) this.init();
+    },
+    task() {
+      this.columnItems();
     }
   },
   computed: {
@@ -112,15 +123,18 @@ export default {
     init() {
       this.showing = true;
       this.$task.find(this.$route.params.task);
-      this.$tasks.get().then(res => {
-        if (!this.task.name) {
-          this.$router.push("/tasks");
-        }
-      });
+      this.$tasks.get();
     },
     remove(id) {
       this.$task.delete(id).then(res => {
         this.init();
+      });
+    },
+    columnItems() {
+      this.task.columns.forEach(column => {
+        column.children = this.task.children.filter(child => {
+          return child.parent_id == column.id;
+        });
       });
     }
   }

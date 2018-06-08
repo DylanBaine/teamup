@@ -31,5 +31,9 @@ class Task extends Model {
             this.alert(err.response.data.message, 'error');
         });
     }
+
+    removeColumn(column) {
+        return axios.post(`${this.postUrl}&action=remove-column&arg=${column}`)
+    }
 }
 export default Task;

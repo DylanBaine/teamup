@@ -2,40 +2,28 @@
 namespace App\TEAMUP\Responses;
 
 use App\TEAMUP\BLL\TaskLogic;
-use App\TEAMUP\Contracts\ResponseContract;
 use Exception;
+use Illuminate\Contracts\Support\Responsable;
 
-class SettingResponse implements ResponseContract
+class SettingResponse implements Responsable
 {
     use TaskLogic;
 
-    public function respond($request, $id = null)
+    public function toResponse($request, $id = null)
     {
         $this->model = \Request::get('model');
         $this->modelId = \Request::get('id');
         $this->action = \Request::get('action');
-        if ($id !== null) {
-            return $this->update($request, $id);
-        }
-        return $this->create($request);
-    }
-
-    public function update($request, $id)
-    {
-
-    }
-
-    public function create($request)
-    {
         return $this->callUserFunction($request);
     }
 
     private function callUserFunction($request)
     {
+        $method = camel_case($this->action);
+        $arg = request()->query('arg') ? request()->query('arg') : null;
         if (method_exists($this, camel_case($this->action))) {
-            return call_user_func([$this, camel_case($this->action)], [$request]);
+            return call_user_func([$this, $method], [$arg]);
         }
         throw new Exception('I\'m sorry... This isn\'t a valid method...');
     }
-
 }

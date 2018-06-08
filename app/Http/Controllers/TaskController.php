@@ -31,6 +31,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        $parent = Task::find($request->parent_id);
         $t = new Task;
         $t->name = $request->name;
         $t->description = $request->description == null ? 'No Description Given' : $request->description;
@@ -38,7 +39,9 @@ class TaskController extends Controller
         $t->type_id = $request->type_id;
         $t->user_id = $request->parent_id;
         $t->icon = $request->icon;
-        $t->percent_finished = 0;
+        $t->column_id = $parent && $parent->columns()->count() ?
+        $parent->columns()->first()->id:
+        null;
         return response()->json(['success' => $t->save()]);
     }
 
@@ -50,7 +53,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        return $this->tasks->find($id);
+        return $this->tasks->find($id)->load('columns');
     }
 
     /**
@@ -80,7 +83,6 @@ class TaskController extends Controller
         $t->type_id = $request->type_id;
         $t->user_id = $request->parent_id;
         $t->icon = $request->icon;
-        $t->percent_finished = 0;
         $t->save();
     }
 
@@ -93,8 +95,8 @@ class TaskController extends Controller
     public function destroy($id)
     {
         $task = Task::find($id);
-        if($task->parent_id == null || $task->parent_id == 0){
-            foreach($task->children()->get() as $child){
+        if ($task->parent_id == null || $task->parent_id == 0) {
+            foreach ($task->children()->get() as $child) {
                 $child->parent_id = 0;
                 $child->save();
             }

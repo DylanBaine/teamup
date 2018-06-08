@@ -51,7 +51,7 @@ class Task extends Model
         return $this->morphMany(Setting::class, 'settable');
     }
 
-    public function setColumnsAttribute()
+    public function columns()
     {
         return $this->settings('column');
     }

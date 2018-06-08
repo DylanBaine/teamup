@@ -23,7 +23,7 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->actions->respond($request);
+        return $this->actions->toResponse($request);
     }
 
     /**
@@ -46,7 +46,7 @@ class SettingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->actions->respond($request, $id);
+        return $this->actions->toResponse($request, $id);
     }
 
     /**

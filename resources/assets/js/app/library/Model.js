@@ -19,7 +19,7 @@ class Model {
     }
     alert(message, type) {
         if (message == "Pleas log back in to continue working...") {
-            return this.instance.$root.$refs.app.$refs.alert.run(message, 'error', 'login');
+            return this.instance.$root.$refs.app.$refs.alert.run(message, 'error', '/login');
         }
         this.instance.$root.$refs.app.$refs.alert.run(message, type);
     }

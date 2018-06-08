@@ -19,10 +19,11 @@ class CustomAuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $response = Auth::user()->load('permissions', 'groups');
+            return response()->json($response);
         } else {
-            $response = ['success' => false, 'error' => 'I\'m sorry... This info didn\'t match up... Try again.'];
+            return abort(404, "I'm sorry... This info didn't match our records...");
         }
-        return response()->json($response);
+
     }
 
     public function logout()

@@ -13,17 +13,22 @@
             <v-container grid-list-lg>
                 <v-layout row wrap>
                     <v-flex md4>
-                        <div ref="scrollMe" class="scroll-me" v-if="columns.length">
+                        <div ref="scrollMe" class="scroll-me" v-if="task.columns && task.columns.length">
                             <header>
                                 <h2>
                                     Task columns.
                                 </h2>
                             </header>
                             <v-list ref="columnList">
-                                <v-list-tile v-for="column in columns" :key="column.position">
+                                <v-list-tile v-for="column in task.columns" :key="column.position">
                                     <v-list-tile-content>
-                                        {{column.name}}
+                                        {{column.value}}
                                     </v-list-tile-content>
+                                    <v-list-tile-action>
+                                        <v-btn @click="removeColumn(column.id)" icon flat small color="grey">
+                                            <v-icon>delete_forever</v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
                                     <v-list-tile-action>
                                         <v-icon color="grey">drag_indicator</v-icon>
                                     </v-list-tile-action>
@@ -34,7 +39,7 @@
                             <v-text-field
                                 @keyup.native.enter="addColumn"
                                 label="Add a task column."
-                                v-model="newColumn.name"
+                                v-model="newColumn.value"
                             ></v-text-field>
                             <v-btn
                                 absolute
@@ -62,7 +67,7 @@
                                             <b>Notifications:</b> <span v-for="(sub, key) in subbed.subscriptions" :key="key"><span v-if="key != 0">|</span> {{sub.name}} </span>
                                         </v-list-tile-sub-title>
                                     </v-list-tile-content>
-                                    <v-list-tile-action v-if="columns.length">
+                                    <v-list-tile-action v-if="task.columns && task.columns.length">
                                         <v-menu>
                                             <v-btn slot="activator" color="accent" icon>
                                                 <v-icon>more_vert</v-icon>
@@ -73,9 +78,9 @@
                                                 </v-card-title>
                                                 <div ref="scrollMe" class="scroll-me">
                                                     <v-list ref="columnList">
-                                                        <v-list-tile v-for="column in columns" :key="column.position" @click="subscribeUserToColumn(subbed, column.name)">
+                                                        <v-list-tile v-for="column in task.columns" :key="column.position" @click="subscribeUserToColumn(subbed, column.value)">
                                                             <v-list-tile-content>
-                                                                {{column.name}}
+                                                                {{column.value}}
                                                             </v-list-tile-content>
                                                         </v-list-tile>
                                                     </v-list>
@@ -116,6 +121,7 @@
 <script>
 import User from "../../app/models/User";
 import TaskSetting from "../../app/models/TaskSetting";
+import Task from "../../app/models/Task";
 export default {
   data() {
     return {
@@ -124,13 +130,22 @@ export default {
       users: [],
       showing: false,
       newColumn: {
-        name: "",
-        position: 1
+        value: ""
       },
-      columns: [],
       newSub: {},
       subs: []
     };
+  },
+  computed: {
+    $task() {
+      return new Task(this, "task");
+    },
+    $setting() {
+      return new TaskSetting(this, "task");
+    },
+    newColumnPosition() {
+      return this.task.columns.length + 1;
+    }
   },
   watch: {
     columns() {
@@ -141,7 +156,7 @@ export default {
       console.log(list.clientHeight);
     },
     search() {
-      if (this.search.length > 2)
+      if (this.search && this.search.length > 2)
         new User(this, "users").where("name", this.search);
     }
   },
@@ -150,23 +165,34 @@ export default {
   },
   methods: {
     init() {
-      if (this.task == "")
-        this.$router.push(`/tasks/${this.$route.params.task}/manage`);
+      if (this.task == "") this.$task.find(this.$route.params.task);
       this.showing = true;
     },
     addColumn() {
-      new TaskSetting(this, "task").addColumn(this.newColumn).then(() => {
+      this.$setting
+        .addColumn({
+          value: this.newColumn.value,
+          position: this.newColumnPosition
+        })
+        .then(() => {
+          if (!this.$root.errors) {
+            this.$task.find(this.$route.params.task);
+            this.newColumn = {
+              value: "",
+              position: this.newColumnPosition
+            };
+          }
+        });
+    },
+    removeColumn(column) {
+      this.$setting.removeColumn(column).then(() => {
         if (!this.$root.errors) {
-          this.columns.push(this.newColumn);
-          this.newColumn = {
-            name: "",
-            position: this.columns.length + 1
-          };
+          this.$task.find(this.$route.params.task);
         }
       });
     },
     addSub() {
-      new TaskSetting(this, "task")
+      this.$setting
         .subscribeUserToTask({
           user_id: this.newSub.id
         })
@@ -183,7 +209,7 @@ export default {
     },
     subscribeUserToColumn(user, column) {
       if (!user.subscriptions) user.subscriptions = [];
-      new TaskSetting(this, "task")
+      this.$setting
         .subscribeUserToColumn({
           user_id: user.id,
           column: column
