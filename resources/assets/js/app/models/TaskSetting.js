@@ -3,7 +3,8 @@ class Task extends Model {
     constructor(instance, store) {
         super({
             post: 'settings?model=Task&id=' + instance[store].id,
-            get: 'settings?model=Task&id=' + instance[store].id
+            get: 'settings?model=Task&id=' + instance[store].id,
+            edit: 'settings'
         }, { instance, store });
         this.root = instance.$root;
     }

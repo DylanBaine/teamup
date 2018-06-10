@@ -20,6 +20,9 @@ class User extends Model {
             }).catch(err => {
                 this.instance.showLoader();
                 this.instance.error = err.response.data.message;
+                if (!err.response.data.message) {
+                    window.location.reload();
+                }
             });
     }
 

@@ -40,7 +40,7 @@ class TaskController extends Controller
         $t->user_id = $request->parent_id;
         $t->icon = $request->icon;
         $t->column_id = $parent && $parent->columns()->count() ?
-        $parent->columns()->first()->id:
+        $parent->columns()->first()->id :
         null;
         return response()->json(['success' => $t->save()]);
     }
@@ -80,8 +80,8 @@ class TaskController extends Controller
         $t->name = $request->name;
         $t->description = $request->description == null ? 'No Description Given' : $request->description;
         $t->parent_id = $request->parent_id;
+        $t->column_id = $request->column_id;
         $t->type_id = $request->type_id;
-        $t->user_id = $request->parent_id;
         $t->icon = $request->icon;
         $t->save();
     }

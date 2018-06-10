@@ -5,32 +5,25 @@
           <header>
               <h1>{{task.name}}</h1>
           </header>
-            <v-layout row wrap style="width:100%;">
-              <v-flex md3 v-for="column in task.columns" :key="column.key">
-                <v-card style="min-height: 50vh; height: 100%;" class>
+          <v-container grid-list-lg>
+            <v-layout row wrap>
+              <draggable v-for="column in task.columns" :key="column.position"  :items="column.children" :options="{group:'tasks', element: '.drag-me'}" :id="`${column.id}`" class="task-row flex md3 mt-2" @end="add" @start="start">
+                <v-card>
                   <v-card-title>
-                    <h2 class="title">
-                      {{column.value}}
-                    </h2>
+                    <h2>{{column.value}}</h2>
                   </v-card-title>
-                  <v-divider></v-divider>
-                    <v-card v-for="child in column.children" :key="child.id" 
-                        :to="`/tasks/${$route.params.task}/manage/${child.id}`" 
-                        class="primary darken-1 ml-2 mr-2 mb-2 mt-2 elevation-6 white--text">
-                        <v-card-title>
-                            <div>
-                                <h2 class="title">
-                                    <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}
-                                </h2>
-                            </div>
-                        </v-card-title>
-                        <v-card-text>
-                            {{child.description}}
-                        </v-card-text>
-                    </v-card>
                 </v-card>
-              </v-flex>
+                <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${task.id}/manage/${child.id}`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
+                  <v-card-title>
+                    <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
+                  </v-card-title>
+                  <v-card-text>
+                    {{child.description}}
+                  </v-card-text>
+                </v-card>
+              </draggable>
             </v-layout>
+          </v-container>
           <v-slide-x-transition>
             <v-btn
               v-if="!fam"
@@ -93,7 +86,8 @@ export default {
       task: "",
       types: [],
       tasks: [],
-      fam: false
+      fam: false,
+      loaded: false
     };
   },
   watch: {
@@ -102,7 +96,9 @@ export default {
       if (!this.$route.params.child && !this.$route.meta.editing) this.init();
     },
     task() {
-      this.columnItems();
+      if (!this.dragging) {
+        this.columnItems();
+      }
     }
   },
   computed: {
@@ -121,7 +117,7 @@ export default {
   },
   methods: {
     init() {
-      this.showing = true;
+      this.loaded = true;
       this.$task.find(this.$route.params.task);
       this.$tasks.get();
     },
@@ -131,12 +127,33 @@ export default {
       });
     },
     columnItems() {
+      console.log("arganizing");
       this.task.columns.forEach(column => {
         column.children = this.task.children.filter(child => {
-          return child.parent_id == column.id;
+          return child.column_id == column.id;
         });
       });
-    }
+    },
+    add(e) {
+      var newParent = e.to.id;
+      var target = e.item.id;
+      var task = this.task.children.filter(task => {
+        return task.id == target;
+      })[0];
+      task.column_id = newParent;
+      this.$task.update(task.id, task, "quick");
+    },
+    start(e) {}
   }
 };
 </script>
+
+<style>
+.sortable-ghost {
+  opacity: 0;
+}
+.task-row {
+  min-height: 60vh;
+}
+</style>
+

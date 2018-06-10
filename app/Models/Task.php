@@ -46,9 +46,9 @@ class Task extends Model
     public function settings($name = null)
     {
         if ($name != null) {
-            return $this->morphMany(Setting::class, 'settable')->where('name', $name);
+            return $this->morphMany(Setting::class, 'settable')->where('name', $name)->orderBy('position');
         }
-        return $this->morphMany(Setting::class, 'settable');
+        return $this->morphMany(Setting::class, 'settable')->orderBy('position');
     }
 
     public function columns()

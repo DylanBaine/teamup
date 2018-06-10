@@ -20,19 +20,23 @@
                                 </h2>
                             </header>
                             <v-list ref="columnList">
-                                <v-list-tile v-for="column in task.columns" :key="column.position">
-                                    <v-list-tile-content>
-                                        {{column.value}}
-                                    </v-list-tile-content>
-                                    <v-list-tile-action>
-                                        <v-btn @click="removeColumn(column.id)" icon flat small color="grey">
-                                            <v-icon>delete_forever</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                    <v-list-tile-action>
-                                        <v-icon color="grey">drag_indicator</v-icon>
-                                    </v-list-tile-action>
-                                </v-list-tile>
+                                <draggable v-model="task.columns" :items="task.columns" @end="changeColumnOrder">
+                                    <div :id="column.id" v-for="column in task.columns" :key="column.position">
+                                        <v-list-tile>
+                                            <v-list-tile-content>
+                                                {{column.value}}
+                                            </v-list-tile-content>
+                                            <v-list-tile-action>
+                                                <v-btn @click="removeColumn(column.id)" icon flat small color="grey">
+                                                    <v-icon>delete_forever</v-icon>
+                                                </v-btn>
+                                            </v-list-tile-action>
+                                            <v-list-tile-action>
+                                                <v-icon color="grey">drag_indicator</v-icon>
+                                            </v-list-tile-action>
+                                        </v-list-tile>
+                                    </div>
+                                </draggable>
                             </v-list>
                         </div>
                         <div class="relative">
@@ -220,6 +224,13 @@ export default {
             this.$mount();
           }
         });
+    },
+    changeColumnOrder(e) {
+      console.log(e.item.id);
+      this.task.columns.forEach((column, i) => {
+        column.position = i + 1;
+        this.$setting.update(column.id, column, "quick");
+      });
     }
   }
 };

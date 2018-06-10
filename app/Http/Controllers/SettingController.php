@@ -46,7 +46,12 @@ class SettingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->actions->toResponse($request, $id);
+        $s = Setting::find($id);
+        $s->name = $request->name;
+        $s->value = $request->value;
+        $s->position = $request->position;
+        $s->save();
+        //return $this->actions->toResponse($request, $id);
     }
 
     /**

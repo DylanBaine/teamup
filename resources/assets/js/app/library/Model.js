@@ -1,6 +1,7 @@
 class Model {
     constructor(route, store) {
         this.postUrl = `${url}/${route.post}`;
+        this.editUrl = route.edit ? `${url}/${route.edit}` : `${url}/${route.post}`;
         this.getUrl = `${url}/${route.get}`;
         this.instance = store.instance;
         this.store = store.store;
@@ -133,17 +134,17 @@ class Model {
      * @param {integer} id id of the record you are updating
      * @param {object} data the new data to be saved to the database
      */
-    update(id, data) {
+    update(id, data, quick = false) {
         var config = {
             headers: { 'Content-Type': 'multipart/FormData' }
         };
-        this.showLoader('Updating...');
-        return axios.put(`${this.postUrl}/${id}`, data)
+        if (!quick) this.showLoader('Updating...');
+        return axios.put(`${this.editUrl}/${id}`, data)
             .then(res => {
-                this.showLoader();
-                this.successfullyUpdated();
+                if (!quick) this.showLoader();
+                if (!quick) this.successfullyUpdated();
             }).catch(err => {
-                this.showLoader();
+                if (!quick) this.showLoader();
                 this.showError(err.response.data.message);
             });;
     }
