@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\TEAMUP\Responses\UpdateTaskResponse;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -57,17 +58,6 @@ class TaskController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -76,14 +66,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $t = Task::find($id);
-        $t->name = $request->name;
-        $t->description = $request->description == null ? 'No Description Given' : $request->description;
-        $t->parent_id = $request->parent_id;
-        $t->column_id = $request->column_id;
-        $t->type_id = $request->type_id;
-        $t->icon = $request->icon;
-        $t->save();
+        return (new UpdateTaskResponse)->toResponse($request, $id);
     }
 
     /**
