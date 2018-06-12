@@ -24,7 +24,7 @@
                                     <div :id="column.id" v-for="column in task.columns" :key="column.position">
                                         <v-list-tile>
                                             <v-list-tile-content>
-                                                {{column.value}}
+                                                <input type="text" class="padded ghost" @keydown.enter="$setting.update(column.id, column)" v-model="column.value">
                                             </v-list-tile-content>
                                             <v-list-tile-action>
                                                 <v-btn @click="removeColumn(column.id)" icon flat small color="grey">
@@ -32,7 +32,7 @@
                                                 </v-btn>
                                             </v-list-tile-action>
                                             <v-list-tile-action>
-                                                <v-icon color="grey">drag_indicator</v-icon>
+                                                <v-btn flat icon><v-icon color="grey">drag_indicator</v-icon></v-btn>
                                             </v-list-tile-action>
                                         </v-list-tile>
                                     </div>
@@ -55,42 +55,21 @@
                         </div>
                     </v-flex>
                     <v-flex md7 offset-md1 class="relative">
-                        <div class="scroll-me" v-if="subs.length">
+                        <div class="scroll-me" v-if="task.subscribers.length">
                             <header>
                                 <h2>
                                     Users subscribed to {{task.name}}.
                                 </h2>
                             </header>
                             <v-list>
-                                <v-list-tile v-for="subbed in subs" :key="subbed.key">
+                                <v-list-tile v-for="subbed in task.subscribers" :key="subbed.key">
                                     <v-list-tile-content>
                                         <v-list-tile-title>
-                                            {{subbed.name}}
+                                            {{subbed.user.name}}
                                         </v-list-tile-title>
-                                        <v-list-tile-sub-title v-if="subbed.subscriptions && subbed.subscriptions.length">
-                                            <b>Notifications:</b> <span v-for="(sub, key) in subbed.subscriptions" :key="key"><span v-if="key != 0">|</span> {{sub.name}} </span>
-                                        </v-list-tile-sub-title>
                                     </v-list-tile-content>
-                                    <v-list-tile-action v-if="task.columns && task.columns.length">
-                                        <v-menu>
-                                            <v-btn slot="activator" color="accent" icon>
-                                                <v-icon>more_vert</v-icon>
-                                            </v-btn>
-                                            <v-card>
-                                                <v-card-title>
-                                                    Choose a specific column to subscribe {{subbed.name}} to.
-                                                </v-card-title>
-                                                <div ref="scrollMe" class="scroll-me">
-                                                    <v-list ref="columnList">
-                                                        <v-list-tile v-for="column in task.columns" :key="column.position" @click="subscribeUserToColumn(subbed, column.value)">
-                                                            <v-list-tile-content>
-                                                                {{column.value}}
-                                                            </v-list-tile-content>
-                                                        </v-list-tile>
-                                                    </v-list>
-                                                </div>
-                                            </v-card>
-                                        </v-menu>
+                                    <v-list-tile-action>
+                                        <v-btn flat icon @click="removeSubscriber(subbed.id)"><v-icon color="grey">delete_forever</v-icon></v-btn>
                                     </v-list-tile-action>
                                 </v-list-tile>
                             </v-list>
@@ -198,12 +177,13 @@ export default {
     addSub() {
       this.$setting
         .subscribeUserToTask({
+          subscribable_id: this.task.id,
+          subscribable_type: "App\\Models\\Task",
           user_id: this.newSub.id
         })
         .then(() => {
           if (!this.$root.errors) {
-            this.newSub.subscriptions = [];
-            this.subs.push(this.newSub);
+            this.$task.find(this.$route.params.task);
             this.search = "";
             this.newSub = {
               name: ""
@@ -211,22 +191,12 @@ export default {
           }
         });
     },
-    subscribeUserToColumn(user, column) {
-      if (!user.subscriptions) user.subscriptions = [];
-      this.$setting
-        .subscribeUserToColumn({
-          user_id: user.id,
-          column: column
-        })
-        .then(() => {
-          if (!this.$root.errors) {
-            user.subscriptions.push({ name: column });
-            this.$mount();
-          }
-        });
+    removeSubscriber(setting) {
+      this.$setting.removeSubscriber(setting).then(() => {
+        this.$task.find(this.$route.params.task);
+      });
     },
     changeColumnOrder(e) {
-      console.log(e.item.id);
       this.task.columns.forEach((column, i) => {
         column.position = i + 1;
         this.$setting.update(column.id, column, "quick");

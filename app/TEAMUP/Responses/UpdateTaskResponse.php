@@ -15,8 +15,9 @@ class UpdateTaskResponse implements Responsable
         $t->name = $request->name;
         $t->description = $request->description == null ? 'No Description Given' : $request->description;
         $t->parent_id = $request->parent_id;
-        $t->column_id = $request->column_id;
+        $t->column_id = $request->column_id ? $request->column_id : $t->column_id;
         $t->type_id = $request->type_id;
+        $t->user_id = $request->user_id;
         $t->icon = $request->icon;
         $t->save();
         if ($request->parent_id !== null) {

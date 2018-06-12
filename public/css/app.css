@@ -15250,6 +15250,18 @@ table.table tfoot tr td {
   padding: 0;
 }
 
+input.ghost {
+  border: solid 1px transparent;
+  -webkit-transition: all .6s;
+  transition: all .6s;
+}
+
+input.ghost:focus {
+  outline: transparent;
+  border: solid 1px #26a69977;
+  border-radius: 10px;
+}
+
 [v-cloak] {
   display: none;
 }

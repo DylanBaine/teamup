@@ -27,3 +27,12 @@
   height: auto;
   padding: 0;
 }
+input.ghost{
+  border: solid 1px transparent;
+  transition: all .6s;
+}
+input.ghost:focus{
+  outline: transparent;
+  border: solid 1px #26a69977;
+  border-radius: 10px;
+}

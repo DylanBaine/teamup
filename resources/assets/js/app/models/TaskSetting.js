@@ -11,7 +11,7 @@ class Task extends Model {
 
     subscribeUserToTask(data) {
         return axios.post(`${this.postUrl}&action=subscribe-user-to-task`, data).then(res => {
-            this.alert('You subscribed a user to a row in this task!', 'info');
+            this.alert('User subscribed to this task.', 'info');
         }).catch(err => {
             this.alert(err.response.data.message, 'error');
         });
@@ -25,9 +25,9 @@ class Task extends Model {
         });
     }
 
-    subscribeUserToColumn(data) {
-        return axios.post(`${this.postUrl}&action=subscribe-user-to-column`, data).then(res => {
-            this.alert('You subscribed a user to a row in this task!', 'info');
+    removeSubscriber(setting) {
+        return axios.post(`${this.postUrl}&action=remove-user-from-column&arg=${setting}`).then(res => {
+            this.alert('User subscribed.', 'info');
         }).catch(err => {
             this.alert(err.response.data.message, 'error');
         });

@@ -38,6 +38,7 @@
                 <p>
                     {{task.description}}
                 </p>
+                <h3 class="subheader" v-if="task.user_id">Assigned To: {{task.user.name}}</h3>
                 <v-list>
                     <v-list-tile v-for="child in task.children" :key="child.key" :to="`/tasks/${child.id}`">
                         <v-list-tile-action>

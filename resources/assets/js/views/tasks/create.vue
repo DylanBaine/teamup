@@ -22,7 +22,13 @@
                 <v-layout row wrap justify-center>
                   <v-flex md4>
                     <v-select
-                      label="User To Assign"
+                      autocomplete
+                      label="Assigned To"
+                      :search-input.sync="search"
+                      :items="users"
+                      item-text="name"
+                      v-model="task.user"
+                      hint="Start typing to find a user."
                     ></v-select>
                   </v-flex>
                   <v-flex md4>
@@ -72,6 +78,7 @@
 <script>
 import TaskType from "../../app/Models/TaskType";
 import Task from "../../app/models/Task";
+import User from "../../app/models/User";
 export default {
   data() {
     return {
@@ -86,7 +93,9 @@ export default {
       },
       editing: this.$route.meta.editing,
       types: [],
-      parentOptions: []
+      parentOptions: [],
+      search: "",
+      users: []
     };
   },
   computed: {
@@ -95,16 +104,26 @@ export default {
     },
     $tasks() {
       return new Task(this.$parent, "tasks");
+    },
+    $users() {
+      return new User(this, "users");
+    }
+  },
+  watch: {
+    search() {
+      if (this.search && this.search.length > 3) {
+        this.$users.where("name", this.search);
+      }
     }
   },
   mounted() {
     this.init();
-    console.log(this.$parent);
   },
   methods: {
     init() {
       if (this.editing) {
         this.task = this.$parent.task;
+        this.users = [this.task.user];
       }
       this.parentOptions = this.$parent.tasks;
       this.$types.get().then(res => {
@@ -121,13 +140,15 @@ export default {
     update() {
       var t = this.task;
       var data = {
+        id: t.id,
         name: t.name,
         description: t.description,
-        user_id: t.user_id,
+        user_id: t.user.id,
         type_id: t.type_id,
         icon: t.icon,
         parent_id: t.parent_id
       };
+      this.users = [this.task.user];
       this.$tasks.update(this.task.id, data).then(res => {
         this.$parent.init();
       });

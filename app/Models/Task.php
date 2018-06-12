@@ -13,7 +13,7 @@ class Task extends Model
 
     }
 
-    public function users()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -54,5 +54,10 @@ class Task extends Model
     public function columns()
     {
         return $this->settings('column');
+    }
+
+    public function subscribers()
+    {
+        return $this->morphMany(Subscription::class, 'subscribable')->with('user');
     }
 }

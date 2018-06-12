@@ -2,6 +2,7 @@
 namespace App\TEAMUP\BLL;
 
 use App\Models\Setting;
+use App\Models\Subscription;
 
 trait TaskLogic
 {
@@ -23,12 +24,15 @@ trait TaskLogic
         $setting->delete();
     }
 
-    function subscribeUserToColumn()
+    function removeUserFromColumn($setting)
     {
+        $sub = Subscription::where('id', $setting)->first();
+        $sub->delete();
     }
 
     function subscribeUserToTask()
     {
+        Subscription::create(request()->all());
     }
 
 }

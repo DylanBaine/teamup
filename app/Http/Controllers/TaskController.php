@@ -38,7 +38,7 @@ class TaskController extends Controller
         $t->description = $request->description == null ? 'No Description Given' : $request->description;
         $t->parent_id = $request->parent_id;
         $t->type_id = $request->type_id;
-        $t->user_id = $request->parent_id;
+        $t->user_id = $request->user_id;
         $t->icon = $request->icon;
         $t->column_id = $parent && $parent->columns()->count() ?
         $parent->columns()->first()->id :
@@ -54,7 +54,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        return $this->tasks->find($id)->load('columns');
+        return $this->tasks->find($id)->load('columns', 'user', 'subscribers');
     }
 
     /**
