@@ -60,4 +60,5 @@ class Task extends Model
     {
         return $this->morphMany(Subscription::class, 'subscribable')->with('user');
     }
+
 }

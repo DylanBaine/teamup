@@ -3,7 +3,10 @@ namespace App\TEAMUP\Responses;
 
 use App\Models\Setting;
 use App\Models\Task;
+use App\Notifications\TaskUpdated;
 use Illuminate\Contracts\Support\Responsable;
+use Notification;
+use App\Models\User;
 
 class UpdateTaskResponse implements Responsable
 {
@@ -34,6 +37,10 @@ class UpdateTaskResponse implements Responsable
         $percent = ($finishedTaskCount / $childrentCount) * 100;
         $parent->percent_finished = $percent;
         $parent->save();
+        $users = User::whereHas('subscriptions', function ($sub) use ($parent) {
+            $sub->where('subscribable_id', $parent->id)->where('subscribable_type', 'App\Models\Task');
+        })->get();
+        Notification::send($users, new TaskUpdated($task, $parent));
     }
 
 }
