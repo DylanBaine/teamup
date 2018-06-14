@@ -26,6 +26,9 @@ class UserPermissionsSeeder extends Seeder
         $announcement = 2;
         $groups = 3;
         $tasks = 4;
+        $sprint = 5;
+        $postTypes = 6;
+        $permissions = 7;
 
         $this->make($dylan, $create, $documentation);
         $this->make($dylan, $read, $documentation);
@@ -46,6 +49,9 @@ class UserPermissionsSeeder extends Seeder
         $this->make($dylan, $read, $tasks);
         $this->make($dylan, $update, $tasks);
         $this->make($dylan, $delete, $tasks);
+
+        $this->make($dylan, $create, $postTypes);
+        $this->make($dylan, $create, $permissions);
 
         $this->make($taskOnly, $read, $tasks);
 

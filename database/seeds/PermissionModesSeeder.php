@@ -26,5 +26,14 @@ class PermissionModesSeeder extends Seeder
         DB::table('permission_modes')->insert([
             'name' => 'delete',
         ]);
+
+        DB::table('permission_modes')->insert([
+            'name' => 'manage',
+        ]);
+
+        DB::table('permission_modes')->insert([
+            'name' => 'assign',
+        ]);
+
     }
 }

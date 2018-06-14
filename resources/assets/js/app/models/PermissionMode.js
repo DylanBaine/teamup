@@ -1,11 +1,11 @@
 import Model from '../library/Model';
-class Permission extends Model {
+class PermissionMode extends Model {
     constructor(instance, store) {
         super({
-            post: 'permissions',
-            get: 'permissions',
+            post: 'permission-modes',
+            get: 'permission-modes'
         }, { instance, store });
         this.root = instance.$root;
     }
 }
-export default Permission;
+export default PermissionMode;

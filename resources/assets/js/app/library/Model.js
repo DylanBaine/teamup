@@ -160,6 +160,7 @@ class Model {
         }).then(res => {
             this.showLoader();
             this.successfullyDeleted();
+            this.get();
         }).catch(err => {
             this.showLoader();
             this.showError(err.response.data.message);

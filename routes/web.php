@@ -29,8 +29,10 @@ include 'fileRoutes.php';
 include 'groupRoutes.php';
 // include api routes for tasks module
 include 'taskRoutes.php';
-
+// include api routes for settings
 include 'settingRoutes.php';
+// include api routes for permission modes
+include 'permissionRoutes.php';
 
 Route::post('/test', function () {
     $querys = request()->query();

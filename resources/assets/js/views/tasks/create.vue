@@ -123,7 +123,9 @@ export default {
     init() {
       if (this.editing) {
         this.task = this.$parent.task;
-        this.users = [this.task.user];
+        this.$nextTick(() => {
+          this.users = [this.task.user];
+        });
       }
       this.parentOptions = this.$parent.tasks;
       this.$types.get().then(res => {
@@ -143,7 +145,7 @@ export default {
         id: t.id,
         name: t.name,
         description: t.description,
-        user_id: t.user.id,
+        user_id: t.user ? t.user.id : null,
         type_id: t.type_id,
         icon: t.icon,
         parent_id: t.parent_id

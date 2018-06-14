@@ -44,6 +44,7 @@ class TypeController extends Controller
             'name' => $request->name,
             'slug' => $slug,
             'model' => $request->model,
+            'icon' => 'file_copy',
         ]);
         return redirect()->back();
     }
@@ -83,6 +84,6 @@ class TypeController extends Controller
      */
     public function destroy($id)
     {
-        $this->types->delete($id);
+        Type::where('id', $id)->delete($id);
     }
 }

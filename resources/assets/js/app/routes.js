@@ -20,9 +20,18 @@ import PostType from '../views/posts/index.vue';
 import Post from '../views/posts/show.vue';
 import CreatePost from '../views/posts/create.vue';
 
+// Permission Views
+import Permissions from '../views/permissions/index.vue';
+import CreatePermissions from '../views/permissions/create.vue';
+
 const routes = [
     { path: '/login', component: Login },
     { path: '/', component: Home },
+    {
+        path: '/permissions', component: Permissions, children: [
+            { path: 'create', component: CreatePermissions }
+        ]
+    },
     {
         path: '/groups', component: Groups, children: [
             { path: 'create', component: CreateGroup },

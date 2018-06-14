@@ -4,6 +4,7 @@
       <v-container grid-list-lg>
           <header>
               <h1>{{task.name}}</h1>
+              <p>{{task.description}}</p>
           </header>
           <v-container grid-list-lg>
             <v-layout row wrap>

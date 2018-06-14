@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Permission;
+use App\Models\PermissionMode;
 use Illuminate\Http\Request;
 
-class PermissionController extends Controller
+class PermissionModeController extends Controller
 {
-
-    public $permissions;
-    public function __construct()
-    {
-        $this->permission = Permission::all();
-    }
     /**
      * Display a listing of the resource.
      *
@@ -20,9 +14,18 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        return Permission::get();
+        return PermissionMode::get();
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+    }
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -31,11 +34,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        Permission::create([
-            'permission_mode_id' => $request->mode,
-            'user_id' => $request->user,
-            'type_id' => $request->type,
-        ]);
+        PermissionMode::create($request->all());
     }
 
     /**
@@ -46,7 +45,18 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        $this->permissions->find($id);
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
     /**
@@ -58,9 +68,7 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->permissions->find($id)->update([
-            'mode' => $request->mode,
-        ]);
+        //
     }
 
     /**
@@ -71,6 +79,6 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        Permission::where('id', $id)->delete();
+        PermissionMode::where('id', $id)->delete();
     }
 }

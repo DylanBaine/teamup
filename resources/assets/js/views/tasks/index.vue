@@ -18,7 +18,10 @@
               </h3>
             </div>
           </v-card-title>
-          <v-card-text v-if="task.percent_finished">
+          <v-card-text>
+            <p>
+              {{task.description.lenght >= 40 ? task.description : task.description.substr(0, 40)+'...[Click to read more]'}}
+            </p>
             <h2 class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
               <div class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
                 <div class="primary" :style="`width:${task.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
@@ -27,17 +30,42 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <v-btn
-      v-if="$user.can('create', 'tasks')"
-      fab
-      bottom
-      right
-      color="pink"
-      dark
-      fixed
-      :to="`/tasks/create`">
-      <v-icon>add</v-icon>
-    </v-btn>
+          <v-slide-x-transition>
+            <v-btn
+              v-if="!fam"
+              color="primary"
+              outline
+              fab
+              class="fixed bottom right"
+              @click="fam = !fam">
+              <v-icon>more_vert</v-icon>  
+            </v-btn>
+          </v-slide-x-transition>
+          <v-slide-x-reverse-transition>
+            <div class="fixed bottom right" v-if="fam">
+                <v-btn v-if="$user.can('manage', 'tasks')"
+                    fab
+                    color="info"
+                    dark
+                    :to="`/tasks/settings`">
+                    <v-icon>settings</v-icon>
+                </v-btn>
+                <v-btn v-if="$user.can('create', 'tasks')"
+                    fab
+                    color="accent"
+                    dark
+                    :to="`/tasks/create`">
+                    <v-icon>add</v-icon>
+                </v-btn>
+                <v-btn
+                    fab
+                    color="primary"
+                    outline
+                    @click="fam = !fam">
+                    <v-icon>chevron_right</v-icon>
+                </v-btn>
+            </div>
+          </v-slide-x-reverse-transition>
   </v-container>
 </template>
 
@@ -48,7 +76,8 @@ export default {
   data() {
     return {
       tasks: [],
-      user: {}
+      user: {},
+      fam: false
     };
   },
   watch: {

@@ -115,6 +115,7 @@ class Repository {
         for (let prop in data) {
             this[prop] = data[prop];
         }
+        this.instance[this.store] = this;
 
     }
 

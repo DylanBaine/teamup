@@ -11,7 +11,7 @@
 					<v-btn icon to="/">
 						<v-icon>home</v-icon>
 					</v-btn>
-					<v-btn icon>
+					<v-btn icon @click="$refs.manageModal.init()">
 						<v-icon>apps</v-icon>
 					</v-btn>
 					<v-btn icon>
@@ -69,19 +69,7 @@
 				</v-layout>
 			</v-container>
 		</v-content>
-		<v-dialog v-model="dialog" width="800px">
-			<v-card v-for="permission in $user.permissions('create')" :key="permission.id">
-				<v-card-text>
-					<v-list v-for="type in permission.types" :key="type.id" v-if="type.slug != 'groups'">
-						<v-list-tile>
-							<v-list-tile-content>
-								{{type.name}}
-							</v-list-tile-content>
-						</v-list-tile>
-					</v-list>
-				</v-card-text>
-			</v-card>
-		</v-dialog>
+		<user-manage-modal ref="manageModal"></user-manage-modal>
 		<v-btn
 			v-if="$route.params && $user.can('create', $route.params.type)"
 			fab
@@ -105,11 +93,12 @@ export default {
     return {
       dialog: false,
       drawer: true,
-      dark: true
+      dark: true,
+      showCreateModal: false
     };
   },
   mounted() {
-    var thing = this.$user.can("create", "groups");
+    var thing = this.$user.permissions("create");
     console.log(thing);
   },
   props: ["user"],
