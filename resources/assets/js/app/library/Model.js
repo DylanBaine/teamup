@@ -2,6 +2,7 @@ class Model {
     constructor(route, store) {
         this.postUrl = `${url}/${route.post}`;
         this.editUrl = route.edit ? `${url}/${route.edit}` : `${url}/${route.post}`;
+        this.deleteUrl = route.delete ? `${url}/${route.delete}` : `${url}/${route.post}`;
         this.getUrl = `${url}/${route.get}`;
         this.instance = store.instance;
         this.store = store.store;
@@ -155,7 +156,7 @@ class Model {
      */
     delete(id) {
         this.showLoader('Deleting...');
-        return axios.post(`${this.postUrl}/${id}`, {
+        return axios.post(`${this.deleteUrl}/${id}`, {
             _method: 'delete'
         }).then(res => {
             this.showLoader();

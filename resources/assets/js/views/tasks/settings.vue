@@ -12,6 +12,38 @@
             </v-toolbar>
             <v-container grid-list-lg>
                 <v-layout row wrap>
+                    <v-flex md6 offset-md3 class="mb-5">
+                        <v-card>
+                            <v-card-title class="grey lighten-2 black--text">
+                                <h2 class="title">
+                                    Global Task Types
+                                </h2>
+                            </v-card-title>
+                            <v-card-text class="scroll-me">
+                                <v-list>
+                                    <v-list-tile v-for="type in types" :key="type.key">
+                                        <v-list-tile-content>
+                                            <input type="text" class="padded ghost" v-model="type.name" @keyup.enter="$taskType.update(type.id, type)">
+                                        </v-list-tile-content>
+                                        <v-list-tile-action>
+                                            <v-btn flat icon @click="removeType(type.id)">
+                                                <v-icon color="grey">delete_forever</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+                                    </v-list-tile>
+                                </v-list>
+                            </v-card-text>
+                            <v-card-actions class="relative">
+                                <v-text-field
+                                    label="New Task Type"
+                                    v-model="newType.name"
+                                ></v-text-field>
+                                <v-btn @click="addType" color="primary" fab absolute bottom right>
+                                    <v-icon>add</v-icon>    
+                                </v-btn>                                
+                            </v-card-actions>
+                        </v-card>
+                    </v-flex>
                     <v-flex md4>
                         <div ref="scrollMe" class="scroll-me" v-if="task.columns && task.columns.length">
                             <header>
@@ -105,13 +137,18 @@
 import User from "../../app/models/User";
 import TaskSetting from "../../app/models/TaskSetting";
 import Task from "../../app/models/Task";
+import TaskType from "../../app/models/TaskType";
 export default {
   data() {
     return {
       search: null,
       task: this.$parent.task,
       users: [],
+      types: [],
       showing: false,
+      newType: {
+        name: ""
+      },
       newColumn: {
         value: ""
       },
@@ -125,6 +162,9 @@ export default {
     },
     $setting() {
       return new TaskSetting(this, "task");
+    },
+    $taskType() {
+      return new TaskType(this, "types");
     },
     newColumnPosition() {
       return this.task.columns.length + 1;
@@ -150,6 +190,13 @@ export default {
     init() {
       if (this.task == "") this.$task.find(this.$route.params.task);
       this.showing = true;
+      this.$taskType.get();
+    },
+    addType() {
+      this.$taskType.create(this.newType);
+      this.newType = {
+        value: ""
+      };
     },
     addColumn() {
       this.$setting

@@ -25,11 +25,12 @@ class FileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $fileTypes = Type::where('model', 'File')->with(['files' => function ($files) {
-            $files->where('user_id', Auth::user()->id);
-        }])->get();
-        return view('files.index', compact('fileTypes'));
+    { /*
+    $fileTypes = Type::where('model', 'File')->with(['files' => function ($files) {
+    $files->where('user_id', Auth::user()->id);
+    }])->get();
+    return view('files.index', compact('fileTypes')); */
+        return File::get();
     }
 
     /**
@@ -50,9 +51,10 @@ class FileController extends Controller
         Type::firstOrCreate([
             'name' => $uploader->getFileMimeType(),
             'slug' => str_slug($uploader->getFileMimeType()),
+            'icon' => 'attach_file',
             'model' => 'File',
         ])->files()->save($file);
-        return redirect()->back();
+        return $file->slug;
     }
 
     /**

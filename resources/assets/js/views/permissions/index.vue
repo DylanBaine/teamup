@@ -1,20 +1,79 @@
 <template>
     <v-container grid-list-lg>
-        <header>
-            <h1>
-                Permissions
-            </h1>
-        </header>
-        <v-layout row wrap>
+        <h1 class="mb-4">
+            Permissions
+        </h1>
+        <v-layout row wrap fill-height align-top>
+            <v-flex md5 v-if="$user.can('assign', 'permissions')">
+                <v-form @submit.prevent="assignUser">
+                    <v-card>
+                        <v-card-title>
+                            <h2 class="title">
+                                Assign Permissions
+                            </h2>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-layout row wrap>
+                                <v-flex md12>
+                                    <v-select
+                                        autocomplete
+                                        :items="users"
+                                        item-text="name"
+                                        item-value="id"
+                                        v-model="assign.user"
+                                        label="User"
+                                        :search-input.sync="search"
+                                    ></v-select>
+                                </v-flex>
+                                <v-flex md6>
+                                    <v-select
+                                        :items="modes"
+                                        v-model="assign.mode"
+                                        item-text="name"
+                                        item-value="id"
+                                        label="Mode"
+                                    ></v-select>
+                                </v-flex>
+                                <v-flex md6>
+                                    <v-select
+                                        :items="types"
+                                        v-model="assign.type"
+                                        item-text="name"
+                                        item-value="id"
+                                        label="Permissable"
+                                    ></v-select>
+                                </v-flex>
+                            </v-layout>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn type="submit" color="success">Save</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-form>
+            </v-flex>
             <v-flex md7 v-if="$user.can('manage', 'permissions')">
                 <v-card>
                     <v-card-title>
-                        <h2 class="title">
-                            Manage Permissions
-                        </h2>
+                        <div>
+                            <h2 class="title">
+                                Manage Permissions
+                            </h2>
+                            <v-select
+                                clearable
+                                autocomplete
+                                :items="users"
+                                item-text="name"
+                                item-value="id"
+                                v-model="permissionSearch"
+                                label="User"
+                                :search-input.sync="search"
+                            ></v-select>
+                        </div>
                     </v-card-title>
-                    <v-card-text>
+                    <v-card-text style="max-height: 40vh; overflow: auto;">
                         <v-data-table
+                            hide-actions
                             :items="permissions"
                             disable-initial-sort
                             :headers="[
@@ -37,54 +96,8 @@
                     </v-card-text>
                 </v-card>
             </v-flex>
-            <v-flex md5 v-if="$user.can('assign', 'permissions')">
-                <v-form @submit.prevent="assignUser">
-                    <v-card>
-                        <v-card-title>
-                            <h2 class="title">
-                                Assign Permissions
-                            </h2>
-                        </v-card-title>
-                        <v-card-text>
-                            <v-layout row wrap>
-                                <v-flex md5>
-                                    <v-select
-                                        autocomplete
-                                        :items="users"
-                                        item-text="name"
-                                        item-value="id"
-                                        v-model="assign.user"
-                                        label="User"
-                                        :search-input.sync="search"
-                                    ></v-select>
-                                </v-flex>
-                                <v-flex md3>
-                                    <v-select
-                                        :items="modes"
-                                        v-model="assign.mode"
-                                        item-text="name"
-                                        item-value="id"
-                                        label="Mode"
-                                    ></v-select>
-                                </v-flex>
-                                <v-flex md4>
-                                    <v-select
-                                        :items="types"
-                                        v-model="assign.type"
-                                        item-text="name"
-                                        item-value="id"
-                                        label="Permissable"
-                                    ></v-select>
-                                </v-flex>
-                            </v-layout>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn type="submit" color="success">Save</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-form>
-            </v-flex>
+        </v-layout>
+        <v-layout row wrap>
             <v-flex md6>
                 <v-card>
                     <v-card-title class="grey lighten-2 black--text">
@@ -142,17 +155,25 @@
                     </v-card-text>
                     <v-card-actions v-if="$user.can('create', 'permission-types')">
                         <v-form @submit.prevent="addType()" style="width: 100%;">
+                            <v-dialog v-model="selectingIcon" :width="500">
+                                <icon-selector v-model="newType.icon"></icon-selector>
+                            </v-dialog>
                             <v-layout row wrap>
-                                <v-flex>
+                                <v-flex md5>
                                     <v-text-field
                                         label="New Permissable"
                                         v-model="newType.name"
                                     ></v-text-field>                                    
                                 </v-flex>
+                                <v-flex md3 class="d-flex align-center">
+                                    <v-btn outline color="grey" @click="selectingIcon = true">
+                                        Icon
+                                    </v-btn>
+                                </v-flex>
                                 <v-flex md4>
                                     <v-select
                                         :items="[
-                                            'Post', 'Task', 'Group'
+                                            'Post', 'Task', 'Group', 'File'
                                         ]"
                                         v-model="newType.model"
                                         label="Model"
@@ -178,6 +199,8 @@ import User from "../../app/models/User";
 export default {
   data() {
     return {
+      selectingIcon: false,
+      permissionSearch: null,
       searchPermissions: null,
       tableItems: [],
       permissions: [],
@@ -187,7 +210,8 @@ export default {
       types: [],
       newType: {
         name: null,
-        model: null
+        model: null,
+        icon: null
       },
       assign: {
         type: null,
@@ -201,6 +225,13 @@ export default {
     search() {
       if (this.search && this.search.length > 3) {
         this.$users.where("name", this.search);
+      }
+    },
+    permissionSearch() {
+      if (this.permissionSearch !== null) {
+        this.$permissions.where("user_id", this.permissionSearch);
+      } else {
+        this.$permissions.get();
       }
     }
   },

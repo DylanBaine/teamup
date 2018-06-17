@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="showing" persistent>
-        <v-card>
+        <v-card scrollable>
             <v-toolbar dark color="primary">
                 <v-btn icon :to="`/${$route.params.type}`">
                     <v-icon>chevron_left</v-icon>
@@ -8,19 +8,22 @@
                 <h2 class="title">
                     {{post.name}}
                 </h2>
+                <v-spacer></v-spacer>
+                <v-btn
+                    icon
+                    @click="remove(post.id)"
+                    color="warning">
+                    <v-icon>delete_forever</v-icon>
+                </v-btn>
+                <v-btn
+                    icon
+                    :to="`/${$route.params.type}/${post.id}`"
+                    color="success">
+                    <v-icon>edit</v-icon>
+                </v-btn>
             </v-toolbar>
-            <v-card-text>
-                {{post.content}}
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn flat color="error" v-if="$parent.$user.can('delete', $route.params.type)">
-                        Delete
-                    </v-btn>
-                    <v-btn flat color="warning" v-if="$root.$refs.app.$user.can('update', $route.params.type)">
-                        Edit
-                    </v-btn>
-                </v-card-actions>
-            </v-card-text>        
+            <v-card-text v-html="post.content">
+            </v-card-text>
         </v-card>
     </v-dialog>
 </template>
@@ -46,6 +49,11 @@ export default {
     init() {
       this.showing = true;
       this.$post.find(this.$route.params.post);
+    },
+    remove(post) {
+      this.$post.delete(post).then(() => {
+        this.$router.push("/" + this.$route.params.type);
+      });
     }
   }
 };

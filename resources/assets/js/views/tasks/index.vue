@@ -20,7 +20,7 @@
           </v-card-title>
           <v-card-text>
             <p>
-              {{task.description.lenght >= 40 ? task.description : task.description.substr(0, 40)+'...[Click to read more]'}}
+              {{task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description}}
             </p>
             <h2 class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
               <div class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
@@ -43,13 +43,6 @@
           </v-slide-x-transition>
           <v-slide-x-reverse-transition>
             <div class="fixed bottom right" v-if="fam">
-                <v-btn v-if="$user.can('manage', 'tasks')"
-                    fab
-                    color="info"
-                    dark
-                    :to="`/tasks/settings`">
-                    <v-icon>settings</v-icon>
-                </v-btn>
                 <v-btn v-if="$user.can('create', 'tasks')"
                     fab
                     color="accent"

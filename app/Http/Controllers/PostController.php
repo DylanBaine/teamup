@@ -27,10 +27,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->posts;
-        $types = $this->typeRepo->get('posts');
-        $model = 'Post';
-        return view('types.index', compact('posts', 'types', 'model'));
+        return Post::get();
     }
 
     /**
@@ -48,14 +45,13 @@ class PostController extends Controller
         if ($request->type_id) {
             $type = Type::findOrFail($request->type_id);
         } else {
-            $type->Type::firstOrCreate([
+            $type = Type::firstOrCreate([
                 'name' => $request->type_name,
                 'slug' => str_slug($request->type_name),
                 'model' => 'Post',
             ]);
         }
         $type->posts()->save($post);
-        return redirect()->back();
     }
 
     /**

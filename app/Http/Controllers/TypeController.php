@@ -39,12 +39,12 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        $slug = $request->slug ? $request->slug : str_slug($request->name);
+        $slug = $request->slug ? $request->slug : str_plural(str_slug($request->name));
         Type::create([
             'name' => $request->name,
             'slug' => $slug,
             'model' => $request->model,
-            'icon' => 'file_copy',
+            'icon' => $request->icon ? $request->icon : 'file_copy',
         ]);
         return redirect()->back();
     }

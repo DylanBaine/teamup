@@ -4,6 +4,7 @@ class TaskType extends Model {
         super({
             post: 'types?model=Task',
             get: 'types?model=Task',
+            edit: 'types'
         }, { instance, store });
         this.root = instance.$root;
     }

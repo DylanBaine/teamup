@@ -40,6 +40,7 @@ class TaskController extends Controller
         $t->type_id = $request->type_id;
         $t->user_id = $request->user_id;
         $t->icon = $request->icon;
+        $t->percent_finished = 0;
         $t->column_id = $parent && $parent->columns()->count() ?
         $parent->columns()->first()->id :
         null;

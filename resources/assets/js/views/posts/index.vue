@@ -3,26 +3,35 @@
         <router-view></router-view>
         <header>
             <h1>
-                {{type.name}}
+                Post Types
             </h1>
         </header>
         <section>
             <v-layout row wrap>
-                <v-flex md6 v-for="post in type.posts" :key="post.id">
-                    <v-card hover :to="`/${$route.params.type}/${post.id}`">
+                <v-flex md6 v-for="type in types" :key="type.id">
+                    <v-card hover>
                         <v-card-title class="grey lighten-2">
                             <h2 class="title black--text">
-                                {{post.name}}
-                                <h6 class="mt-1 subheading black--text">{{post.content.length}} characters</h6>
+                                <label :for="type.id+type.slug">
+                                        <v-icon color="black">edit</v-icon>
+                                </label>
+                                <input :id="type.id+type.slug" @keyup.enter="$types.update(type.id, type)" type="text" class="padded ghost" v-model="type.name">
                             </h2>
+                            <v-spacer></v-spacer>
+                            <v-btn icon flat @click="remove(type)" color="black">
+                                <v-icon>delete_forever</v-icon>
+                            </v-btn>
                         </v-card-title>
-                        <v-card-text>
-                            {{post.content.substr(0, 200)}}
-                        </v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
         </section>
+            <div class="fixed bottom right">
+                <v-btn fab dark v-if="$user.can('create', 'post-types')"
+                    to="/post-types/create" color="accent">
+                    <v-icon>add</v-icon>
+                </v-btn>
+            </div>
     </v-container>
 </template>
 
@@ -32,12 +41,13 @@ import User from "../../app/models/User";
 export default {
   data() {
     return {
-      type: null
+      types: null,
+      fam: false
     };
   },
   computed: {
-    $type() {
-      return new Type(this, "type");
+    $types() {
+      return new Type(this, "types");
     },
     $user() {
       return new User(this.$root, "user");
@@ -53,9 +63,10 @@ export default {
   },
   methods: {
     init() {
-      if (this.type == null || this.type.slug != this.$route.params.type) {
-        this.$type.where("slug", this.$route.params.type, "first");
-      }
+      this.$types.get();
+    },
+    remove(type) {
+      this.$types.delete(type.id);
     }
   }
 };

@@ -4,6 +4,8 @@ class Type extends Model {
         super({
             post: 'types?model=Post',
             get: 'types?model=Post',
+            edit: 'types',
+            delete: 'types'
         }, { instance, store });
         this.root = instance.$root;
     }

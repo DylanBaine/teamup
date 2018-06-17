@@ -7,7 +7,7 @@ class Post extends Model
 {
 
     //public $with = ['type'];
-    protected $fillable = ['name', 'content'];
+    protected $fillable = ['name', 'content', 'type_id'];
 
     public function belongsToUser()
     {

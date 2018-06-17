@@ -24,7 +24,7 @@
 				<template v-for="permission in $user.permissions('read')">
 					<v-list-tile
 						:to="`/${permission.type.slug}`"
-						:key="permission.type.id">
+						:key="permission.key">
 						<v-list-tile-action>
 							<v-icon size="15px">{{permission.type.icon}}</v-icon>
 						</v-list-tile-action>

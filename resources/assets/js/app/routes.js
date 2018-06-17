@@ -12,13 +12,15 @@ import Tasks from '../views/tasks/index.vue';
 import CreateTask from '../views/tasks/create.vue';
 import ShowTask from '../views/tasks/show.vue';
 import ManageTask from '../views/tasks/manage.vue';
-import EditTask from '../views/tasks/edit.vue';
+//import EditTask from '../views/tasks/edit.vue';
 import TaskSettings from '../views/tasks/settings.vue';
 
 // Post Views
-import PostType from '../views/posts/index.vue';
-import Post from '../views/posts/show.vue';
+import PostType from '../views/posts/type.vue';
+import ShowPost from '../views/posts/show.vue';
 import CreatePost from '../views/posts/create.vue';
+import ManagePosts from '../views/posts/manage.vue';
+import PostTypess from '../views/posts/index.vue';
 
 // Permission Views
 import Permissions from '../views/permissions/index.vue';
@@ -30,6 +32,11 @@ const routes = [
     {
         path: '/permissions', component: Permissions, children: [
             { path: 'create', component: CreatePermissions }
+        ]
+    },
+    {
+        path: '/post-types', component: PostTypess, children: [
+            { path: 'create', component: ManagePosts }
         ]
     },
     {
@@ -59,7 +66,7 @@ const routes = [
     {
         path: '/:type', component: PostType, children: [
             { path: 'create', component: CreatePost },
-            { path: ':post', component: Post },
+            { path: ':post', component: ShowPost },
         ]
     }
 ]

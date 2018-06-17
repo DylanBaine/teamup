@@ -31,7 +31,6 @@
                         color="success">
                         <v-icon>edit</v-icon>
                     </v-btn>
-
                 </div>
             </v-toolbar>
             <v-card-text>

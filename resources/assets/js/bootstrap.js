@@ -51,6 +51,7 @@ Vue.component('icon-selector', require('./components/IconSelector.vue'));
 Vue.component('alerts', require('./components/Alert.vue'));
 Vue.component('draggable', require('vuedraggable'));
 Vue.component('user-manage-modal', require('./components/UserManageModal.vue'));
+Vue.component('page-builder', require('./components/PageBuilder.vue'));
 
 Array.prototype.hasProp = function (needle, haystack) {
     for (let i = 0; i < this.length; i++) {
