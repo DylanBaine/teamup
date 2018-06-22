@@ -21,14 +21,19 @@ class UserPermissionsSeeder extends Seeder
         $read = 2;
         $update = 3;
         $delete = 4;
+        $manage = 5;
+        $assign = 6;
         // Types
         $documentation = 1;
         $announcement = 2;
         $groups = 3;
         $tasks = 4;
-        $sprint = 5;
-        $postTypes = 6;
-        $permissions = 7;
+        $postTypes = 5;
+        $permissions = 6;
+        $permissionTypes = 7;
+        $permissionModes = 8;
+        $sprint = 9;
+        $support = 10;
 
         $this->make($dylan, $create, $documentation);
         $this->make($dylan, $read, $documentation);
@@ -51,7 +56,13 @@ class UserPermissionsSeeder extends Seeder
         $this->make($dylan, $delete, $tasks);
 
         $this->make($dylan, $create, $postTypes);
+
         $this->make($dylan, $create, $permissions);
+        $this->make($dylan, $read, $permissions);
+        $this->make($dylan, $manage, $permissions);
+        $this->make($dylan, $assign, $permissions);
+        $this->make($dylan, $create, $permissionTypes);
+        $this->make($dylan, $create, $permissionModes);
 
         $this->make($taskOnly, $read, $tasks);
 

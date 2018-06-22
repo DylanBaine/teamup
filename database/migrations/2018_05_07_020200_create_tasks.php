@@ -23,7 +23,7 @@ class CreateTasks extends Migration
             $table->string('name');
             $table->longText('description');
             $table->integer('column_id')->nullable();
-            $table->intgeger('percent_finished')->nullable();
+            $table->integer('percent_finished')->nullable();
             $table->string('icon')->nullable();
             $table->timestamps();
 

@@ -55,5 +55,19 @@ class PostTypesSeeder extends Seeder
             'model' => 'Permission',
             'created_at' => $createdAt,
         ]);
+        DB::table('types')->insert([
+            'name' => 'Permission Types',
+            'slug' => 'permission-types',
+            'icon' => '',
+            'model' => 'Permission',
+            'created_at' => $createdAt,
+        ]);
+        DB::table('types')->insert([
+            'name' => 'Permission Modes',
+            'slug' => 'permission-modes',
+            'icon' => '',
+            'model' => 'Permission',
+            'created_at' => $createdAt,
+        ]);
     }
 }

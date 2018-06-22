@@ -87,7 +87,7 @@
                                     <td>{{ props.item.mode.name }}</td>
                                     <td>{{ props.item.type.name }}</td>
                                     <td>
-                                        <v-btn v-if="$user.can('delete', 'tasks')" @click="removePermission(props.item.id)" flat icon color="grey">
+                                        <v-btn v-if="$user.can('delete', 'permissions')" @click="removePermission(props.item.id)" flat icon color="grey">
                                             <v-icon>delete_forever</v-icon>
                                         </v-btn>
                                     </td>

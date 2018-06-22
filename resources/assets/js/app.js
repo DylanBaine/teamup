@@ -25,7 +25,6 @@ const app = new Vue({
     created() {
     },
     mounted() {
-
     },
     methods: {
         showLoader(message) {
