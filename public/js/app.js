@@ -41629,7 +41629,7 @@ var routes = [{ path: '/login', component: __WEBPACK_IMPORTED_MODULE_0__views_Lo
         path: ':child', component: __WEBPACK_IMPORTED_MODULE_7__views_tasks_show_vue___default.a, children: [{ path: 'edit', component: __WEBPACK_IMPORTED_MODULE_6__views_tasks_create_vue___default.a, meta: { editing: true } }]
     }]
 }, {
-    path: '/:type', component: __WEBPACK_IMPORTED_MODULE_10__views_posts_type_vue___default.a, children: [{ path: 'create', component: __WEBPACK_IMPORTED_MODULE_12__views_posts_create_vue___default.a }, { path: ':post', component: __WEBPACK_IMPORTED_MODULE_11__views_posts_show_vue___default.a }]
+    path: '/:type', component: __WEBPACK_IMPORTED_MODULE_10__views_posts_type_vue___default.a, children: [{ path: 'create', component: __WEBPACK_IMPORTED_MODULE_12__views_posts_create_vue___default.a }, { path: ':post', component: __WEBPACK_IMPORTED_MODULE_11__views_posts_show_vue___default.a }, { path: ':post/edit', component: __WEBPACK_IMPORTED_MODULE_12__views_posts_create_vue___default.a, meta: { editing: true } }]
 }];
 /* harmony default export */ __webpack_exports__["a"] = (routes);
 
@@ -45564,7 +45564,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -45644,16 +45643,7 @@ var render = function() {
                           _vm._v(
                             "\n                            " +
                               _vm._s(post.name) +
-                              "\n                            "
-                          ),
-                          _c(
-                            "h6",
-                            { staticClass: "mt-1 subheading black--text" },
-                            [
-                              _vm._v(
-                                _vm._s(post.content.length) + " characters"
-                              )
-                            ]
+                              "\n                        "
                           )
                         ])
                       ]),
@@ -45871,7 +45861,12 @@ var render = function() {
                 {
                   attrs: {
                     icon: "",
-                    to: "/" + _vm.$route.params.type + "/" + _vm.post.id,
+                    to:
+                      "/" +
+                      _vm.$route.params.type +
+                      "/" +
+                      _vm.post.id +
+                      "/edit",
                     color: "success"
                   }
                 },
@@ -46024,14 +46019,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     init: function init() {
+      if (this.$route.meta.editing) {
+        this.$post.find(this.$route.params.post);
+      }
       this.showing = true;
     },
     save: function save() {
       var _this = this;
 
-      this.$post.create(this.post).then(function () {
-        _this.reset();
-      });
+      if (this.$route.meta.editing) {
+        this.$post.update(this.post.id, this.post);
+      } else {
+        this.$post.create(this.post).then(function () {
+          _this.reset();
+        });
+      }
     },
     reset: function reset() {
       this.post = {
@@ -46114,16 +46116,18 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _c("page-builder", {
-                    attrs: { label: "Content" },
-                    model: {
-                      value: _vm.post.content,
-                      callback: function($$v) {
-                        _vm.$set(_vm.post, "content", $$v)
-                      },
-                      expression: "post.content"
-                    }
-                  }),
+                  _vm.showing
+                    ? _c("page-builder", {
+                        attrs: { label: "Content" },
+                        model: {
+                          value: _vm.post.content,
+                          callback: function($$v) {
+                            _vm.$set(_vm.post, "content", $$v)
+                          },
+                          expression: "post.content"
+                        }
+                      })
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",
@@ -69427,6 +69431,10 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(158)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(144)
@@ -69435,7 +69443,7 @@ var __vue_template__ = __webpack_require__(150)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -69496,6 +69504,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      newValue: "",
       init: {
         content_css: ["/css/app.css"],
         content_style: "body{padding: 20px;} .container{border: dotted 1px blue;} .row{border: dotted 1px grey;}.md4, .x6{border: dotted 1px red;} .jumbotron{border: dotted 1px lightblue;}",
@@ -69548,10 +69557,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   components: {
     mce: __WEBPACK_IMPORTED_MODULE_0__tinymce_tinymce_vue__["a" /* default */]
   },
+  computed: {},
   props: ["value", "label"],
   mounted: function mounted() {},
 
-  methods: {}
+  methods: {
+    change: function change() {
+      console.log("change");
+      this.newValue = this.value;
+      this.$emit("input", this.newValue);
+    }
+  }
 });
 
 /***/ }),
@@ -69780,11 +69796,7 @@ var render = function() {
             [
               _c("mce", {
                 attrs: { init: _vm.init },
-                on: {
-                  input: function($event) {
-                    _vm.$emit("input", _vm.value)
-                  }
-                },
+                on: { input: _vm.change },
                 model: {
                   value: _vm.value,
                   callback: function($$v) {
@@ -69878,6 +69890,49 @@ module.exports = {"categories":[{"name":"action","key":"action","icons":[{"id":"
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 155 */,
+/* 156 */,
+/* 157 */,
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(159);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(6)("4c4ebc58", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-73346336\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PageBuilder.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-73346336\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PageBuilder.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(5)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.mce-notification-warning {\r\n  display: none !important;\n}\r\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

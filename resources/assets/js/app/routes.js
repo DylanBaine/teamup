@@ -67,6 +67,7 @@ const routes = [
         path: '/:type', component: PostType, children: [
             { path: 'create', component: CreatePost },
             { path: ':post', component: ShowPost },
+            { path: ':post/edit', component: CreatePost, meta: { editing: true } }
         ]
     }
 ]

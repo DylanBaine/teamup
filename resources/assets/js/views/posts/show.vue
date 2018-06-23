@@ -17,7 +17,7 @@
                 </v-btn>
                 <v-btn
                     icon
-                    :to="`/${$route.params.type}/${post.id}`"
+                    :to="`/${$route.params.type}/${post.id}/edit`"
                     color="success">
                     <v-icon>edit</v-icon>
                 </v-btn>

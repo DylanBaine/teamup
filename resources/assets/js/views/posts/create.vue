@@ -15,7 +15,7 @@
                         label="Post Title"
                         v-model="post.name"
                     ></v-text-field>
-                    <page-builder label="Content" v-model="post.content"></page-builder>
+                    <page-builder label="Content" v-model="post.content" v-if="showing"></page-builder>
                     <v-card-actions class="mt-2">
                         <v-spacer></v-spacer>
                         <v-btn :to="`/${$route.params.type}`" color="error" flat>
@@ -63,12 +63,19 @@ export default {
   },
   methods: {
     init() {
+      if (this.$route.meta.editing) {
+        this.$post.find(this.$route.params.post);
+      }
       this.showing = true;
     },
     save() {
-      this.$post.create(this.post).then(() => {
-        this.reset();
-      });
+      if (this.$route.meta.editing) {
+        this.$post.update(this.post.id, this.post);
+      } else {
+        this.$post.create(this.post).then(() => {
+          this.reset();
+        });
+      }
     },
     reset() {
       this.post = {

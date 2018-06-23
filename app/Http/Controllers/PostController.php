@@ -74,7 +74,7 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->updatePost($request, $id);
+        Post::find($id)->update($request->all());
     }
 
     /**

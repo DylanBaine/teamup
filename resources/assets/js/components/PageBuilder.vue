@@ -7,7 +7,7 @@
             </h2>
         </v-card-title>
         <v-card-text>
-            <mce @input="$emit('input', value)" v-model="value" :init="init"></mce>
+            <mce @input="change" v-model="value" :init="init"></mce>
         </v-card-text>
     </v-card>
 </div>
@@ -18,6 +18,7 @@ import Editor from "@tinymce/tinymce-vue";
 export default {
   data() {
     return {
+      newValue: "",
       init: {
         content_css: ["/css/app.css"],
         content_style:
@@ -88,8 +89,21 @@ export default {
   components: {
     mce: Editor
   },
+  computed: {},
   props: ["value", "label"],
   mounted() {},
-  methods: {}
+  methods: {
+    change() {
+      console.log("change");
+      this.newValue = this.value;
+      this.$emit("input", this.newValue);
+    }
+  }
 };
 </script>
+
+<style>
+.mce-notification-warning {
+  display: none !important;
+}
+</style>
