@@ -26,6 +26,12 @@ import PostTypess from '../views/posts/index.vue';
 import Permissions from '../views/permissions/index.vue';
 import CreatePermissions from '../views/permissions/create.vue';
 
+// Site Views
+import Sites from '../views/sites/index.vue';
+import CreateSite from '../views/sites/create.vue';
+import ShowSite from '../views/sites/show.vue';
+import SiteSettings from '../views/sites/settings.vue';
+
 const routes = [
     { path: '/login', component: Login },
     { path: '/', component: Home },
@@ -57,10 +63,22 @@ const routes = [
             { path: 'add-task', component: CreateTask },
             { path: 'settings', component: TaskSettings },
             {
-                path: ':child', component: ShowTask, children: [
+                path: ':task', component: ManageTask, meta: { child: true }, children: [
                     { path: 'edit', component: CreateTask, meta: { editing: true } },
                 ]
             },
+        ]
+    },
+    {
+        path: '/sites', component: Sites, children: [
+            { path: `create`, component: CreateSite }
+        ]
+    },
+    {
+        path: '/sites/:site', component: ShowSite, children: [
+            { path: 'settings', component: SiteSettings },
+            { path: 'create-page', component: CreatePost, meta: { forSite: true } },
+            { path: ':post', component: CreatePost, meta: { forSite: true, editing: true } }
         ]
     },
     {

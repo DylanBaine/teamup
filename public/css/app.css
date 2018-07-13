@@ -15282,6 +15282,10 @@ input.ghost:focus {
   position: relative;
 }
 
+.absolute {
+  position: absolute;
+}
+
 .bottom {
   bottom: 16px;
 }
@@ -15292,5 +15296,40 @@ input.ghost:focus {
 
 .right {
   right: 16px;
+}
+
+img {
+  max-width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.card img {
+  width: 100% !important;
+  height: 200px !important;
+}
+
+.header-from-builder img {
+  width: 100% !important;
+  height: 100% !important;
+  opacity: .3;
+}
+
+.header-from-builder {
+  min-height: 546px;
+  width: 100%;
+  overflow: hidden;
+  background-image: linear-gradient(45deg, #323a47 0%, #2b3038 33%, #3b4758 51%);
+}
+
+.post-page .container,
+.post-blog .container {
+  max-width: 900px;
+}
+
+@media (max-width: 600px) {
+  .header-from-builder {
+    min-height: 35vh;
+  }
 }
 

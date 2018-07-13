@@ -40,7 +40,7 @@ class Task extends Model
 
     public function children()
     {
-        return $this->hasMany(Task::class, 'parent_id');
+        return $this->hasMany(Task::class, 'parent_id', 'id');
     }
 
     public function settings($name = null)

@@ -12,7 +12,6 @@ class TaskController extends Controller
     public function __construct()
     {
         $this->middleware('permissions');
-        $this->tasks = Task::all()->load('type', 'children');
     }
     /**
      * Display a listing of the resource.
@@ -55,7 +54,9 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        return $this->tasks->find($id)->load('columns', 'user', 'subscribers');
+        $task = Task::find($id)->load('columns', 'user', 'subscribers', 'children');
+        $task->parent = Task::find($task->parent_id);
+        return $task;
     }
 
     /**

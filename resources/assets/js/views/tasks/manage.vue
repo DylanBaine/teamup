@@ -4,6 +4,12 @@
       <v-container grid-list-lg>
           <header>
               <h1>{{task.name}}</h1>
+              <h4 v-if="task.parent_id">
+                Parent: <router-link :to="`/tasks/${task.parent_id}/manage`">{{task.parent.name}}</router-link>
+              </h4>
+              <h4 v-else>
+                Parent: <router-link to="/tasks">Tasks</router-link>
+              </h4>
               <p>{{task.description}}</p>
           </header>
           <v-container grid-list-lg>
@@ -14,7 +20,7 @@
                     <h2>{{column.value}}</h2>
                   </v-card-title>
                 </v-card>
-                <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${task.id}/manage/${child.id}`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
+                <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
                   <v-card-title>
                     <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
                   </v-card-title>

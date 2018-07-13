@@ -2,7 +2,7 @@
     <v-dialog fullscreen hide-overlay v-model="showing" persistent>
         <v-card>
             <v-form @submit.prevent="save()">
-                <v-toolbar dark color="primary">
+                <v-toolbar dark color="primary" v-if="!$route.meta.forSite">
                     <v-btn icon :to="`/${$route.params.type}`">
                         <v-icon>chevron_left</v-icon>
                     </v-btn>
@@ -12,13 +12,13 @@
                 </v-toolbar>  
                 <v-card-text>
                     <v-text-field
-                        label="Post Title"
+                        :label="$route.meta.forSite ? 'Page Name' : 'Post Title'"
                         v-model="post.name"
                     ></v-text-field>
                     <page-builder label="Content" v-model="post.content" v-if="showing"></page-builder>
                     <v-card-actions class="mt-2">
                         <v-spacer></v-spacer>
-                        <v-btn :to="`/${$route.params.type}`" color="error" flat>
+                        <v-btn :to="$route.meta.forSite ? `/sites/${$route.params.site}` : `/${$route.params.type}`" color="error" flat>
                             Cancel
                         </v-btn>
                         <v-btn color="success" flat type="submit">
@@ -41,7 +41,10 @@ export default {
       post: {
         name: "",
         content: "",
-        type_id: this.$parent.type.id
+        type_id: this.$route.meta.forSite ? null : this.$parent.type.id,
+        site_id: this.$route.meta.forSite ? this.$parent.site.id : null,
+        type_name: this.$route.meta.forSite ? "Page" : null,
+        model: this.$route.meta.forSite ? "Site" : "Post"
       }
     };
   },
@@ -50,7 +53,7 @@ export default {
       return new Post(this, "post");
     },
     $type() {
-      return new PostType(this.$parent, "types");
+      if (!this.$route.meta.forSite) return new PostType(this.$parent, "types");
     }
   },
   watch: {

@@ -4,12 +4,10 @@ Route::get('/', function () {
     $user = Auth::user() ? Auth::user()->load('groups', 'permissions', 'tasks') : false;
     return view('layouts.app', compact('user'));
 });
-
 // Return the session user
 Route::get('/auth/user', function () {
     return Auth::user();
 });
-
 // Handle all search methods
 Route::get('/search', 'SearchController');
 
@@ -33,6 +31,8 @@ include 'taskRoutes.php';
 include 'settingRoutes.php';
 // include api routes for permission modes
 include 'permissionRoutes.php';
+// include api routes for sites
+include 'siteRoutes.php';
 
 Route::post('/test', function () {
     $querys = request()->query();

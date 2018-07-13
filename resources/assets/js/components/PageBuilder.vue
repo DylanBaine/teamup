@@ -75,7 +75,7 @@ export default {
           {
             title: "Header",
             content:
-              '<div class="pos-relative header-from-builder"><div class="pos-absolute align-center justify-center display-flex" style="left: 0; top: 5%; height: 90%; z-index: 9; width: 100%; margin: auto;"><div style="width: 500px; padding: 20px;"><h2>Title</h2><p>Text</p></div></div><img class="pos-absolute" style="z-index: 1;" src="https://placeimg.com/1000/280/arch" /></div><p></p>'
+              '<div class="relative header-from-builder"><div class="absolute align-center justify-center d-flex" style="left: 0; top: 5%; height: 90%; z-index: 9; width: 100%; margin: auto;"><div style="width: 500px; padding: 20px;"><h2>Title</h2><p>Text</p></div></div><img class="absolute" style="z-index: 1;" src="https://placeimg.com/1000/280/arch" /></div><p></p>'
           },
           {
             title: "Contact Form",

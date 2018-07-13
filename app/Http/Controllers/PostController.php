@@ -27,7 +27,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::get();
+        return Post::where('site_id', null)->get();
     }
 
     /**
@@ -40,7 +40,9 @@ class PostController extends Controller
     {
         $post = Auth::user()->posts()->create([
             'name' => $request->name,
+            'slug' => str_slug($request->name),
             'content' => $request->content,
+            'site_id' => $request->site_id,
         ]);
         if ($request->type_id) {
             $type = Type::findOrFail($request->type_id);
@@ -48,7 +50,8 @@ class PostController extends Controller
             $type = Type::firstOrCreate([
                 'name' => $request->type_name,
                 'slug' => str_slug($request->type_name),
-                'model' => 'Post',
+                'icon' => 'file_copy',
+                'model' => $request->model,
             ]);
         }
         $type->posts()->save($post);
