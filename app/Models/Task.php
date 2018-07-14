@@ -13,6 +13,33 @@ class Task extends Model
 
     }
 
+    public function createDefaultSettings()
+    {
+        Setting::create([
+            'company_id' => company('id'),
+            'name' => 'column',
+            'value' => 'Back Log',
+            'settable_id' => $this->id,
+            'position' => 3,
+            'settable_type' => 'App\Models\Task',
+        ]);
+        Setting::create([
+            'company_id' => company('id'),
+            'name' => 'column',
+            'value' => 'In Progress',
+            'settable_id' => $this->id,
+            'position' => 3,
+            'settable_type' => 'App\Models\Task',
+        ]);
+        Setting::create([
+            'company_id' => company('id'),
+            'name' => 'column',
+            'value' => 'Finished',
+            'settable_id' => $this->id,
+            'position' => 3,
+            'settable_type' => 'App\Models\Task',
+        ]);
+    }
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -40,7 +67,7 @@ class Task extends Model
 
     public function children()
     {
-        return $this->hasMany(Task::class, 'parent_id', 'id');
+        return $this->hasMany(Task::class, 'parent_id', 'id')->with('type');
     }
 
     public function settings($name = null)

@@ -14,7 +14,7 @@ class SiteController extends Controller
      */
     public function index()
     {
-        return Site::with('homePage', 'pages')->get();
+        return company()->sites()->with('homePage', 'pages')->get();
     }
 
     /**
@@ -26,6 +26,7 @@ class SiteController extends Controller
     public function store(Request $request)
     {
         $site = new Site;
+        $site->company_id = company('id');
         $site->name = $request->name;
         $site->subroute = str_slug($request->name);
         $site->url = $request->url;
@@ -41,7 +42,9 @@ class SiteController extends Controller
      */
     public function show($subroute)
     {
-        return Site::where('subroute', $subroute)->with('pages')->first();
+        $site = Site::where('subroute', $subroute)->with('pages')->first();
+        $this->authorize('show', $site);
+        return $site;
     }
 
     /**

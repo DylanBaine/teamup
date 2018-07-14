@@ -706,12 +706,14 @@ var Model = function () {
         value: function get() {
             var _this3 = this;
 
-            this.showLoader('Loading...');
+            var quick = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+            if (!quick) this.showLoader('Loading...');
             return axios.get(this.getUrl).then(function (res) {
-                _this3.showLoader();
+                if (!quick) _this3.showLoader();
                 _this3._set_(res.data);
             }).catch(function (err) {
-                _this3.showLoader();
+                if (!quick) _this3.showLoader();
                 _this3.showError(err.response.data.message);
             });
         }
@@ -2089,6 +2091,11 @@ var app = new Vue({
         },
         $middleware: function $middleware() {
             return new __WEBPACK_IMPORTED_MODULE_1__app_middleware_AuthMiddleware__["a" /* default */](this);
+        }
+    },
+    computed: {
+        company: function company() {
+            if (this.user) return this.user.company;
         }
     },
     created: function created() {},
@@ -43174,6 +43181,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -43230,10 +43238,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this.users = [_this.task.user];
         });
       }
-      this.parentOptions = this.$parent.tasks;
-      this.$types.get().then(function (res) {
-        _this.showing = true;
-      });
+      //this.parentOptions = this.$parent.tasks;
+      this.$types.get(true);
+      this.showing = true;
     },
     post: function post() {
       if (this.editing) {
@@ -43358,7 +43365,15 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("h2", { staticClass: "title" })
+              _vm.$parent.task
+                ? _c("h2", { staticClass: "title" }, [
+                    _vm._v(
+                      "\n            " +
+                        _vm._s(_vm.$parent.task.name) +
+                        "\n          "
+                    )
+                  ])
+                : _vm._e()
             ],
             1
           ),
@@ -44164,6 +44179,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -44180,7 +44201,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   watch: {
     $route: function $route() {
       this.fam = false;
-      if (!this.$route.params.child && !this.$route.meta.editing) this.init();
+      this.init();
     },
     task: function task() {
       if (!this.dragging) {
@@ -44200,14 +44221,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   mounted: function mounted() {
+    console.log("mounted");
     this.init();
+  },
+  updated: function updated() {
+    console.log(this.$key);
+    this.$mount();
+    this.columnItems();
   },
 
   methods: {
     init: function init() {
       this.loaded = true;
       this.$task.find(this.$route.params.task);
-      this.$tasks.get();
     },
     remove: function remove(id) {
       var _this = this;
@@ -44349,13 +44375,42 @@ var render = function() {
                               )
                             ]),
                             _vm._v(" "),
-                            _c("v-card-text", [
-                              _vm._v(
-                                "\n                  " +
-                                  _vm._s(child.description) +
-                                  "\n                "
-                              )
-                            ])
+                            child.type.name !== "Task"
+                              ? _c("v-card-text", [
+                                  _vm._v(
+                                    "\n                  " +
+                                      _vm._s(child.percent_finished) +
+                                      "% finished.\n                "
+                                  ),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "grey darken-1",
+                                      staticStyle: {
+                                        padding: "0",
+                                        width: "100%",
+                                        height: "20px",
+                                        "border-radius": "50px"
+                                      }
+                                    },
+                                    [
+                                      _c("div", {
+                                        staticClass: "grey darken-2",
+                                        style:
+                                          "width:" +
+                                          child.percent_finished +
+                                          "%; height: 100%; border-radius: 50px;"
+                                      })
+                                    ]
+                                  )
+                                ])
+                              : _c("v-card-text", [
+                                  _vm._v(
+                                    "\n                  " +
+                                      _vm._s(child.description) +
+                                      "\n                "
+                                  )
+                                ])
                           ],
                           1
                         )
@@ -67171,7 +67226,7 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("span", { staticClass: "hidden-sm-and-down" }, [
-                _vm._v(_vm._s(_vm.user.name))
+                _vm._v(_vm._s(_vm.$root.company.name))
               ])
             ],
             1
@@ -67226,7 +67281,13 @@ var render = function() {
           _c(
             "v-container",
             { attrs: { fluid: "", "fill-height": "" } },
-            [_c("v-layout", [_c("router-view")], 1)],
+            [
+              _c(
+                "v-layout",
+                [_c("router-view", { key: _vm.$route.fullPath })],
+                1
+              )
+            ],
             1
           )
         ],

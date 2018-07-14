@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
 
+    public $company;
     public function __construct()
     {
         $this->middleware('permissions');
@@ -20,7 +21,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return response()->json(Task::where('parent_id', 0)->orWhere('parent_id', null)->with('children', 'type')->get());
+        return company()->tasks()->where('parent_id', null)->with('children', 'type')->get();
     }
 
     /**
@@ -33,6 +34,7 @@ class TaskController extends Controller
     {
         $parent = Task::find($request->parent_id);
         $t = new Task;
+        $t->company_id = company('id');
         $t->name = $request->name;
         $t->description = $request->description == null ? 'No Description Given' : $request->description;
         $t->parent_id = $request->parent_id;
@@ -43,7 +45,11 @@ class TaskController extends Controller
         $t->column_id = $parent && $parent->columns()->count() ?
         $parent->columns()->first()->id :
         null;
-        return response()->json(['success' => $t->save()]);
+        $t->save();
+        if ($t->type->name === 'Sprint') {
+            $t->createDefaultSettings();
+        }
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -54,7 +60,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = Task::find($id)->load('columns', 'user', 'subscribers', 'children');
+        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children');
         $task->parent = Task::find($task->parent_id);
         return $task;
     }

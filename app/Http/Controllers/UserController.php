@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use \App\Models\User;
 
 class UserController extends Controller
 {
@@ -11,7 +10,6 @@ class UserController extends Controller
     protected $allUsers;
     public function __construct()
     {
-        $this->users = User::all();
     }
     /**
      * Display a listing of the resource.
@@ -20,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return $this->users;
+        return company()->users;
 
     }
     /**

@@ -14,7 +14,7 @@ class PermissionModeController extends Controller
      */
     public function index()
     {
-        return PermissionMode::get();
+        return company()->permissionModes()->get();
     }
 
     /**
@@ -25,7 +25,7 @@ class PermissionModeController extends Controller
     public function create()
     {
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -34,7 +34,7 @@ class PermissionModeController extends Controller
      */
     public function store(Request $request)
     {
-        PermissionMode::create($request->all());
+        PermissionMode::create($array_merge(['company_id' => company('id')], $request->all()));
     }
 
     /**

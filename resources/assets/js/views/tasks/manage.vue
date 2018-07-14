@@ -24,7 +24,13 @@
                   <v-card-title>
                     <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
                   </v-card-title>
-                  <v-card-text>
+                  <v-card-text v-if="child.type.name !== 'Task'">
+                    {{child.percent_finished}}% finished.
+                  <div class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
+                    <div class="grey darken-2" :style="`width:${child.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
+                  </div>
+                  </v-card-text>
+                  <v-card-text v-else>
                     {{child.description}}
                   </v-card-text>
                 </v-card>
@@ -100,7 +106,7 @@ export default {
   watch: {
     $route() {
       this.fam = false;
-      if (!this.$route.params.child && !this.$route.meta.editing) this.init();
+      this.init();
     },
     task() {
       if (!this.dragging) {
@@ -120,13 +126,18 @@ export default {
     }
   },
   mounted() {
+    console.log("mounted");
     this.init();
+  },
+  updated() {
+    console.log(this.$key);
+    this.$mount();
+    this.columnItems();
   },
   methods: {
     init() {
       this.loaded = true;
       this.$task.find(this.$route.params.task);
-      this.$tasks.get();
     },
     remove(id) {
       this.$task.delete(id).then(res => {

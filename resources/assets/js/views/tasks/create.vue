@@ -5,7 +5,8 @@
               <v-btn icon :to="$route.params.task ? `/tasks/${$route.params.task}/manage` : '/tasks/'">
                   <v-icon>chevron_left</v-icon>
               </v-btn>
-              <h2 class="title">
+              <h2 class="title" v-if="$parent.task">
+                {{$parent.task.name}}
               </h2>
           </v-toolbar>
           <v-container grid-list-xl>
@@ -127,10 +128,9 @@ export default {
           this.users = [this.task.user];
         });
       }
-      this.parentOptions = this.$parent.tasks;
-      this.$types.get().then(res => {
-        this.showing = true;
-      });
+      //this.parentOptions = this.$parent.tasks;
+      this.$types.get(true);
+      this.showing = true;
     },
     post() {
       if (this.editing) {

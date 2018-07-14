@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\File;
 use App\Models\Type;
 use App\TEAMUP\FileUpload;
 use Auth;
@@ -17,7 +16,6 @@ class FileController extends Controller
     public function __construct(Request $request)
     {
         $this->uploader = new FileUpload($request);
-        $this->files = File::all();
     }
     /**
      * Display a listing of the resource.
@@ -30,7 +28,7 @@ class FileController extends Controller
     $files->where('user_id', Auth::user()->id);
     }])->get();
     return view('files.index', compact('fileTypes')); */
-        return File::get();
+        return company()->files()->get();
     }
 
     /**
@@ -44,11 +42,13 @@ class FileController extends Controller
         $uploader = $this->uploader;
         $uploader->storeFile();
         $file = Auth::user()->files()->create([
+            'company_id' => company('id'),
             'name' => $uploader->getFileName(),
             'slug' => $uploader->getFileSlug(),
             'hash_name' => $uploader->getFileHashName(),
         ]);
         Type::firstOrCreate([
+            'company_id' => company('id'),
             'name' => $uploader->getFileMimeType(),
             'slug' => str_slug($uploader->getFileMimeType()),
             'icon' => 'attach_file',
@@ -65,7 +65,7 @@ class FileController extends Controller
      */
     public function show($id)
     {
-        return $this->files->find($id);
+        return company()->files()->find($id);
     }
 
     /**

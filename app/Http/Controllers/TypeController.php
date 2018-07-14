@@ -12,7 +12,6 @@ class TypeController extends Controller
     protected $types, $repo;
     public function __construct()
     {
-        $this->types = Type::with('posts')->get();
         $this->repo = new Repo;
     }
     /**
@@ -24,7 +23,7 @@ class TypeController extends Controller
     {
         $model = \Request::get('model');
         if ($model == null) {
-            $types = $this->types;
+            $types = company()->types()->get();
         } else {
             $types = $this->repo->get($model);
         }
@@ -41,6 +40,7 @@ class TypeController extends Controller
     {
         $slug = $request->slug ? $request->slug : str_plural(str_slug($request->name));
         Type::create([
+            'compay_id' => company('id'),
             'name' => $request->name,
             'slug' => $slug,
             'model' => $request->model,

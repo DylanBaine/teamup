@@ -93,14 +93,14 @@ class Model {
     /**
      * Get all of the records of a given model
      */
-    get() {
-        this.showLoader(`Loading...`);
+    get(quick = false) {
+        if (!quick) this.showLoader(`Loading...`);
         return axios.get(this.getUrl)
             .then(res => {
-                this.showLoader();
+                if (!quick) this.showLoader();
                 this._set_(res.data);
             }).catch(err => {
-                this.showLoader();
+                if (!quick) this.showLoader();
                 this.showError(err.response.data.message);
             });
     }

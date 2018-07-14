@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Edit;
-
 class EditController extends Controller
 {
 
@@ -11,7 +9,6 @@ class EditController extends Controller
 
     public function __construct()
     {
-        $this->edits = Edit::all();
     }
     /**
      * Display a listing of the resource.
@@ -20,7 +17,7 @@ class EditController extends Controller
      */
     public function index()
     {
-        return $this->edits;
+        return company()->edits()->get();
     }
 
     /**

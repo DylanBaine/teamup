@@ -9,7 +9,7 @@ const app = new Vue({
         middleware: {},
         userLinks: [],
         icons: require('./app/library/Icons.json'),
-        errors: false
+        errors: false,
     },
     watch: {
         $route() {
@@ -20,6 +20,12 @@ const app = new Vue({
         },
         $middleware() {
             return new AuthMiddleware(this);
+        }
+    },
+    computed: {
+        company() {
+            if (this.user)
+                return this.user.company
         }
     },
     created() {

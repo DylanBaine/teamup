@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class Permission extends Model
 {
     protected $with = ['type', 'mode', 'user'];
-    protected $fillable = ['permission_mode_id', 'user_id', 'type_id'];
+    protected $fillable = ['permission_mode_id', 'user_id', 'type_id', 'company_id'];
 
     public function mode()
     {

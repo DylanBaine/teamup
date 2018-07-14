@@ -11,7 +11,6 @@ class PermissionController extends Controller
     public $permissions;
     public function __construct()
     {
-        $this->permission = Permission::all();
     }
     /**
      * Display a listing of the resource.
@@ -20,7 +19,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        return Permission::get();
+        return company()->permissions()->get();
     }
 
     /**
@@ -32,6 +31,7 @@ class PermissionController extends Controller
     public function store(Request $request)
     {
         Permission::create([
+            'company_id' => company('id'),
             'permission_mode_id' => $request->mode,
             'user_id' => $request->user,
             'type_id' => $request->type,
@@ -46,7 +46,7 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        $this->permissions->find($id);
+        return company()->permissions()->find($id);
     }
 
     /**

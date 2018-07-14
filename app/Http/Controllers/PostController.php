@@ -18,7 +18,6 @@ class PostController extends Controller
     {
         $this->typeRepo = new TypesRepository;
         $this->updatePost = new UpdatePost;
-        $this->posts = Post::get();
     }
     /**
      * Display a listing of the resource.
@@ -27,7 +26,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::where('site_id', null)->get();
+        return company()->posts()->where('site_id', null)->get();
     }
 
     /**
@@ -39,6 +38,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $post = Auth::user()->posts()->create([
+            'company_id' => company('id'),
             'name' => $request->name,
             'slug' => str_slug($request->name),
             'content' => $request->content,
@@ -48,6 +48,7 @@ class PostController extends Controller
             $type = Type::findOrFail($request->type_id);
         } else {
             $type = Type::firstOrCreate([
+                'company_id' => company('id'),
                 'name' => $request->type_name,
                 'slug' => str_slug($request->type_name),
                 'icon' => 'file_copy',
@@ -65,7 +66,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return $this->posts->find($id);
+        $post = company()->sites()->find($id);
+        return $post;
     }
 
     /**

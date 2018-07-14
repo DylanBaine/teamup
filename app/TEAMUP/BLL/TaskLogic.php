@@ -10,6 +10,7 @@ trait TaskLogic
     function addColumn()
     {
         Setting::create([
+            'company_id' => company('id'),
             'name' => 'column',
             'value' => request('value'),
             'position' => request('position'),

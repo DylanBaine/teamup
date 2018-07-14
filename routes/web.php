@@ -2,11 +2,17 @@
 // Return the layout view when visiting the app
 Route::get('/', function () {
     $user = Auth::user() ? Auth::user()->load('groups', 'permissions', 'tasks') : false;
+    if ($user) {
+        $user->company = App\Models\Company::find($user->company_id);
+    }
+
     return view('layouts.app', compact('user'));
 });
 // Return the session user
 Route::get('/auth/user', function () {
-    return Auth::user();
+    $user = Auth::user();
+    $user->company = App\Models\Company::find($user->company_id);
+    return $user;
 });
 // Handle all search methods
 Route::get('/search', 'SearchController');

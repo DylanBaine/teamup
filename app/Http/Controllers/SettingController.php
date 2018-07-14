@@ -12,7 +12,6 @@ class SettingController extends Controller
     public function __construct()
     {
         $this->actions = new SettingResponse;
-        $this->settings = Setting::all();
     }
 
     /**

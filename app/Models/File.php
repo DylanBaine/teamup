@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class File extends Model
 {
     //public $with = ['users', 'groups'];
-    protected $fillable = ['name', 'slug', 'type', 'hash_name'];
+    protected $fillable = ['name', 'slug', 'type', 'hash_name', 'company_id'];
 
     public function users()
     {

@@ -45,7 +45,7 @@
 			fixed>
 			<v-toolbar-title style="width: 300px" class="ml-0 pl-3">
 				<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-				<span class="hidden-sm-and-down">{{user.name}}</span>
+				<span class="hidden-sm-and-down">{{$root.company.name}}</span>
 			</v-toolbar-title>
 			<v-text-field
 				flat
@@ -65,7 +65,7 @@
 		<v-content>
 			<v-container fluid fill-height>
 				<v-layout>
-					<router-view></router-view>
+					<router-view :key="$route.fullPath"></router-view>
 				</v-layout>
 			</v-container>
 		</v-content>

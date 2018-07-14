@@ -40,7 +40,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return $this->groups;
+        return company()->groups()->get();
     }
 
     /**
@@ -52,6 +52,7 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         Group::create([
+            'company_id' => company('id'),
             'name' => $request->name,
         ]);
         //return $this->assertDb->has('id', $group->id);
@@ -66,7 +67,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        return $this->groups->find($id);
+        return company()->groups()->find($id)->load('users');
     }
 
     /**
