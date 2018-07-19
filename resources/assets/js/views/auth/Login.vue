@@ -3,6 +3,14 @@
   <v-layout justify-center align-center>
     <div>
         <v-card width="800px">
+          <v-card-title>
+            <h2 class="title">
+              Login
+            </h2>
+            <v-spacer></v-spacer>
+            <v-btn small color="accent" @click="$root.register = true">or register</v-btn>
+          </v-card-title>
+          <v-divider></v-divider>
             <v-form :valid="valid" @submit.prevent="login()">
                 <v-card-text>
                     <div>

@@ -23,6 +23,7 @@
                 <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
                   <v-card-title>
                     <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
+                    <h3 class="subheader">{{child.type.name}}</h3>
                   </v-card-title>
                   <v-card-text v-if="child.type.name !== 'Task'">
                     {{child.percent_finished}}% finished.

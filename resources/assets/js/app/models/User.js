@@ -26,6 +26,21 @@ class User extends Model {
             });
     }
 
+    register(user) {
+        this.instance.showLoader('Setting things up...');
+        return axios.post(url + '/auth/register', user)
+            .then(res => {
+                window.location.reload();
+                this.root.user = res.data;
+            }).catch(err => {
+                this.instance.showLoader();
+                this.instance.error = err.response.data.message;
+                if (!err.response.data.message) {
+                    window.location.reload();
+                }
+            });
+    }
+
     logout() {
         this.instance.showLoader('Logging you out...');
         return axios.post(url + '/auth/logout')

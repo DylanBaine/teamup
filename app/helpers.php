@@ -16,3 +16,8 @@ function user($prop = null)
     }
     return Auth::user();
 }
+
+function repository($class)
+{
+    return "TEAMUP\Repositories\$class";
+}

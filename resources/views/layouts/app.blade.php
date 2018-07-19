@@ -22,6 +22,7 @@
             v-if="user"
             :user="user"
         ></application>
+        <register v-else-if="register"></register>
         <login v-else ref="login"></login>
     </div>
 <script src="{{asset('js/app.js')}}"></script>

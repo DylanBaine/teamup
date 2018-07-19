@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
+use App\TEAMUP\Auth\UserCreation;
 
 class CustomAuthController extends Controller
 {
@@ -25,6 +26,11 @@ class CustomAuthController extends Controller
             return abort(404, "I'm sorry... This info didn't match our records...");
         }
 
+    }
+
+    public function register(Request $request)
+    {
+        return (new UserCreation($request))->response();
     }
 
     public function logout()

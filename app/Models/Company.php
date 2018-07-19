@@ -7,10 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Company extends Model
 {
     protected $table = 'companys';
+    protected $fillable = ['name', 'super_user_id'];
 
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function superUser()
+    {
+        return $this->belongsTo(User::class, 'super_user_id', 'plan_id');
     }
 
     public function tasks()
