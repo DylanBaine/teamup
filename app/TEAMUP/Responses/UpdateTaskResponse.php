@@ -32,7 +32,10 @@ class UpdateTaskResponse implements Responsable
     {
         $parent = Task::find($task->parent_id);
         $childrentCount = $parent->children()->count();
-        $finishedColumnId = Setting::where('value', 'Finished')->where('settable_id', $parent->id)->first()->id;
+        $finishedColumnId = Setting::where('value', 'Finished')->where('settable_id', $parent->id)->first();
+        if($finishedColumnId){
+            $finishedColumnId = $finishedColumnId->id;
+        }
         $finishedTaskCount = $parent->children()->where('column_id', $finishedColumnId)->count();
         $percent = ($finishedTaskCount / $childrentCount) * 100;
         $parent->percent_finished = $percent;

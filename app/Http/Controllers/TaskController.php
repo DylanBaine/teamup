@@ -60,7 +60,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children');
+        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type');
         $task->parent = Task::find($task->parent_id);
         return $task;
     }

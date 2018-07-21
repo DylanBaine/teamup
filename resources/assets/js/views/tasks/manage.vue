@@ -12,7 +12,7 @@
               </h4>
               <p>{{task.description}}</p>
           </header>
-          <v-container grid-list-lg>
+          <v-container v-if="task.type.name == 'Sprint'" grid-list-lg>
             <v-layout row wrap>
               <draggable v-for="column in task.columns" :key="column.position"  :items="column.children" :options="{group:'tasks', element: '.drag-me'}" :id="`${column.id}`" class="task-row flex md3 mt-2" @end="add" @start="start">
                 <v-card>
@@ -36,6 +36,34 @@
                   </v-card-text>
                 </v-card>
               </draggable>
+            </v-layout>
+          </v-container>
+          <v-container v-else grid-list-lg>
+            <v-layout row wrap>
+              <v-flex md6 v-for="task in task.children" :key="task.key">
+                <v-card ripple :to="`/tasks/${task.id}/manage`">
+                  <v-card-title :class="task.parent_id == 0 ? 'blue lighten-2' : 'grey lighten-2'">
+                    <div>
+                      <h2 class="title black--text">
+                        {{task.name}} ({{task.type_id ? task.type.name : 'No type yet...'}})
+                        <v-icon color="black">{{task.icon}}</v-icon>
+                      </h2>
+                      <h3 class="subheading mt-1 black--text" v-if="task.parent_id == 0">
+                        Previously a child task.
+                      </h3>
+                    </div>
+                  </v-card-title>
+                  <v-card-text>
+                    <p>
+                      {{task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description}}
+                    </p>
+                    <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
+                      <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
+                        <div class="primary" :style="`width:${task.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
+                      </div>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
             </v-layout>
           </v-container>
           <v-slide-x-transition>

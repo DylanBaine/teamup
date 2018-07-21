@@ -9,6 +9,29 @@ use DB;
 class UserCreation
 {
 
+    private $create = [
+        'Posts', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
+        'Documentation', 'Announcements', 'Permission Types'
+    ];
+    private $read = [
+        'Posts', 'Tasks', 'Users', 'Permissions',
+        'Documentation', 'Announcements'
+    ];
+    private $update = [
+        'Posts', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
+        'Documentation', 'Announcements', 'Permission Types'
+    ];
+    private $delete = [
+        'Posts', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
+        'Documentation', 'Announcements', 'Permission Types'
+    ];
+    private $manage = [
+        'Tasks', 'Users', 'Permissions'
+    ];
+    private $assign = [
+        'Tasks', 'Permissions'
+    ];
+
     public function __construct($request)
     {
         $this->request = $request;
@@ -64,38 +87,19 @@ class UserCreation
     private function createPermissions()
     {
         $this->setupPermissionModes();
-        $create = $this->company->permissionModes()->where('name', 'create')->first()->id;
-        $read = $this->company->permissionModes()->where('name', 'read')->first()->id;
-        $update = $this->company->permissionModes()->where('name', 'update')->first()->id;
-        $delete = $this->company->permissionModes()->where('name', 'delete')->first()->id;
-        $manage = $this->company->permissionModes()->where('name', 'manage')->first()->id;
-        $assign = $this->company->permissionModes()->where('name', 'assign')->first()->id;
-        $noRead = [
-            $this->company->types()->where('name', 'Permission Modes')->first()->id,
-            $this->company->types()->where('name', 'Permission Types')->first()->id
+        $modes = [
+            'create' => $this->company->permissionModes()->where('name', 'create')->first()->id,
+            'read' => $this->company->permissionModes()->where('name', 'read')->first()->id,
+            'update' => $this->company->permissionModes()->where('name', 'update')->first()->id,
+            'delete' => $this->company->permissionModes()->where('name', 'delete')->first()->id,
+            'manage' => $this->company->permissionModes()->where('name', 'manage')->first()->id,
+            'assign' => $this->company->permissionModes()->where('name', 'assign')->first()->id,
         ];
-        foreach($noRead as $type){
-            $this->makePermission($create, $type);
-            $this->makePermission($update, $type);
-            $this->makePermission($delete, $type);
-            $this->makePermission($manage, $type);
-            $this->makePermission($assign, $type);
-        }
-        $allTypes = [
-            $this->company->types()->where('name', 'Posts')->first()->id,
-            $this->company->types()->where('name', 'Documentation')->first()->id,
-            $this->company->types()->where('name', 'Announcement')->first()->id,
-            $this->company->types()->where('name', 'Permissions')->first()->id,
-            $this->company->types()->where('name', 'Tasks')->first()->id,
-            $this->company->types()->where('name', 'Users')->first()->id,
-        ];
-        foreach($allTypes as $type){
-            $this->makePermission($create, $type);
-            $this->makePermission($read, $type);
-            $this->makePermission($update, $type);
-            $this->makePermission($delete, $type);
-            $this->makePermission($manage, $type);
-            $this->makePermission($assign, $type);
+        foreach($modes as $key => $mode){
+            foreach($this->{$key} as $type){
+                $type = company()->types()->where('name', $type)->first()->id;
+                $this->makePermission($mode, $type);
+            }
         }
 
     }
@@ -104,16 +108,18 @@ class UserCreation
     {
         $this->makeType('Permission Modes', 'Permission', '');
         $this->makeType('Permission Types', 'Permission', '');
-        $this->makeType('Post Types', 'Post', '');
+        $this->makeType('Post Types', 'Permission', '');
         $this->makeType('Permissions', 'Permission', 'supervised_user_circle');
-        $this->makeType('Posts', 'Post', 'format_align_left');
-        $this->makeType('Tasks', 'Task', 'rowing');
-        $this->makeType('Groups', 'Group', 'group');
+        $this->makeType('Posts', 'Permission', 'format_align_left');
+        $this->makeType('Tasks', 'Permission', 'rowing');
+        $this->makeType('Task Types', 'Permission', 'rowing');
+        $this->makeType('Groups', 'Permission', 'group');
         $this->makeType('Documentation', 'Post', 'chrome_reader_mode');
-        $this->makeType('Announcement', 'Post', 'chrome_reader_mode');
+        $this->makeType('Announcements', 'Post', 'chrome_reader_mode');
         $this->makeType('Sprint', 'Task', 'directions_run');
         $this->makeType('Task', 'Task', 'rowing');
-        $this->makeType('Users', 'User', 'person');
+        $this->makeType('Team', 'Task', 'group');
+        $this->makeType('Users', 'Permission', 'person');
     }
 
     private function makeType($name, $model, $icon)

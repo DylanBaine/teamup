@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -10,6 +11,7 @@ class UserController extends Controller
     protected $allUsers;
     public function __construct()
     {
+        $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -29,7 +31,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return $this->users->find($id);
+        return User::find($id)->load('permissions', 'tasks');
     }
 
     /**

@@ -20,7 +20,7 @@ import PostType from '../views/posts/type.vue';
 import ShowPost from '../views/posts/show.vue';
 import CreatePost from '../views/posts/create.vue';
 import ManagePosts from '../views/posts/manage.vue';
-import PostTypess from '../views/posts/index.vue';
+import PostTypes from '../views/posts/index.vue';
 
 // Permission Views
 import Permissions from '../views/permissions/index.vue';
@@ -32,6 +32,10 @@ import CreateSite from '../views/sites/create.vue';
 import ShowSite from '../views/sites/show.vue';
 import SiteSettings from '../views/sites/settings.vue';
 
+// User Views
+import Users from '../views/users/index.vue';
+import ShowUser from '../views/users/show.vue';
+
 const routes = [
     { path: '/login', component: Login },
     { path: '/', component: Home },
@@ -41,7 +45,7 @@ const routes = [
         ]
     },
     {
-        path: '/post-types', component: PostTypess, children: [
+        path: '/post-types', component: PostTypes, children: [
             { path: 'create', component: ManagePosts }
         ]
     },
@@ -70,22 +74,13 @@ const routes = [
         ]
     },
     {
-        path: '/sites', component: Sites, children: [
-            { path: `create`, component: CreateSite }
-        ]
-    },
-    {
-        path: '/sites/:site', component: ShowSite, children: [
-            { path: 'settings', component: SiteSettings },
-            { path: 'create-page', component: CreatePost, meta: { forSite: true } },
-            { path: ':post', component: CreatePost, meta: { forSite: true, editing: true } }
+        path: '/users', component: Users, children: [
+            { path: ':user', component: ShowUser }
         ]
     },
     {
         path: '/:type', component: PostType, children: [
-            { path: 'create', component: CreatePost },
-            { path: ':post', component: ShowPost },
-            { path: ':post/edit', component: CreatePost, meta: { editing: true } }
+            { path: 'create', component: CreatePost }
         ]
     }
 ]
