@@ -19,6 +19,11 @@
                 </v-flex>
             </v-layout>
         </v-container>
+        <div class="fixed bottom right">
+            <v-btn fab color="accent" to="users/create">
+                <v-icon>add</v-icon>
+            </v-btn>
+        </div>
     </div>
 </template>
 

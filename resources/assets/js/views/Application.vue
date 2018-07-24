@@ -1,4 +1,4 @@
-<template>
+	<template>
 	<v-app :dark="dark" id="inspire">
 		<v-navigation-drawer
 			:clipped="$vuetify.breakpoint.lgAndUp"
@@ -65,7 +65,7 @@
 		<v-content>
 			<v-container fluid fill-height>
 				<v-layout>
-					<router-view :key="$route.fullPath"></router-view>
+					<router-view :key="randomKey"></router-view>
 				</v-layout>
 			</v-container>
 		</v-content>
@@ -94,8 +94,14 @@ export default {
       dialog: false,
       drawer: true,
       dark: true,
-      showCreateModal: false
+      showCreateModal: false,
+      randomKey: Math.random()
     };
+  },
+  watch: {
+    $route() {
+      this.randomKey = Math.random();
+    }
   },
   mounted() {
     var thing = this.$user.permissions("create");

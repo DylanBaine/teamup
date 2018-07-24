@@ -40,7 +40,7 @@ class TypeController extends Controller
     {
         $slug = $request->slug ? $request->slug : str_plural(str_slug($request->name));
         Type::create([
-            'compay_id' => company('id'),
+            'company_id' => company('id'),
             'name' => $request->name,
             'slug' => $slug,
             'model' => $request->model,

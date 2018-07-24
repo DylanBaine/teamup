@@ -35,6 +35,7 @@ import SiteSettings from '../views/sites/settings.vue';
 // User Views
 import Users from '../views/users/index.vue';
 import ShowUser from '../views/users/show.vue';
+import CreateUser from '../views/users/create.vue';
 
 const routes = [
     { path: '/login', component: Login },
@@ -61,9 +62,10 @@ const routes = [
             { path: ':task', component: ShowTask },
         ]
     },
+    { path: '/tasks/:task/manage/edit', component: CreateTask, meta: { editing: true } },
     {
         path: '/tasks/:task/manage', component: ManageTask, children: [
-            { path: 'edit', component: CreateTask, meta: { editing: true } },
+
             { path: 'add-task', component: CreateTask },
             { path: 'settings', component: TaskSettings },
             {
@@ -75,7 +77,8 @@ const routes = [
     },
     {
         path: '/users', component: Users, children: [
-            { path: ':user', component: ShowUser }
+            { path: ':user', component: ShowUser },
+            { path: 'create', component: CreateUser }
         ]
     },
     {

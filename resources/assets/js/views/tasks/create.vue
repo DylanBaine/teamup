@@ -103,8 +103,8 @@ export default {
     $types() {
       return new TaskType(this, "types");
     },
-    $tasks() {
-      return new Task(this.$parent, "tasks");
+    $task() {
+      return new Task(this, "task");
     },
     $users() {
       return new User(this, "users");
@@ -123,7 +123,7 @@ export default {
   methods: {
     init() {
       if (this.editing) {
-        this.task = this.$parent.task;
+        this.$task.find(this.$route.params.task);
         this.$nextTick(() => {
           this.users = [this.task.user];
         });
@@ -151,9 +151,7 @@ export default {
         parent_id: t.parent_id
       };
       this.users = [this.task.user];
-      this.$tasks.update(this.task.id, data).then(res => {
-        this.$parent.init();
-      });
+      this.$task.update(this.task.id, data);
     },
     save() {
       this.$tasks.create(this.task).then(res => {

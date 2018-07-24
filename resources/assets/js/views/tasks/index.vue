@@ -43,6 +43,12 @@
           </v-slide-x-transition>
           <v-slide-x-reverse-transition>
             <div class="fixed bottom right" v-if="fam">
+                <v-btn v-if="$user.can('manage', 'tasks')"
+                    fab
+                    color="info"
+                    dark @click="settings = true">
+                    <v-icon>settings</v-icon>
+                </v-btn>
                 <v-btn v-if="$user.can('create', 'tasks')"
                     fab
                     color="accent"
@@ -59,18 +65,61 @@
                 </v-btn>
             </div>
           </v-slide-x-reverse-transition>
+
+      <v-dialog v-model="settings" width="500px">
+        <v-card>
+            <v-card-title class="grey lighten-2 black--text">
+                <h2 class="title">
+                    Global Task Types
+                </h2>
+                <v-spacer></v-spacer>
+                <v-btn flat icon color="black" @click="settings = false">
+                  <v-icon>close</v-icon>
+                </v-btn>
+            </v-card-title>
+            <v-card-text style="height: 60vh; overflow: auto;">
+                <v-list>
+                    <v-list-tile v-for="type in types" :key="type.key">
+                        <v-list-tile-content>
+                            <input type="text" class="padded ghost" v-model="type.name" @keyup.enter="$taskType.update(type.id, type)">
+                        </v-list-tile-content>
+                        <v-list-tile-action>
+                            <v-btn flat icon @click="removeType(type.id)">
+                                <v-icon color="grey">delete_forever</v-icon>
+                            </v-btn>
+                        </v-list-tile-action>
+                    </v-list-tile>
+                </v-list>
+                <v-card-actions class="relative">
+                    <v-text-field
+                        label="New Task Type"
+                        v-model="newType.name"
+                    ></v-text-field>
+                    <v-btn @click="addType" color="primary" fab absolute bottom right>
+                        <v-icon>add</v-icon>    
+                    </v-btn>                                
+                </v-card-actions>
+            </v-card-text>
+        </v-card>
+      </v-dialog>
   </v-container>
 </template>
 
 <script>
 import Task from "../../app/models/Task";
 import User from "../../app/models/User";
+import TaskType from "../../app/models/TaskType";
 export default {
   data() {
     return {
       tasks: [],
       user: {},
-      fam: false
+      fam: false,
+      types: [],
+      settings: false,
+      newType: {
+        name: ""
+      }
     };
   },
   watch: {
@@ -82,6 +131,9 @@ export default {
     }
   },
   computed: {
+    $types() {
+      return new TaskType(this, "types");
+    },
     $tasks() {
       return new Task(this, "tasks");
     },
@@ -95,6 +147,13 @@ export default {
   methods: {
     init() {
       this.$tasks.get();
+      this.$types.get();
+    },
+    addType() {
+      this.$types.create(this.newType);
+      this.newType = {
+        name: ""
+      };
     }
   }
 };
