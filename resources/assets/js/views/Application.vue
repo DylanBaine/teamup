@@ -1,5 +1,5 @@
 	<template>
-	<v-app :dark="dark" id="inspire">
+	<div>
 		<v-navigation-drawer
 			:clipped="$vuetify.breakpoint.lgAndUp"
 			v-model="drawer"
@@ -83,7 +83,7 @@
 		</v-btn>
 		<loader ref="loader"></loader>
     <alerts ref="alert"></alerts>
-	</v-app>
+	</div>
 </template>
 
 <script>
@@ -94,7 +94,6 @@ export default {
       dialog: false,
       drawer: true,
       dark: true,
-      showCreateModal: false,
       randomKey: Math.random()
     };
   },

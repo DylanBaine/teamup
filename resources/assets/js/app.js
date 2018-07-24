@@ -10,7 +10,9 @@ const app = new Vue({
         userLinks: [],
         icons: require('./app/library/Icons.json'),
         errors: false,
-        register: false
+        register: false,
+        newPassword: null,
+        dark: true
     },
     watch: {
         $route() {

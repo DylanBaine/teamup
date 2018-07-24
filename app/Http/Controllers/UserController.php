@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Notifications\UserCreated;
+use Illuminate\Http\Request;
+use Notification;
 
 class UserController extends Controller
 {
@@ -32,6 +34,18 @@ class UserController extends Controller
     public function show($id)
     {
         return User::find($id)->load('permissions', 'tasks');
+    }
+
+    public function store(Request $request)
+    {
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->company_id = company('id');
+        if ($user->save()) {
+            Notification::send($user, new UserCreated($request->name, company('name')));
+        };
     }
 
     /**

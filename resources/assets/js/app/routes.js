@@ -77,8 +77,8 @@ const routes = [
     },
     {
         path: '/users', component: Users, children: [
+            { path: 'create', component: CreateUser },
             { path: ':user', component: ShowUser },
-            { path: 'create', component: CreateUser }
         ]
     },
     {

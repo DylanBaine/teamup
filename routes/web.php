@@ -1,4 +1,12 @@
 <?php
+
+Route::post('set_new_password', function (Request $request) {
+    $user = user();
+    $user->password = bcrypt(request('password'));
+    $user->password_confimed = 1;
+    $user->save();
+    return redirect()->back();
+});
 // Return the layout view when visiting the app
 Route::get('/', function () {
     $user = Auth::user() ? Auth::user()->load('groups', 'permissions', 'tasks') : false;
