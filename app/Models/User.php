@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 class User extends Authenticatable
 {
     use Notifiable;
-    protected $fillable = ['name', 'email', 'company_id', 'password'];
+    protected $fillable = ['name', 'email', 'company_id', 'password', 'password_confirmed'];
     protected $hidden = ['password', 'remember_token'];
 
     public function groups()

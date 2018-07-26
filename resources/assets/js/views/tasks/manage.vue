@@ -97,7 +97,7 @@
                     fab
                     color="info"
                     dark
-                    :to="`/tasks/${$route.params.task}/manage/settings`">
+                    :to="`/tasks/${$route.params.task}/settings`">
                     <v-icon>settings</v-icon>
                 </v-btn>
                 <v-btn

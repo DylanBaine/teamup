@@ -41747,10 +41747,10 @@ var routes = [{ path: '/login', component: __WEBPACK_IMPORTED_MODULE_0__views_Lo
 }, {
     path: '/tasks', component: __WEBPACK_IMPORTED_MODULE_5__views_tasks_index_vue___default.a, children: [{ path: 'create', component: __WEBPACK_IMPORTED_MODULE_6__views_tasks_create_vue___default.a }, { path: ':task', component: __WEBPACK_IMPORTED_MODULE_7__views_tasks_show_vue___default.a }]
 }, { path: '/tasks/:task/manage/edit', component: __WEBPACK_IMPORTED_MODULE_6__views_tasks_create_vue___default.a, meta: { editing: true } }, {
-    path: '/tasks/:task/manage', component: __WEBPACK_IMPORTED_MODULE_8__views_tasks_manage_vue___default.a, children: [{ path: 'add-task', component: __WEBPACK_IMPORTED_MODULE_6__views_tasks_create_vue___default.a }, { path: 'settings', component: __WEBPACK_IMPORTED_MODULE_9__views_tasks_settings_vue___default.a }, {
+    path: '/tasks/:task/manage', component: __WEBPACK_IMPORTED_MODULE_8__views_tasks_manage_vue___default.a, children: [{ path: 'add-task', component: __WEBPACK_IMPORTED_MODULE_6__views_tasks_create_vue___default.a }, {
         path: ':task', component: __WEBPACK_IMPORTED_MODULE_8__views_tasks_manage_vue___default.a, meta: { child: true }, children: [{ path: 'edit', component: __WEBPACK_IMPORTED_MODULE_6__views_tasks_create_vue___default.a, meta: { editing: true } }]
     }]
-}, {
+}, { path: '/tasks/:task/settings', component: __WEBPACK_IMPORTED_MODULE_9__views_tasks_settings_vue___default.a }, {
     path: '/users', component: __WEBPACK_IMPORTED_MODULE_21__views_users_index_vue___default.a, children: [{ path: 'create', component: __WEBPACK_IMPORTED_MODULE_23__views_users_create_vue___default.a }, { path: ':user', component: __WEBPACK_IMPORTED_MODULE_22__views_users_show_vue___default.a }]
 }, {
     path: '/:type', component: __WEBPACK_IMPORTED_MODULE_10__views_posts_type_vue___default.a, children: [{ path: 'create', component: __WEBPACK_IMPORTED_MODULE_12__views_posts_create_vue___default.a }]
@@ -43580,7 +43580,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     save: function save() {
       var _this2 = this;
 
-      this.$tasks.create(this.task).then(function (res) {
+      this.$task.create(this.task).then(function (res) {
         _this2.reset();
         _this2.$parent.init();
       });
@@ -44966,10 +44966,7 @@ var render = function() {
                           fab: "",
                           color: "info",
                           dark: "",
-                          to:
-                            "/tasks/" +
-                            _vm.$route.params.task +
-                            "/manage/settings"
+                          to: "/tasks/" + _vm.$route.params.task + "/settings"
                         }
                       },
                       [_c("v-icon", [_vm._v("settings")])],
@@ -45241,7 +45238,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       search: null,
-      task: this.$parent.task,
+      task: '',
       users: [],
       types: [],
       showing: false,
@@ -45291,6 +45288,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (this.task == "") this.$task.find(this.$route.params.task);
       this.showing = true;
       this.$taskType.get();
+      this.$task.find(this.$route.params.task);
     },
     addColumn: function addColumn() {
       var _this = this;

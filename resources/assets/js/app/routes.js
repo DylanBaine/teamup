@@ -67,7 +67,7 @@ const routes = [
         path: '/tasks/:task/manage', component: ManageTask, children: [
 
             { path: 'add-task', component: CreateTask },
-            { path: 'settings', component: TaskSettings },
+            
             {
                 path: ':task', component: ManageTask, meta: { child: true }, children: [
                     { path: 'edit', component: CreateTask, meta: { editing: true } },
@@ -75,6 +75,7 @@ const routes = [
             },
         ]
     },
+    { path: '/tasks/:task/settings', component: TaskSettings },
     {
         path: '/users', component: Users, children: [
             { path: 'create', component: CreateUser },

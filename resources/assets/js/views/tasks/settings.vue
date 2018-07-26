@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       search: null,
-      task: this.$parent.task,
+      task: '',
       users: [],
       types: [],
       showing: false,
@@ -159,6 +159,7 @@ export default {
       if (this.task == "") this.$task.find(this.$route.params.task);
       this.showing = true;
       this.$taskType.get();
+      this.$task.find(this.$route.params.task);
     },
     addColumn() {
       this.$setting

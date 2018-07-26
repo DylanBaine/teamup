@@ -53,6 +53,7 @@ class UserCreation
             'email' => $r->email,
             'password' => bcrypt($r->password),
             'company_id' => 0,
+            'password_confirmed' => 1
         ];
         User::create($userData);
         $this->user = User::with('permissions')->where('email', $r->email)->first();

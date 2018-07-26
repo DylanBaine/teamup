@@ -154,7 +154,7 @@ export default {
       this.$task.update(this.task.id, data);
     },
     save() {
-      this.$tasks.create(this.task).then(res => {
+      this.$task.create(this.task).then(res => {
         this.reset();
         this.$parent.init();
       });

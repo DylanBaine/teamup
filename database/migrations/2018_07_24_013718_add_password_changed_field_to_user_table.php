@@ -13,7 +13,7 @@ class AddPasswordChangedFieldToUserTable extends Migration
     public function up()
     {
         Schema::table('users', function ($table) {
-            $table->boolean('password_confimed')->default(0);
+            $table->boolean('password_confirmed')->default(0);
         });
     }
 

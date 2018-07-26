@@ -20,10 +20,9 @@
         <v-app :dark="dark" id="inspire">
             <application
                 ref="app"
-                v-if="user && user.password_confimed"
                 :user="user"
-            ></application>
-            <v-card style="width: 70%; margin: auto;" :value="true" light  v-else-if="!user.password_confimed">
+            ></application><!-- 
+            <v-card style="width: 70%; margin: auto;" :value="true" light  v-else-if="!user && !user.password_confimed">
                 <v-card-text>
                     <h2 class="title">
                         Thanks for coming over!
@@ -52,7 +51,7 @@
                 </v-card-text>
             </v-card>
             <register v-else-if="register"></register>
-            <login v-else ref="login"></login>
+            <login v-else ref="login"></login> -->
         </v-app>
     </div>
 <script src="{{asset('js/app.js')}}"></script>
