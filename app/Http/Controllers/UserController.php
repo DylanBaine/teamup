@@ -33,7 +33,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::find($id)->load('permissions', 'tasks');
+        return User::find($id)->load('permissions', 'tasks', 'columns');
     }
 
     public function store(Request $request)
@@ -44,6 +44,7 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->company_id = company('id');
         if ($user->save()) {
+            $user->createDefaultSettings();
             Notification::send($user, new UserCreated($request->name, company('name')));
         };
     }

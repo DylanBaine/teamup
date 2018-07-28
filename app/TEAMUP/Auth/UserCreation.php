@@ -42,7 +42,7 @@ class UserCreation
         $this->createUser();
         $this->createCompany();
         $this->fillUserRelations();
-        return $this->user->load('company');
+        return redirect('/app');
     }
 
     private function createUser()
@@ -63,11 +63,6 @@ class UserCreation
     private function createCompany()
     {
         $r = $this->request;
-        $companyData = [
-            'name' => $r->companyName,
-            'super_user_id' => $this->user->id,
-            'plan_id' => 1,
-        ];
         $company = new Company;
         $company->name = $r->companyName;
         $company->super_user_id = $this->user->id;
@@ -77,6 +72,7 @@ class UserCreation
         $this->user->save();
         $this->companyId = $company->id;
         $this->company = $company;
+        $this->user->createDefaultSettings();
     }
 
     private function fillUserRelations()
@@ -120,6 +116,7 @@ class UserCreation
         $this->makeType('Sprint', 'Task', 'directions_run');
         $this->makeType('Task', 'Task', 'rowing');
         $this->makeType('Team', 'Task', 'group');
+        $this->makeType('Project', 'Task', 'timeline');
         $this->makeType('Users', 'Permission', 'person');
     }
 

@@ -1,29 +1,30 @@
 <template>
-<v-app>
-  <v-layout justify-center align-center>
     <div>
-        <v-card width="800px">
+        <v-card class="elevation-6" style="margin: auto;" width="800px">
           <v-card-title>
             <h2 class="title">
               Login
             </h2>
             <v-spacer></v-spacer>
-            <v-btn small color="accent" @click="$root.register = true">or register</v-btn>
+            <v-btn small color="accent" href="/register">or register</v-btn>
           </v-card-title>
           <v-divider></v-divider>
-            <v-form :valid="valid" @submit.prevent="login()">
+            <v-form :valid="valid" action="/auth/login" method="POST">
+                <input type="hidden" name="_token" :value="$root.csrf_token">
                 <v-card-text>
                     <div>
                         <v-text-field
                             v-model="user.email"
                             label="Email"
                             type="email"
+                            name="email"
                         ></v-text-field>
                         <br>
                         <v-text-field
                             v-model="user.password"
                             label="Password"
                             type="password"
+                            name="password"
                         ></v-text-field>
                     </div>
                 </v-card-text>
@@ -40,9 +41,6 @@
           </v-alert>
       </v-fade-transition>
     </div>
-  </v-layout>
-	<loader ref="loader"></loader>
-</v-app>
 </template>
 
 <script>

@@ -12,11 +12,7 @@ class User extends Model {
         this.instance.showLoader('Logging you in...')
         return axios.post(url + '/auth/login', user)
             .then(res => {
-                this.instance.showLoader();
-                if (this.instance.$root.$route.path == '/login') {
-                    this.instance.$root.$router.push('/');
-                }
-                this.root.user = res.data;
+                window.location.href = "/app";
             }).catch(err => {
                 this.instance.showLoader();
                 this.instance.error = err.response.data.message;
@@ -30,7 +26,7 @@ class User extends Model {
         this.instance.showLoader('Setting things up...');
         return axios.post(url + '/auth/register', user)
             .then(res => {
-                window.location.reload();
+                window.location.href = "/app";
                 this.root.user = res.data;
             }).catch(err => {
                 this.instance.showLoader();
@@ -47,6 +43,7 @@ class User extends Model {
             .then(res => {
                 this.instance.showLoader();
                 this.root.user = false;
+                window.location.href = "/";
             })
     }
 

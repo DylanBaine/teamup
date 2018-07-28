@@ -12,6 +12,52 @@ class User extends Authenticatable
     use Notifiable;
     protected $fillable = ['name', 'email', 'company_id', 'password', 'password_confirmed'];
     protected $hidden = ['password', 'remember_token'];
+    protected $defalutSettings = [
+        'column' => 'Back Log',
+        'column' => 'In Progress',
+        'column' => 'Finished',
+    ];
+
+    public function settings($name = null)
+    {
+        if ($name != null) {
+            return $this->morphMany(Setting::class, 'settable')->where('name', $name)->orderBy('position');
+        }
+        return $this->morphMany(Setting::class, 'settable')->orderBy('position');
+    }
+
+    public function createDefaultSettings()
+    {
+        Setting::create([
+            'company_id' => company('id'),
+            'name' => 'column',
+            'value' => 'Back Log',
+            'settable_id' => $this->id,
+            'position' => 1,
+            'settable_type' => 'App\Models\User',
+        ]);
+        Setting::create([
+            'company_id' => company('id'),
+            'name' => 'column',
+            'value' => 'In Progress',
+            'settable_id' => $this->id,
+            'position' => 2,
+            'settable_type' => 'App\Models\User',
+        ]);
+        Setting::create([
+            'company_id' => company('id'),
+            'name' => 'column',
+            'value' => 'Finished',
+            'settable_id' => $this->id,
+            'position' => 3,
+            'settable_type' => 'App\Models\User',
+        ]);
+    }
+
+    public function columns()
+    {
+        return $this->settings('column');
+    }
 
     public function groups()
     {
@@ -52,7 +98,7 @@ class User extends Authenticatable
 
     public function tasks()
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class)->with('column', 'type');
     }
 
     public function subscriptions()

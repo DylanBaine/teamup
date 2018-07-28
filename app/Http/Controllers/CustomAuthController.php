@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\TEAMUP\Auth\UserCreation;
 use Auth;
 use Illuminate\Http\Request;
-use App\TEAMUP\Auth\UserCreation;
 
 class CustomAuthController extends Controller
 {
@@ -19,11 +19,10 @@ class CustomAuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            $user = Auth::user()->load('permissions', 'groups');
-            $user->company = \App\Models\Company::find($user->company_id);
-            return response()->json($user);
-        } else {
-            return abort(404, "I'm sorry... This info didn't match our records...");
+            return redirect('/app');
+        }
+        else{
+            about(403, 'The given data was invalid');
         }
 
     }

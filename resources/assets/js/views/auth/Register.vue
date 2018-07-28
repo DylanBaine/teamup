@@ -1,47 +1,50 @@
 <template>
-<v-app>
-  <v-layout justify-center align-center>
-    <div>
-        <v-card width="800px">
-            <v-card-title>
-                <h2 class="title">
-                    Register
-                </h2>
-                <v-spacer></v-spacer>
-                <v-btn small color="accent" @click="$root.register = false">or login</v-btn>
-            </v-card-title>
-            <v-divider></v-divider>
-            <v-form :valid="valid" @submit.prevent="register()">
-                <v-card-text>
-                    <div>
-                        <v-text-field
-                            v-model="user.email"
-                            label="Email"
-                            type="email"
-                        ></v-text-field>
-                        <br>
-                        <v-text-field
-                            v-model="user.name"
-                            label="Name"
-                        ></v-text-field>
-                        <br>
-                        <v-text-field
-                            v-model="user.password"
-                            label="Password"
-                            type="password"
-                        ></v-text-field>
-                        <br>
-                        <v-text-field
-                            v-model="user.companyName"
-                            label="Company Name"
-                        ></v-text-field>
-                    </div>
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn type="submit" color="primary">get started</v-btn>
-                </v-card-actions>
-            </v-form>
-        </v-card>
+  <div>
+      <v-card style="margin: auto;" class="elevation-6" width="800px">
+          <v-card-title>
+              <h2 class="title">
+                  Register
+              </h2>
+              <v-spacer></v-spacer>
+              <v-btn small color="accent" href="/login">or login</v-btn>
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-form :valid="valid" method="POST" action="/auth/register">
+              <input type="hidden" name="_token" :value="$root.csrf_token">
+              <v-card-text>
+                  <div>
+                      <v-text-field
+                          v-model="user.email"
+                          name="email"
+                          label="Email"
+                          type="email"
+                      ></v-text-field>
+                      <br>
+                      <v-text-field
+                        v-model="user.name"
+                        label="Name"
+                        name="name"
+                      ></v-text-field>
+                      <br>
+                      <v-text-field
+                          v-model="user.password"
+                          label="Password"
+                          type="password"
+                          name="password"
+                      ></v-text-field>
+                      <br>
+                      <v-text-field
+                          v-model="user.companyName"
+                          label="Company Name"
+                          name="companyName"
+                      ></v-text-field>
+                  </div>
+              </v-card-text>
+              <v-card-actions>
+                  <v-btn type="submit" color="primary">get started</v-btn>
+              </v-card-actions>
+          </v-form>
+      </v-card>
       <v-fade-transition>
           <v-alert type="error" v-if="error" :value="true">
               <h3 class="text-xs-center">
@@ -49,10 +52,8 @@
               </h3>
           </v-alert>
       </v-fade-transition>
+      <loader ref="loader"></loader>
     </div>
-  </v-layout>
-	<loader ref="loader"></loader>
-</v-app>
 </template>
 
 <script>

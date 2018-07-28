@@ -4,7 +4,7 @@
     <h1>
         All Tasks
     </h1>
-    <v-layout row wrap>
+    <v-layout row wrap v-if="tasks.length">
       <v-flex md6 v-for="task in tasks" :key="task.key">
         <v-card ripple :to="`/tasks/${task.id}/manage`">
           <v-card-title :class="task.parent_id == 0 ? 'blue lighten-2' : 'grey lighten-2'">
@@ -29,6 +29,11 @@
           </v-card-text>
         </v-card>
       </v-flex>
+    </v-layout>
+    <v-layout v-else>
+      <h1 class="subheading">
+        No tasks yet.
+      </h1>
     </v-layout>
           <v-slide-x-transition>
             <v-btn

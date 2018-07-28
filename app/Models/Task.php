@@ -8,6 +8,12 @@ class Task extends Model
 {
     protected $fillable = ['name', 'description', 'type_id', 'user_id', 'parent_id', 'percent_finished'];
 
+    protected $defalutSettings = [
+        'column' => 'Back Log',
+        'column' => 'In Progress',
+        'column' => 'Finished',
+    ];
+
     public function __construct(array $attributes = [])
     {
 
@@ -20,7 +26,7 @@ class Task extends Model
             'name' => 'column',
             'value' => 'Back Log',
             'settable_id' => $this->id,
-            'position' => 3,
+            'position' => 1,
             'settable_type' => 'App\Models\Task',
         ]);
         Setting::create([
@@ -28,7 +34,7 @@ class Task extends Model
             'name' => 'column',
             'value' => 'In Progress',
             'settable_id' => $this->id,
-            'position' => 3,
+            'position' => 2,
             'settable_type' => 'App\Models\Task',
         ]);
         Setting::create([
@@ -40,6 +46,7 @@ class Task extends Model
             'settable_type' => 'App\Models\Task',
         ]);
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -81,6 +88,10 @@ class Task extends Model
     public function columns()
     {
         return $this->settings('column');
+    }
+
+    public function column(){
+        return $this->belongsTo(Setting::class)->where('name', 'column');
     }
 
     public function subscribers()

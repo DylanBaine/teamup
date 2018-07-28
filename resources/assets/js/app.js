@@ -12,7 +12,8 @@ const app = new Vue({
         errors: false,
         register: false,
         newPassword: null,
-        dark: true
+        dark: true,
+        csrf_token: token,
     },
     watch: {
         $route() {
