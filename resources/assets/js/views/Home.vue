@@ -2,7 +2,7 @@
   <v-layout>
     <router-view></router-view>
     <v-container fluid grid-list-md>
-        <v-container v-if="user.tasks.length" grid-list-lg>
+        <v-container grid-list-lg>
           <header>
             <h2 class="title">
               Your Tasks
@@ -70,7 +70,6 @@ export default {
       this.$user.find(this.$root.user.id);
     },
     formatTasks() {
-      console.log("Organizing...");
       this.user.columns.forEach(column => {
         column.children = [];
         this.user.tasks.forEach(task => {

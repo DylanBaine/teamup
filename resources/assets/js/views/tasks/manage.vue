@@ -155,11 +155,9 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted");
     this.init();
   },
   updated() {
-    console.log(this.$key);
     this.$mount();
     this.columnItems();
   },
@@ -174,7 +172,6 @@ export default {
       });
     },
     columnItems() {
-      console.log("arganizing");
       this.task.columns.forEach(column => {
         column.children = this.task.children.filter(child => {
           return child.column_id == column.id;

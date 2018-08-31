@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       search: null,
-      task: '',
+      task: "",
       users: [],
       types: [],
       showing: false,
@@ -144,7 +144,6 @@ export default {
       var list = this.$refs.columnList.$el;
       var scrollPos = el.scrollHeight + list.clientHeight;
       el.scrollTop = scrollPos;
-      console.log(list.clientHeight);
     },
     search() {
       if (this.search && this.search.length > 2)

@@ -44,7 +44,7 @@ class UserCreated extends Notification
             ->line("Hey there, $this->user!")
             ->line(user('name') . ' added you to ' . company('name') . ' on TeamUp.')
             ->line('You temporary password is "secret"')
-            ->action('Login now!', url('/'))
+            ->action('Login now!', url('/login'))
             ->line('Thank you for using our application!');
     }
 

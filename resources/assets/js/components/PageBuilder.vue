@@ -94,7 +94,6 @@ export default {
   mounted() {},
   methods: {
     change() {
-      console.log("change");
       this.newValue = this.value;
       this.$emit("input", this.newValue);
     }

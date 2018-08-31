@@ -18,4 +18,13 @@ class SearchController extends Controller
         $result = $model::where($param, 'like', '%' . $value . '%')->get();
         return response()->json($result);
     }
+
+    public function index(){
+        $param = request()->query('q');
+        return user()->permissions()->with('type')->whereHas('mode', function($mode){
+            $mode->where('name', 'read');
+        })->whereHas('type', function($type) use ($param){
+            $type->where('name', 'like', "%$param%");
+        })->get();
+    }
 }

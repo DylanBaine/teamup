@@ -21,30 +21,32 @@ class Task extends Model
 
     public function createDefaultSettings()
     {
-        Setting::create([
-            'company_id' => company('id'),
-            'name' => 'column',
-            'value' => 'Back Log',
-            'settable_id' => $this->id,
-            'position' => 1,
-            'settable_type' => 'App\Models\Task',
-        ]);
-        Setting::create([
-            'company_id' => company('id'),
-            'name' => 'column',
-            'value' => 'In Progress',
-            'settable_id' => $this->id,
-            'position' => 2,
-            'settable_type' => 'App\Models\Task',
-        ]);
-        Setting::create([
-            'company_id' => company('id'),
-            'name' => 'column',
-            'value' => 'Finished',
-            'settable_id' => $this->id,
-            'position' => 3,
-            'settable_type' => 'App\Models\Task',
-        ]);
+        if(!$this->columns->count()){
+            Setting::create([
+                'company_id' => company('id'),
+                'name' => 'column',
+                'value' => 'Back Log',
+                'settable_id' => $this->id,
+                'position' => 1,
+                'settable_type' => 'App\Models\Task',
+            ]);
+            Setting::create([
+                'company_id' => company('id'),
+                'name' => 'column',
+                'value' => 'In Progress',
+                'settable_id' => $this->id,
+                'position' => 2,
+                'settable_type' => 'App\Models\Task',
+            ]);
+            Setting::create([
+                'company_id' => company('id'),
+                'name' => 'column',
+                'value' => 'Finished',
+                'settable_id' => $this->id,
+                'position' => 3,
+                'settable_type' => 'App\Models\Task',
+            ]);
+        }
     }
 
     public function user()

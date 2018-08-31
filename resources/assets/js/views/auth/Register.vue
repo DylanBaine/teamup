@@ -6,10 +6,10 @@
                   Register
               </h2>
               <v-spacer></v-spacer>
-              <v-btn small color="accent" href="/login">or login</v-btn>
+              <v-btn small color="accent" :href="$root.url+'/login'">or login</v-btn>
           </v-card-title>
           <v-divider></v-divider>
-          <v-form :valid="valid" method="POST" action="/auth/register">
+          <v-form :valid="valid" method="POST" :action="$root.url+'/auth/register'">
               <input type="hidden" name="_token" :value="$root.csrf_token">
               <v-card-text>
                   <div>

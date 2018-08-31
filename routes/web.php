@@ -1,4 +1,6 @@
 <?php
+//Search Route
+Route::get('toolbar-search', 'SearchController@index');
 //Marketing site routes
 include 'marketingRoutes.php';
 // Return the layout view when visiting the app

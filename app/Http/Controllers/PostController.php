@@ -66,7 +66,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = company()->sites()->find($id);
+        $post = company()->posts()->find($id);
         return $post;
     }
 

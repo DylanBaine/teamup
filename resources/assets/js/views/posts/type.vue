@@ -2,12 +2,12 @@
     <v-container grid-list-lg>
         <router-view></router-view>
         <header>
-            <h1>
+            <h1 v-if="type">
                 {{type.name}}
             </h1>
         </header>
         <section>
-            <v-layout row wrap>
+            <v-layout row wrap v-if="type">
                 <v-flex md6 v-for="post in type.posts" :key="post.id">
                     <v-card hover :to="`/${$route.params.type}/${post.id}`">
                         <v-card-title class="grey lighten-2">

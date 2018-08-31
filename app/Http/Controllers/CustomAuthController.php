@@ -19,6 +19,9 @@ class CustomAuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
+            if(!user()->password_confirmed){
+                return redirect('set-password');
+            }
             return redirect('/app');
         }
         else{

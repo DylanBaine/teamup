@@ -1,24 +1,24 @@
 <template>
     <v-dialog fullscreen hide-overlay v-model="showing" persistent>
-        <v-card>
+        <v-card v-if="post">
             <v-form @submit.prevent="save()">
                 <v-toolbar dark color="primary" v-if="!$route.meta.forSite">
                     <v-btn icon :to="`/${$route.params.type}`">
                         <v-icon>chevron_left</v-icon>
                     </v-btn>
-                    <h2 class="title">
-                        Create new {{$parent.type.name}}.
+                    <h2 class="title" v-if="type">
+                        Create new {{type.name}}.
                     </h2>
                 </v-toolbar>  
                 <v-card-text>
                     <v-text-field
-                        :label="$route.meta.forSite ? 'Page Name' : 'Post Title'"
+                        :label="'Post Title'"
                         v-model="post.name"
                     ></v-text-field>
                     <page-builder label="Content" v-model="post.content" v-if="showing"></page-builder>
                     <v-card-actions class="mt-2">
                         <v-spacer></v-spacer>
-                        <v-btn :to="$route.meta.forSite ? `/sites/${$route.params.site}` : `/${$route.params.type}`" color="error" flat>
+                        <v-btn :to="`/${$route.params.type}`" color="error" flat>
                             Cancel
                         </v-btn>
                         <v-btn color="success" flat type="submit">
@@ -38,13 +38,13 @@ export default {
   data() {
     return {
       showing: false,
+      type: null,
       post: {
         name: "",
         content: "",
-        type_id: this.$route.meta.forSite ? null : this.$parent.type.id,
-        site_id: this.$route.meta.forSite ? this.$parent.site.id : null,
-        type_name: this.$route.meta.forSite ? "Page" : null,
-        model: this.$route.meta.forSite ? "Site" : "Post"
+        type_id: "",
+        type_name: "",
+        model: "Post"
       }
     };
   },
@@ -53,7 +53,7 @@ export default {
       return new Post(this, "post");
     },
     $type() {
-      if (!this.$route.meta.forSite) return new PostType(this.$parent, "types");
+      return new PostType(this, "type");
     }
   },
   watch: {
@@ -69,6 +69,10 @@ export default {
       if (this.$route.meta.editing) {
         this.$post.find(this.$route.params.post);
       }
+      this.$type.where("slug", this.$route.params.type, "first").then(() => {
+        this.post.type_id = this.type.id;
+        this.post.type_name = this.type.name;
+      });
       this.showing = true;
     },
     save() {
@@ -84,7 +88,7 @@ export default {
       this.post = {
         name: "",
         content: "",
-        type_id: this.$parent.type.id
+        type_id: this.type.id
       };
     }
   }

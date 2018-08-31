@@ -47,17 +47,18 @@
 				<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
 				<span class="hidden-sm-and-down">{{$root.company.name}}</span>
 			</v-toolbar-title>
-			<v-text-field
-				flat
-				solo-inverted
-				prepend-icon="search"
-				label="Search"
-				class="hidden-sm-and-down"
-			></v-text-field>
+			<v-select
+				autocomplete clearable
+				flat solo-inverted v-model="quickLink"
+				prepend-icon="search" label="Search modules"
+				:search-input.sync="search" class="hidden-sm-and-down"
+				:items="results" @input="$router.push('/'+quickLink.type.slug)"
+				item-text="type.name" item-value="quickLink"
+			></v-select>
 			<v-spacer></v-spacer>
-			<v-btn icon @click="dark = !dark">
+			<!-- <v-btn icon @click="dark = !dark">
 				<v-icon>highlight</v-icon>
-			</v-btn>
+			</v-btn> -->
 			<v-btn icon @click="$user.logout()">
 				<v-icon>close</v-icon>
 			</v-btn>
@@ -91,20 +92,25 @@ import User from "./../app/models/User";
 export default {
   data() {
     return {
+      search: null,
       dialog: false,
       drawer: true,
       dark: true,
-      randomKey: Math.random()
+      results: [],
+      randomKey: Math.random(),
+      quickLink: null
     };
   },
   watch: {
     $route() {
       this.randomKey = Math.random();
+    },
+    search(data) {
+      this.getSearch(data);
     }
   },
   mounted() {
     var thing = this.$user.permissions("create");
-    console.log(thing);
   },
   props: ["user"],
   computed: {
@@ -115,6 +121,11 @@ export default {
   methods: {
     showLoader(message) {
       this.$refs.loader.run(message);
+    },
+    getSearch(data) {
+      axios.get("/toolbar-search?q=" + data).then(res => {
+        this.results = res.data;
+      });
     }
   }
 };

@@ -10,20 +10,20 @@ class UserCreation
 {
 
     private $create = [
-        'Posts', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
-        'Documentation', 'Announcements', 'Permission Types'
+        'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
+        'Documentation', 'Announcements', 'Permission Types', 'Reports'
     ];
     private $read = [
-        'Posts', 'Tasks', 'Users', 'Permissions',
-        'Documentation', 'Announcements'
+        'Post Types', 'Tasks', 'Users', 'Permissions',
+        'Documentation', 'Announcements', 'Reports'
     ];
     private $update = [
-        'Posts', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
-        'Documentation', 'Announcements', 'Permission Types'
+        'Post Types', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
+        'Documentation', 'Announcements', 'Permission Types', 'Reports'
     ];
     private $delete = [
-        'Posts', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
-        'Documentation', 'Announcements', 'Permission Types'
+        'Post Types', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
+        'Documentation', 'Announcements', 'Permission Types', 'Reports'
     ];
     private $manage = [
         'Tasks', 'Users', 'Permissions'
@@ -105,7 +105,7 @@ class UserCreation
     {
         $this->makeType('Permission Modes', 'Permission', '');
         $this->makeType('Permission Types', 'Permission', '');
-        $this->makeType('Post Types', 'Permission', '');
+        $this->makeType('Post Types', 'Permission', 'format_align_left');
         $this->makeType('Permissions', 'Permission', 'supervised_user_circle');
         $this->makeType('Posts', 'Permission', 'format_align_left');
         $this->makeType('Tasks', 'Permission', 'rowing');
@@ -118,6 +118,7 @@ class UserCreation
         $this->makeType('Team', 'Task', 'group');
         $this->makeType('Project', 'Task', 'timeline');
         $this->makeType('Users', 'Permission', 'person');
+        $this->makeType('Reports', 'Permission', 'bar_chart');
     }
 
     private function makeType($name, $model, $icon)

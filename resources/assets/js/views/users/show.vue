@@ -19,8 +19,15 @@
                     <v-container grid-list-md>
                         <v-layout row wrap>
                             <v-flex md4 v-for="task in user.tasks" :key="task.id">
-                                <v-card class="grey lighten-2">
-                                    <h4>{{task.name}}</h4>
+                                <v-card class="grey black--text lighten-2" :to="'/tasks/'+task.id">
+                                    <v-card-text>
+                                        <h4>
+                                            {{task.name}}
+                                        </h4>
+                                        <h5 class="subheading">
+                                            {{task.column.value}}
+                                        </h5>
+                                    </v-card-text>
                                 </v-card>
                             </v-flex>
                         </v-layout>
