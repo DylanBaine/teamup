@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\TEAMUP\Responses\UpdateTaskResponse;
 use Illuminate\Http\Request;
+use App\Models\ProgressChange;
 
 class TaskController extends Controller
 {
@@ -49,6 +50,14 @@ class TaskController extends Controller
         if ($t->type->name === 'Sprint') {
             $t->createDefaultSettings();
         }
+        if($t->column){
+            ProgressChange::create([
+                'task_id' => $t->id,
+                'column_id' => $t->column->id,
+                'user_id' => user('id'),
+                'duration_in_seconds' => 0
+                ]);
+        }
         return response()->json(['success' => true]);
     }
 
@@ -60,7 +69,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type');
+        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type', 'changes');
         $task->parent = Task::find($task->parent_id);
         return $task;
     }

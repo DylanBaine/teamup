@@ -8,8 +8,11 @@
                     <v-icon>chevron_left</v-icon>
                 </v-btn>
                 <h2 class="title">
-                    {{task.name}}
+                    {{task.name}} 
                 </h2>
+                <h3 class="subheading">
+                    ID: {{task.id}}
+                </h3>
                 <v-spacer></v-spacer>
                 <div v-if="!$route.params.child">
                     <v-btn
@@ -34,25 +37,43 @@
                 </div>
             </v-toolbar>
             <v-card-text>
-                <p>
-                    {{task.description}}
-                </p>
-                <h3 class="subheader" v-if="task.user_id">Assigned To: {{task.user.name}}</h3>
-                <v-list>
-                    <v-list-tile v-for="child in task.children" :key="child.key" :to="`/tasks/${child.id}`">
-                        <v-list-tile-action>
-                            <v-icon>{{child.icon}}</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>
-                                {{child.name}}
-                            </v-list-tile-title>
-                            <v-list-tile-sub-title>
-                                {{child.percent_finished}}% finished
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list>
+                <v-card>
+                    <p>
+                        {{task.description}}
+                    </p>
+                    <h3 class="subheader" v-if="task.user_id">Assigned To: {{task.user.name}}</h3>
+                    <v-list>
+                        <v-list-tile v-for="child in task.children" :key="child.key" :to="`/tasks/${child.id}`">
+                            <v-list-tile-action>
+                                <v-icon>{{child.icon}}</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>
+                                    {{child.name}}
+                                </v-list-tile-title>
+                                <v-list-tile-sub-title>
+                                    {{child.percent_finished}}% finished
+                                </v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                    </v-list>
+                </v-card>
+                <v-card>
+                    <v-card-title>
+                        <h2 class="title">
+                            Log
+                        </h2>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-list>
+                            <v-list-tile v-for="change in changes" :key="change.id">
+                                <v-list-tile-content>
+                                    {{change.column.value}}
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </v-list>
+                    </v-card-text>
+                </v-card>
             </v-card-text>
         </v-card>
     </v-dialog>

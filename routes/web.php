@@ -33,3 +33,5 @@ include 'settingRoutes.php';
 include 'permissionRoutes.php';
 // include api routes for sites
 include 'siteRoutes.php';
+
+Route::resource('reports', 'ReportController');

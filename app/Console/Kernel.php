@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\GenerateReport::class,
+        Commands\GenerateRepository::class,
+        Commands\GenerateJavascriptModel::class
     ];
 
     /**

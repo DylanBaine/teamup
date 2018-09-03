@@ -22,7 +22,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return company()->users;
+        return company()->users()->with('tasks')->get();
 
     }
     /**

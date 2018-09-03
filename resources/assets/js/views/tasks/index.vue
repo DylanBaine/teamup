@@ -13,6 +13,9 @@
                 {{task.name}} ({{task.type_id ? task.type.name : 'No type yet...'}})
                 <v-icon color="black">{{task.icon}}</v-icon>
               </h2>
+              <h3 class="subheading black--text">
+                ID: {{task.id}}
+              </h3>
               <h3 class="subheading mt-1 black--text" v-if="task.parent_id == 0">
                 Previously a child task.
               </h3>

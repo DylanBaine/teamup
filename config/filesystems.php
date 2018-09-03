@@ -43,6 +43,21 @@ return [
 
     'disks' => [
 
+        'js_models' => [
+            'driver' => 'local',
+            'root' => base_path('resources\assets\js\app\models'),
+        ],
+
+        'reports' => [
+            'driver' => 'local',
+            'root' => base_path('app\Reports'),
+        ],
+
+        'repositories' => [
+            'driver' => 'local',
+            'root' => base_path('app\Repositories'),
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

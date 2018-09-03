@@ -10,6 +10,8 @@
                 <h2 class="title">
                     {{user.name}}
                 </h2>
+                <v-spacer></v-spacer>
+                <v-btn flat color="white" v-if="$authUser.can('assign', 'permissions')" @click="addingPermissions = true">Add Permissions</v-btn>
             </v-toolbar>
             <v-card-text style="height: 70vh; overflow: auto">
                 <v-card v-if="user.tasks.length">
@@ -120,21 +122,93 @@
                         </v-layout>
                     </v-container>
                 </v-card>
+                <v-slide-x-reverse-transition>
+                    <div style="position: absolute; bottom: 0px; width: 50vw; z-index: 999; left: 25vw;" class="elevation-6" v-if="addingPermissions">
+                        <v-form @submit.prevent="assignUser">
+                            <v-card>
+                                <v-card-title>
+                                    <h2 class="title">
+                                        Assign Permissions
+                                    </h2>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat icon @click="addingPermissions = false">
+                                        <v-icon>close</v-icon>
+                                    </v-btn>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container grid-list-lg>
+                                        <v-layout row wrap>
+                                            <v-flex md6>
+                                                <v-select
+                                                    :items="modes"
+                                                    v-model="assign.mode"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    label="Mode"
+                                                ></v-select>
+                                            </v-flex>
+                                            <v-flex md6>
+                                                <v-select
+                                                    :items="types"
+                                                    v-model="assign.type"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    label="Permissable"
+                                                ></v-select>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn type="submit" color="success">Save</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-form>
+                    </div>                    
+                </v-slide-x-reverse-transition>
             </v-card-text>
-        </v-card>        
+        </v-card>
     </v-dialog>
 </template>
 
 <script>
 import User from "../../app/models/User.js";
+import PermissionMode from "../../app/Models/PermissionMode";
+import Type from "../../app/Models/PermissionType";
+import Permission from "../../app/Models/Permission";
 export default {
   data() {
     return {
-      user: null,
-      showing: false
+      addingPermissions: false,
+      user: {
+        name: null,
+        tasks: [],
+        permissions: []
+      },
+      showing: false,
+      types: [],
+      modes: [],
+      assign: {
+        mode: null,
+        type: null,
+        user: null
+      }
     };
   },
   computed: {
+    $permissions() {
+      return new Permission(this, "permissions");
+    },
+    $modes() {
+      return new PermissionMode(this, "modes");
+    },
+    $types() {
+      return new Type(this, "types");
+    },
+    $authUser() {
+      return new User(this.$root, "user");
+    },
     $user() {
       return new User(this, "user");
     },
@@ -166,6 +240,19 @@ export default {
     init() {
       this.showing = true;
       this.$user.find(this.$route.params.user);
+      this.$modes.get();
+      this.$types.get();
+    },
+    assignUser() {
+      this.assign.user = this.user.id;
+      this.$permissions.create(this.assign).then(() => {
+        this.init();
+        this.assign = {
+          type: null,
+          mode: null,
+          user: null
+        };
+      });
     }
   }
 };

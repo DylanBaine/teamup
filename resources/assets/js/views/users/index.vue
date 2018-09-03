@@ -14,6 +14,10 @@
                             <h2 class="title">
                                 {{user.name}}
                             </h2>
+                            <p>{{user.email}}</p>
+                            <p>
+                                Task Count: {{user.tasks.length}}
+                            </p>
                         </v-card-text>
                     </v-card>
                 </v-flex>

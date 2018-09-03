@@ -35,6 +35,7 @@ import SiteSettings from "../views/sites/settings.vue";
 import Users from "../views/users/index.vue";
 import ShowUser from "../views/users/show.vue";
 import CreateUser from "../views/users/create.vue";
+import ManageUser from "../views/users/manage.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -92,7 +93,11 @@ const routes = [
     component: Users,
     children: [
       { path: "create", component: CreateUser },
-      { path: ":user", component: ShowUser }
+      {
+        path: ":user",
+        component: ShowUser,
+        children: [{ path: "add-permissions", component: ManageUser }]
+      }
     ]
   },
   {

@@ -1,9 +1,12 @@
 <template>
   <div class="container">
       <router-view></router-view>
-      <v-container grid-list-lg>
+      <v-container grid-list-lg v-if="task">
           <header>
               <h1>{{task.name}}</h1>
+                <h3 class="subheading">
+                    ID: {{task.id}}
+                </h3>
               <h4 v-if="task.parent_id">
                 Parent: <router-link :to="`/tasks/${task.parent_id}/manage`">{{task.parent.name}}</router-link>
               </h4>
@@ -38,7 +41,7 @@
               </draggable>
             </v-layout>
           </v-container>
-          <v-container v-else grid-list-lg>
+          <v-container v-else-if="task.type.name"  grid-list-lg>
             <v-layout row wrap>
               <v-flex md6 v-for="task in task.children" :key="task.key">
                 <v-card ripple :to="`/tasks/${task.id}/manage`">
@@ -61,6 +64,43 @@
                       <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
                         <div class="primary" :style="`width:${task.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
                       </div>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+            </v-layout>
+            <v-layout row wrap>
+              <v-flex md6>
+                <v-card v-if="task.changes">
+                    <v-card-title>
+                        <h2 class="title">
+                            Log
+                        </h2>
+                    </v-card-title>
+                    <v-card-text style="height: 400px; overflow: auto;">
+                        <v-list>
+                            <v-list-tile v-for="change in task.changes" :key="change.id" class="grey darken-2 mb-1" v-if="change.column_id">
+                                <v-list-tile-content>
+                                    Changed to "{{change.column.value}}" about {{change.change_date}} by {{change.user.name}}.
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </v-list>
+                    </v-card-text>
+                </v-card>
+              </v-flex>
+              <v-flex md6>
+                <v-card>
+                  <v-card-title>
+                    <h2 class="title">
+                      Chart
+                    </h2>
+                    <v-spacer></v-spacer>
+                  </v-card-title>
+                  <v-card-text>
+                      <GChart
+                        v-if="report"
+                        type="PieChart"
+                        :data="report.percent"
+                      />
                   </v-card-text>
                 </v-card>
               </v-flex>
@@ -122,6 +162,7 @@
 
 <script>
 import Task from "../../app/models/Task";
+import Report from "../../app/models/Report";
 export default {
   data() {
     return {
@@ -129,7 +170,8 @@ export default {
       types: [],
       tasks: [],
       fam: false,
-      loaded: false
+      loaded: false,
+      report: null
     };
   },
   watch: {
@@ -152,6 +194,9 @@ export default {
     },
     $tasks() {
       return new Task(this, "tasks");
+    },
+    $report() {
+      return new Report(this, "report");
     }
   },
   mounted() {
@@ -165,6 +210,7 @@ export default {
     init() {
       this.loaded = true;
       this.$task.find(this.$route.params.task);
+      this.$report.find(`BasicTaskReport?id=${this.$route.params.task}`);
     },
     remove(id) {
       this.$task.delete(id).then(res => {
@@ -198,6 +244,10 @@ export default {
 }
 .task-row {
   min-height: 60vh;
+}
+.progress {
+  padding: 20px;
+  border-radius: 15px;
 }
 </style>
 

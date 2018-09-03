@@ -12,7 +12,7 @@ if (token) {
   );
 }
 
-import Echo from "laravel-echo";
+/* import Echo from "laravel-echo";
 
 window.Pusher = require("pusher-js");
 
@@ -21,7 +21,7 @@ window.Echo = new Echo({
   key: process.env.MIX_PUSHER_APP_KEY,
   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
   encrypted: true
-});
+}); */
 
 window.Vue = require("vue");
 
@@ -43,6 +43,9 @@ Vue.use(Vuetify, {
     success: colors.green.accent4.toString()
   }
 });
+
+import VueGoogleCharts from "vue-google-charts";
+Vue.use(VueGoogleCharts);
 
 Vue.component("application", require("./views/Application.vue"));
 Vue.component("login", require("./views/auth/Login.vue"));

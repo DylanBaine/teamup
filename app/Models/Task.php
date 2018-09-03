@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Task extends Model
 {
@@ -16,7 +17,7 @@ class Task extends Model
 
     public function __construct(array $attributes = [])
     {
-
+        
     }
 
     public function createDefaultSettings()
@@ -47,6 +48,10 @@ class Task extends Model
                 'settable_type' => 'App\Models\Task',
             ]);
         }
+    }
+
+    public function changes(){
+        return $this->hasMany(ProgressChange::class)->with('column')->orderBy('created_at', 'desc');
     }
 
     public function user()

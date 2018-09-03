@@ -43,6 +43,7 @@
                   </v-flex>
                   <v-flex md4 v-if="editing || !$route.params.task">
                     <v-select
+                      v-if="parentOptions.length > 0"
                       v-model="task.parent_id"
                       label="Parent Task"
                       :items="parentOptions"
