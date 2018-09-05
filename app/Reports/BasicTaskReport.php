@@ -5,23 +5,30 @@ use App\Models\Task;
 use Carbon\Carbon;
 class BasicTaskReport extends Report {
 
-    public function __construct($arg){
+    public static $name = "Task Report";
+    public function __construct($arg = null){
+        $this->arg = $arg;
+        /**
+         * @param Model $model the model that the repository is responsable for
+         * @param Array $arg array of arguments used in the request
+         */
         $this->repository = new BasicTaskReportRepository(new Task, $arg);
     }
 
     protected function format(){
         return[
             'percent' => $this->percents(),
-            'days' => $this->days()
+            'days' => $this->days(),
+            'changes' => $this->repository->getSpecifiedModel()->changes
         ];
     }
 
     private function percents(){
         return [
             ['Column', 'Percent'],
-            ['in progress' , $this->repository->percentOfTimeIn('In Progress')],
-            ['in backlog' , $this->repository->percentOfTimeIn('Back Log')],
-            ['in finished' , $this->repository->percentOfTimeIn('Finished')],
+            ['In Progress' , $this->repository->percentOfTimeIn('In Progress')],
+            ['Back Log' , $this->repository->percentOfTimeIn('Back Log')],
+            ['Finished' , $this->repository->percentOfTimeIn('Finished')],
         ];
     }
 
@@ -32,5 +39,6 @@ class BasicTaskReport extends Report {
             'in_current_column' => $this->repository->daysInCurrentColumn()
         ];
     }
+
 
 }        

@@ -17,95 +17,58 @@
           </header>
           <v-container v-if="task.type.name == 'Sprint'" grid-list-lg>
             <v-layout row wrap>
-              <draggable v-for="column in task.columns" :key="column.position"  :items="column.children" :options="{group:'tasks', element: '.drag-me'}" :id="`${column.id}`" class="task-row flex md3 mt-2" @end="add" @start="start">
+                <draggable v-for="column in task.columns" :key="column.position"  :items="column.children" :options="{group:'tasks', element: '.drag-me'}" :id="`${column.id}`" class="task-row flex md3 mt-2" @end="add" @start="start">
                 <v-card>
-                  <v-card-title>
+                    <v-card-title>
                     <h2>{{column.value}}</h2>
-                  </v-card-title>
+                    </v-card-title>
                 </v-card>
                 <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
-                  <v-card-title>
+                    <v-card-title>
                     <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
                     <h3 class="subheader">{{child.type.name}}</h3>
-                  </v-card-title>
-                  <v-card-text v-if="child.type.name !== 'Task'">
-                    {{child.percent_finished}}% finished.
-                  <div class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
-                    <div class="grey darken-2" :style="`width:${child.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
-                  </div>
-                  </v-card-text>
-                  <v-card-text v-else>
-                    {{child.description}}
-                  </v-card-text>
-                </v-card>
-              </draggable>
-            </v-layout>
-          </v-container>
-          <v-container v-else-if="task.type.name"  grid-list-lg>
-            <v-layout row wrap>
-              <v-flex md6 v-for="task in task.children" :key="task.key">
-                <v-card ripple :to="`/tasks/${task.id}/manage`">
-                  <v-card-title :class="task.parent_id == 0 ? 'blue lighten-2' : 'grey lighten-2'">
-                    <div>
-                      <h2 class="title black--text">
-                        {{task.name}} ({{task.type_id ? task.type.name : 'No type yet...'}})
-                        <v-icon color="black">{{task.icon}}</v-icon>
-                      </h2>
-                      <h3 class="subheading mt-1 black--text" v-if="task.parent_id == 0">
-                        Previously a child task.
-                      </h3>
-                    </div>
-                  </v-card-title>
-                  <v-card-text>
-                    <p>
-                      {{task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description}}
-                    </p>
-                    <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
-                      <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
-                        <div class="primary" :style="`width:${task.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
-                      </div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
-            </v-layout>
-            <v-layout row wrap>
-              <v-flex md6>
-                <v-card v-if="task.changes">
-                    <v-card-title>
-                        <h2 class="title">
-                            Log
-                        </h2>
                     </v-card-title>
-                    <v-card-text style="height: 400px; overflow: auto;">
-                        <v-list>
-                            <v-list-tile v-for="change in task.changes" :key="change.id" class="grey darken-2 mb-1" v-if="change.column_id">
-                                <v-list-tile-content>
-                                    Changed to "{{change.column.value}}" about {{change.change_date}} by {{change.user.name}}.
-                                </v-list-tile-content>
-                            </v-list-tile>
-                        </v-list>
+                    <v-card-text v-if="child.type.name !== 'Task'">
+                    {{child.percent_finished}}% finished.
+                    <div class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
+                    <div class="grey darken-2" :style="`width:${child.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
+                    </div>
+                    </v-card-text>
+                    <v-card-text v-else>
+                    {{child.description}}
                     </v-card-text>
                 </v-card>
-              </v-flex>
-              <v-flex md6>
-                <v-card>
-                  <v-card-title>
-                    <h2 class="title">
-                      Chart
-                    </h2>
-                    <v-spacer></v-spacer>
-                  </v-card-title>
-                  <v-card-text>
-                      <GChart
-                        v-if="report"
-                        type="PieChart"
-                        :data="report.percent"
-                      />
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                </draggable>
             </v-layout>
           </v-container>
+          <v-layout row wrap v-else>
+              <v-flex md6 v-for="task in task.children" :key="task.key">
+              <v-card ripple :to="`/tasks/${task.id}/manage`">
+                  <v-card-title :class="task.parent_id == 0 ? 'blue lighten-2' : 'grey lighten-2'">
+                  <div>
+                      <h2 class="title black--text">
+                      {{task.name}} ({{task.type_id ? task.type.name : 'No type yet...'}})
+                      <v-icon color="black">{{task.icon}}</v-icon>
+                      </h2>
+                      <h3 class="subheading mt-1 black--text" v-if="task.parent_id == 0">
+                      Previously a child task.
+                      </h3>
+                  </div>
+                  </v-card-title>
+                  <v-card-text>
+                  <p>
+                      {{task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description}}
+                  </p>
+                  <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
+                      <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
+                      <div class="primary" :style="`width:${task.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
+                      </div>
+                  </v-card-text>
+              </v-card>
+              </v-flex>
+          </v-layout>
+          <basic-task-report v-if="task.type.name == 'Task'" :report="task.report"></basic-task-report>
+          <project-report v-else-if="task.type.name == 'Project'" :report="task.report"></project-report>
           <v-slide-x-transition>
             <v-btn
               v-if="!fam"
@@ -141,6 +104,7 @@
                     <v-icon>settings</v-icon>
                 </v-btn>
                 <v-btn
+                    v-if="task.type.name != 'Task'"
                     fab
                     color="accent"
                     dark
@@ -163,15 +127,17 @@
 <script>
 import Task from "../../app/models/Task";
 import Report from "../../app/models/Report";
+
 export default {
   data() {
     return {
-      task: "",
+      task: null,
       types: [],
       tasks: [],
       fam: false,
       loaded: false,
-      report: null
+      report: null,
+      subWeeks: 1
     };
   },
   watch: {
@@ -194,9 +160,6 @@ export default {
     },
     $tasks() {
       return new Task(this, "tasks");
-    },
-    $report() {
-      return new Report(this, "report");
     }
   },
   mounted() {
@@ -210,7 +173,6 @@ export default {
     init() {
       this.loaded = true;
       this.$task.find(this.$route.params.task);
-      this.$report.find(`BasicTaskReport?id=${this.$route.params.task}`);
     },
     remove(id) {
       this.$task.delete(id).then(res => {

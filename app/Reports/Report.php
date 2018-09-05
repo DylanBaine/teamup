@@ -18,5 +18,10 @@ abstract class Report {
     protected function setData($data){
         $this->data = $data;
     }
+    
+    public function getName() {
+        $path = explode('\\', get_called_class());
+        return array_pop($path);
+    }
 
 }

@@ -41,16 +41,20 @@
                       item-value="id"
                     ></v-select>
                   </v-flex>
-                  <v-flex md4 v-if="editing || !$route.params.task">
-                    <v-select
-                      v-if="parentOptions.length > 0"
-                      v-model="task.parent_id"
-                      label="Parent Task"
-                      :items="parentOptions"
-                      item-text="name"
-                      item-value="id"
-                    ></v-select>
-                  </v-flex>
+                  <v-layout row wrap justify-center>
+                    <v-flex md4 style="display: flex; justify-content: center;">
+                      <div>
+                        <h3>Start:</h3>
+                        <v-date-picker v-model="task.start_date" color="primary white--text"></v-date-picker>
+                      </div>
+                    </v-flex>
+                    <v-flex md4 style="display: flex; justify-content: center;">
+                      <div>
+                        <h3>End:</h3>
+                        <v-date-picker v-model="task.end_date" color="primary white--text"></v-date-picker>
+                      </div>
+                    </v-flex>
+                  </v-layout>
                 </v-layout>
                 <v-layout row wrap align-center>
                   <v-flex md6>
@@ -95,7 +99,6 @@ export default {
       },
       editing: this.$route.meta.editing,
       types: [],
-      parentOptions: [],
       search: "",
       users: []
     };
@@ -129,7 +132,6 @@ export default {
           this.users = [this.task.user];
         });
       }
-      //this.parentOptions = this.$parent.tasks;
       this.$types.get(true);
       this.showing = true;
     },

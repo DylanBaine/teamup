@@ -46,7 +46,11 @@ class TaskController extends Controller
         $t->column_id = $parent && $parent->columns()->count() ?
         $parent->columns()->first()->id :
         null;
+        $t->report = 0;
+        $t->start_date = carbon_format($request->start_date);
+        $t->end_date = carbon_format($request->end_date);
         $t->save();
+        $t->linkReport();
         if ($t->type->name === 'Sprint') {
             $t->createDefaultSettings();
         }
@@ -70,6 +74,7 @@ class TaskController extends Controller
     public function show($id)
     {
         $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type', 'changes');
+        $task->report = $task->runReport();
         $task->parent = Task::find($task->parent_id);
         return $task;
     }

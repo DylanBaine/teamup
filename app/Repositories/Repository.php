@@ -14,7 +14,7 @@ class Repository {
 
     public function getSpecifiedModel(){
         if(!isset($this->arg['id'])){
-            return "Sorry... No model id was given in the arg array...";
+            abort("Sorry... No model id was given in the arg array...", 500);
         }
         return $this->findById($this->arg['id']);
     }

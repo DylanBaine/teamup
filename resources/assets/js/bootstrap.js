@@ -57,6 +57,9 @@ Vue.component("user-manage-modal", require("./components/UserManageModal.vue"));
 Vue.component("page-builder", require("./components/PageBuilder.vue"));
 Vue.component("register", require("./views/auth/Register.vue"));
 
+Vue.component("basic-task-report", require("./components/BasicTaskReport.vue"));
+Vue.component("project-report", require("./components/ProjectReport.vue"));
+
 Array.prototype.hasProp = function(needle, haystack) {
   for (let i = 0; i < this.length; i++) {
     var el = this[i];

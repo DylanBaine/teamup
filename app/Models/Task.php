@@ -14,14 +14,38 @@ class Task extends Model
         'column' => 'In Progress',
         'column' => 'Finished',
     ];
-
+    
     public function __construct(array $attributes = [])
     {
         
     }
 
+    public function runReport(){
+        $file_name = "App\Reports\\".$this->report;
+        $args = [
+            'id' => $this->id
+        ];
+        $class_instance = new $file_name($args);
+        return $class_instance->getData();
+    }
+
+    public function linkReport(){
+        $type = $this->type->name;
+        if($type == 'Task'){
+            $r = 'BasicTaskReport';
+        }elseif($type == 'Sprint'){
+            $r = 'SprintReport';
+        }elseif($type == 'Team'){
+            $r = 'TeamReport';
+        }elseif($type == 'Project'){
+            $r = 'ProjectReport';
+        }
+        $this->report = $r;
+        $this->save();
+    }
     public function createDefaultSettings()
     {
+
         if(!$this->columns->count()){
             Setting::create([
                 'company_id' => company('id'),
@@ -92,8 +116,11 @@ class Task extends Model
         return $this->morphMany(Setting::class, 'settable')->orderBy('position');
     }
 
-    public function columns()
+    public function columns($value = null)
     {
+        if($value != null){
+            return $this->settings('column')->where('value', $value);
+        }
         return $this->settings('column');
     }
 

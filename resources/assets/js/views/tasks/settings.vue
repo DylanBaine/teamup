@@ -1,5 +1,5 @@
 <template>
-    <v-dialog fullscreen v-model="showing" transition="dialog-bottom-transition">
+    <v-dialog v-model="showing" :width="700">
         <v-card>
             <v-toolbar color="primary" dark>
                 <v-btn
@@ -10,93 +10,95 @@
                 </v-btn>
                 <h2 class="title">{{task.name}} Settings</h2>
             </v-toolbar>
-            <v-container grid-list-lg>
-                <v-layout row wrap>
-                    <v-flex md4>
-                        <div ref="scrollMe" class="scroll-me" v-if="task.columns && task.columns.length">
-                            <header>
-                                <h2>
-                                    Task columns.
-                                </h2>
-                            </header>
-                            <v-list ref="columnList">
-                                <draggable v-model="task.columns" :items="task.columns" @end="changeColumnOrder">
-                                    <div :id="column.id" v-for="column in task.columns" :key="column.position">
-                                        <v-list-tile>
-                                            <v-list-tile-content>
-                                                <input type="text" class="padded ghost" @keydown.enter="$setting.update(column.id, column)" v-model="column.value">
-                                            </v-list-tile-content>
-                                            <v-list-tile-action>
-                                                <v-btn @click="removeColumn(column.id)" icon flat small color="grey">
-                                                    <v-icon>delete_forever</v-icon>
-                                                </v-btn>
-                                            </v-list-tile-action>
-                                            <v-list-tile-action>
-                                                <v-btn flat icon><v-icon color="grey">drag_indicator</v-icon></v-btn>
-                                            </v-list-tile-action>
-                                        </v-list-tile>
-                                    </div>
-                                </draggable>
-                            </v-list>
-                        </div>
-                        <div class="relative">
-                            <v-text-field
-                                @keyup.native.enter="addColumn"
-                                label="Add a task column."
-                                v-model="newColumn.value"
-                            ></v-text-field>
-                            <v-btn
-                                absolute
-                                @click="addColumn"
-                                color="primary"
-                                fab bottom right>
-                                <v-icon>add</v-icon>
-                            </v-btn>
-                        </div>
-                    </v-flex>
-                    <v-flex md7 offset-md1 class="relative">
-                        <div class="scroll-me" v-if="task.subscribers.length">
-                            <header>
-                                <h2>
-                                    Users subscribed to {{task.name}}.
-                                </h2>
-                            </header>
-                            <v-list>
-                                <v-list-tile v-for="subbed in task.subscribers" :key="subbed.key">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            {{subbed.user.name}}
-                                        </v-list-tile-title>
-                                    </v-list-tile-content>
-                                    <v-list-tile-action>
-                                        <v-btn flat icon @click="removeSubscriber(subbed.id)"><v-icon color="grey">delete_forever</v-icon></v-btn>
-                                    </v-list-tile-action>
-                                </v-list-tile>
-                            </v-list>
-                        </div>
-                        <div class="relative">
-                            <div>
-                                <v-select
-                                    label="Add users to notify when something changes with this task."
-                                    v-model="newSub"
-                                    :search-input.sync="search"
-                                    autocomplete
-                                    :items="users"
-                                    item-text="name"
-                                    @keyup.native.enter="addSub"
-                                ></v-select>
+            <v-card-text>
+                <v-container grid-list-lg>
+                    <v-layout row wrap>
+                        <!-- <v-flex md4>
+                            <div ref="scrollMe" class="scroll-me" v-if="task.columns && task.columns.length">
+                                <header>
+                                    <h2>
+                                        Task columns.
+                                    </h2>
+                                </header>
+                                <v-list ref="columnList">
+                                    <draggable v-model="task.columns" :items="task.columns" @end="changeColumnOrder">
+                                        <div :id="column.id" v-for="column in task.columns" :key="column.position">
+                                            <v-list-tile>
+                                                <v-list-tile-content>
+                                                    <input type="text" class="padded ghost" @keydown.enter="$setting.update(column.id, column)" v-model="column.value">
+                                                </v-list-tile-content>
+                                                <v-list-tile-action>
+                                                    <v-btn @click="removeColumn(column.id)" icon flat small color="grey">
+                                                        <v-icon>delete_forever</v-icon>
+                                                    </v-btn>
+                                                </v-list-tile-action>
+                                                <v-list-tile-action>
+                                                    <v-btn flat icon><v-icon color="grey">drag_indicator</v-icon></v-btn>
+                                                </v-list-tile-action>
+                                            </v-list-tile>
+                                        </div>
+                                    </draggable>
+                                </v-list>
                             </div>
-                            <v-btn
-                                absolute
-                                @click="addSub"
-                                color="primary"
-                                fab bottom right>
-                                <v-icon>add</v-icon>
-                            </v-btn>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-container>
+                            <div class="relative">
+                                <v-text-field
+                                    @keyup.native.enter="addColumn"
+                                    label="Add a task column."
+                                    v-model="newColumn.value"
+                                ></v-text-field>
+                                <v-btn
+                                    absolute
+                                    @click="addColumn"
+                                    color="primary"
+                                    fab bottom right>
+                                    <v-icon>add</v-icon>
+                                </v-btn>
+                            </div>
+                        </v-flex> -->
+                        <v-flex class="relative">
+                            <div class="scroll-me" v-if="task.subscribers.length">
+                                <header>
+                                    <h2>
+                                        Users subscribed to "{{task.name}} ID: {{task.id}}".
+                                    </h2>
+                                </header>
+                                <v-list>
+                                    <v-list-tile v-for="subbed in task.subscribers" :key="subbed.key">
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                {{subbed.user.name}}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                        <v-list-tile-action>
+                                            <v-btn flat icon @click="removeSubscriber(subbed.id)"><v-icon color="grey">delete_forever</v-icon></v-btn>
+                                        </v-list-tile-action>
+                                    </v-list-tile>
+                                </v-list>
+                            </div>
+                            <div class="relative">
+                                <div>
+                                    <v-select
+                                        label="Add users to notify when something changes with this task."
+                                        v-model="newSub"
+                                        :search-input.sync="search"
+                                        autocomplete
+                                        :items="users"
+                                        item-text="name"
+                                        @keyup.native.enter="addSub"
+                                    ></v-select>
+                                </div>
+                                <v-btn
+                                    absolute
+                                    @click="addSub"
+                                    color="primary"
+                                    fab bottom right>
+                                    <v-icon>add</v-icon>
+                                </v-btn>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-card-text>
         </v-card>
     </v-dialog>
 </template>

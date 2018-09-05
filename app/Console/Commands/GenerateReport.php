@@ -56,11 +56,13 @@ class GenerateReport extends Command
 namespace App\Reports;
 use App\Repositories\\$repoClass;
 class $class extends Report {
+    public static \$name = \"Report Name\";
     public function __construct(\$arg){
-            /**
-             * @param Model \$model the model that the repository is responsable for
-             * @param Array \$arg array of arguments used in the request
-             */
+        \$this->arg = \$arg;
+        /**
+         * @param Model \$model the model that the repository is responsable for
+         * @param Array \$arg array of arguments used in the request
+         */
         \$this->repository = new $repoClass(\$model, \$arg);
     }
 

@@ -38,4 +38,8 @@ class BasicTaskReportRepository extends Repository{
         return round($this->secondsInColumn($column) / 86400, 1);
     }
 
+    public function changesBetweenDates($start, $end){
+        return $this->getSpecifiedModel()->changes()->whereBetween('created_at', [$start, $end])->get();
+    }
+
 }  

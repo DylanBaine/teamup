@@ -28,9 +28,10 @@ class UpdateTaskResponse implements Responsable
         if ($request->parent_id !== null) {
             $this->updateProgress($t);
         }
-        if($t->type->name == 'Sprint'){
+        $type = $t->type->name;
+        if($type == 'Sprint'){
             $t->createDefaultSettings();
-        }   
+        }
     }
 
     protected function updateProgress($task)

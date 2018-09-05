@@ -19,10 +19,10 @@ class CreateTasks extends Migration
             $table->unsignedInteger('group_id')->nullable();
             $table->unsignedInteger('type_id')->nullable();
             $table->unsignedInteger('parent_id')->nullable();
+            $table->integer('column_id')->nullable();
 
             $table->string('name');
             $table->longText('description');
-            $table->integer('column_id')->nullable();
             $table->integer('percent_finished')->nullable();
             $table->string('icon')->nullable();
             $table->timestamps();

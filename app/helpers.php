@@ -1,13 +1,4 @@
 <?php
-$files = glob(__DIR__.'\Reports\*.php');
-if ($files === false) {
-    throw new RuntimeException("Failed to glob for function files");
-}
-foreach ($files as $file) {
-    require_once $file;
-}
-
-
 function company($prop = null)
 {
     $company = App\Models\Company::where('id', user('company_id'))->first();
@@ -28,4 +19,8 @@ function user($prop = null)
 function repository($class)
 {
     return "TEAMUP\Repositories\$class";
+}
+
+function carbon_format($string){
+    return \Carbon\Carbon::createFromFormat('Y-m-d', $string)->toDateTimeString();
 }
