@@ -6,6 +6,7 @@ const app = new Vue({
   router,
   data: {
     user: window.__set_user__,
+    users: window.set_users,
     middleware: {},
     userLinks: [],
     icons: require("./app/library/Icons.json"),

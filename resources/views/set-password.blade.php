@@ -15,10 +15,11 @@
                     <v-text-field
                         label="New Password"
                         name="password"
+                        type="password"
                     ></v-text-field>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn color="primary">Continue</v-btn>
+                    <v-btn color="primary" type="submit">Continue</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>

@@ -61,31 +61,20 @@ const routes = [
   {
     path: "/tasks",
     component: Tasks,
-    children: [
-      { path: "create", component: CreateTask },
-      { path: ":task", component: ShowTask }
-    ]
+    children: [{ path: "create", component: CreateTask }]
   },
   {
-    path: "/tasks/:task/manage/edit",
+    path: "/tasks/:task/edit",
     component: CreateTask,
     meta: { editing: true }
   },
   {
+    path: "/tasks/:task/add",
+    component: CreateTask
+  },
+  {
     path: "/tasks/:task/manage",
-    component: ManageTask,
-    children: [
-      { path: "add-task", component: CreateTask },
-
-      {
-        path: ":task",
-        component: ManageTask,
-        meta: { child: true },
-        children: [
-          { path: "edit", component: CreateTask, meta: { editing: true } }
-        ]
-      }
-    ]
+    component: ManageTask
   },
   { path: "/tasks/:task/settings", component: TaskSettings },
   {

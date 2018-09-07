@@ -27,6 +27,7 @@
                     <v-card-title>
                     <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
                     <h3 class="subheader">{{child.type.name}}</h3>
+                    <p v-if="child.user">{{child.user}}</p>
                     </v-card-title>
                     <v-card-text v-if="child.type.name !== 'Task'">
                     {{child.percent_finished}}% finished.
@@ -93,7 +94,7 @@
                     fab
                     color="success"
                     dark
-                    :to="`/tasks/${$route.params.task}/manage/edit`">
+                    :to="`/tasks/${$route.params.task}/edit`">
                     <v-icon>create</v-icon>
                 </v-btn>
                 <v-btn
@@ -108,7 +109,7 @@
                     fab
                     color="accent"
                     dark
-                    :to="`/tasks/${$route.params.task}/manage/add-task`">
+                    :to="`/tasks/${$route.params.task}/add`">
                     <v-icon>add</v-icon>
                 </v-btn>
                 <v-btn

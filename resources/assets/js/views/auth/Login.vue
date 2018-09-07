@@ -9,7 +9,7 @@
             <v-btn small color="accent" :href="$root.url+'/register'">or register</v-btn>
           </v-card-title>
           <v-divider></v-divider>
-            <v-form :valid="valid" :action="$root.url+'/auth/login'" method="POST">
+            <v-form :valid="valid" @submit.prevent="attempt" method="POST">
                 <input type="hidden" name="_token" :value="$root.csrf_token">
                 <v-card-text>
                     <div>
@@ -32,14 +32,14 @@
                     <v-btn type="submit" color="primary">Login</v-btn>
                 </v-card-actions>
             </v-form>
+          <v-fade-transition>
+              <v-alert type="error" v-if="error" :value="true">
+                  <h3 class="text-xs-center">
+                      {{error}}
+                  </h3>
+              </v-alert>
+          </v-fade-transition>
         </v-card>
-      <v-fade-transition>
-          <v-alert type="error" v-if="error" :value="true">
-              <h3 class="text-xs-center">
-                  {{error}}
-              </h3>
-          </v-alert>
-      </v-fade-transition>
     </div>
 </template>
 
@@ -49,7 +49,6 @@ export default {
   data() {
     return {
       middleware: {},
-      valid: false,
       user: {
         email: "",
         password: ""
@@ -80,6 +79,14 @@ export default {
     },
     showLoader(message) {
       this.$refs.loader.run(message);
+    },
+    attempt() {
+      axios.post(url + "/auth/login", this.user).then(res => {
+        if (res.data == 1) {
+          return (window.location.href = url + "/app");
+        }
+        this.error = res.data;
+      });
     }
   }
 };

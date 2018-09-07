@@ -1,7 +1,7 @@
 <template>
 <v-card class="text-xs-left">
     <v-card-title>
-        <label for="icon-input" class="subtitle">{{label}}</label>
+        <h3>{{label}}</h3>
         <label v-if="selected" class="padded">Selected: <i>{{selected}}</i></label>
     </v-card-title>
     <v-layout row wrap id="icon-input" fluid>
@@ -53,7 +53,7 @@ export default {
 
 <style scoped>
 #icon-input {
-  height: 130px;
+  height: 300px;
   overflow: auto;
   overflow-x: hidden;
   padding: 0;

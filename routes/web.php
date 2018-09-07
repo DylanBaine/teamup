@@ -9,7 +9,8 @@ Route::get('/app', function () {
     if ($user) {
         $user->company = App\Models\Company::find($user->company_id);
     }
-    return view('layouts.app', compact('user'));
+    $users_collection = company()->users()->get();
+    return view('layouts.app', compact('user', 'users_collection'));
 })->middleware('auth');
 // Handle all search methods
 Route::get('/search', 'SearchController');

@@ -13,6 +13,7 @@
     <script>
         window.url = "{{ url('') }}";
         window.__set_user__ = {!!json_encode($user) !!};
+        window.set_users = {!!json_encode($users_collection)!!}
         const token = "{{csrf_token()}}";
     </script>
 </head>

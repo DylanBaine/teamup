@@ -22,12 +22,20 @@ class CustomAuthController extends Controller
             if(!user()->password_confirmed){
                 return redirect('set-password');
             }
-            return redirect('/app');
+            return 1;
         }
-        else{
-            about(403, 'The given data was invalid');
-        }
+        return $this->errorBag($request);
 
+    }
+
+    protected function errorBag(Request $request){
+        if(!$request->email){
+            return "Please enter an email address.";
+        }
+        if(User::where('email', $request->email)->exists()){
+            return "Your password is incorrect.";
+        }
+        return "A user with this email doesn't exist.";
     }
 
     public function register(Request $request)
