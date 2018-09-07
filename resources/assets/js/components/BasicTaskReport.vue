@@ -28,11 +28,9 @@
                 <v-spacer></v-spacer>
                 </v-card-title>
                 <v-card-text>
-                    <GChart
-                    v-if="report"
-                    type="PieChart"
-                    :data="report.percent"
-                    />
+                    <pie-chart
+                        :data="report.percent"        
+                    ></pie-chart>
                 </v-card-text>
             </v-card>
             </v-flex>

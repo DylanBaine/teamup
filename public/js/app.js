@@ -2304,6 +2304,7 @@ Vue.component("draggable", __webpack_require__(160));
 Vue.component("user-manage-modal", __webpack_require__(162));
 Vue.component("page-builder", __webpack_require__(165));
 Vue.component("register", __webpack_require__(175));
+Vue.component("pie-chart", __webpack_require__(193));
 
 Vue.component("basic-task-report", __webpack_require__(180));
 Vue.component("project-report", __webpack_require__(183));
@@ -38774,7 +38775,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       search: "",
       types: [],
       users: [],
-      afterPostRedirect: "/tasks/" + this.$route.params.task
+      afterPostRedirect: "/tasks/" + this.$route.params.task + "/manage"
     };
   },
 
@@ -68566,8 +68567,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -68671,16 +68670,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-card-text",
-                    [
-                      _vm.report
-                        ? _c("GChart", {
-                            attrs: {
-                              type: "PieChart",
-                              data: _vm.report.percent
-                            }
-                          })
-                        : _vm._e()
-                    ],
+                    [_c("pie-chart", { attrs: { data: _vm.report.percent } })],
                     1
                   )
                 ],
@@ -68767,8 +68757,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -68788,13 +68776,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    [
-      _vm.report
-        ? _c("GChart", {
-            attrs: { type: "PieChart", data: _vm.report.task_breakdown }
-          })
-        : _vm._e()
-    ],
+    [_c("pie-chart", { attrs: { data: _vm.report.task_breakdown } })],
     1
   )
 }
@@ -68873,6 +68855,128 @@ module.exports = {"categories":[{"name":"action","key":"action","icons":[{"id":"
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(194)
+/* template */
+var __vue_template__ = __webpack_require__(195)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\PieChart.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ca4b69ae", Component.options)
+  } else {
+    hotAPI.reload("data-v-ca4b69ae", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 194 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      theme: this.$vuetify.them,
+      options: {
+        colors: ["#014841", "#11756c", "#26a69a", "#7cc3bd", "#b6e2de"],
+        backgroundColor: {
+          fill: "transparent"
+        },
+        legend: {
+          textStyle: {
+            color: "white"
+          }
+        }
+      }
+    };
+  },
+  mounted: function mounted() {
+    console.log(this.$vuetify.theme);
+  },
+
+  props: ["data"]
+});
+
+/***/ }),
+/* 195 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm.data
+        ? _c("GChart", {
+            attrs: { type: "PieChart", data: _vm.data, options: _vm.options }
+          })
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-ca4b69ae", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

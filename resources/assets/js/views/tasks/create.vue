@@ -158,7 +158,7 @@ export default {
       search: "",
       types: [],
       users: [],
-      afterPostRedirect: "/tasks/" + this.$route.params.task
+      afterPostRedirect: "/tasks/" + this.$route.params.task + "/manage"
     };
   },
   watch: {

@@ -56,6 +56,7 @@ Vue.component("draggable", require("vuedraggable"));
 Vue.component("user-manage-modal", require("./components/UserManageModal.vue"));
 Vue.component("page-builder", require("./components/PageBuilder.vue"));
 Vue.component("register", require("./views/auth/Register.vue"));
+Vue.component("pie-chart", require("./components/PieChart.vue"));
 
 Vue.component("basic-task-report", require("./components/BasicTaskReport.vue"));
 Vue.component("project-report", require("./components/ProjectReport.vue"));

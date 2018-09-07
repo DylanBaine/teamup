@@ -1,10 +1,8 @@
 <template>
     <div>
-        <GChart
-            v-if="report"
-            type="PieChart"
-            :data="report.task_breakdown"
-        />
+        <pie-chart
+            :data="report.task_breakdown"        
+        ></pie-chart>
     </div>
 </template>
 
