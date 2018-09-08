@@ -3,10 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class Task extends Model
 {
+
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+
     protected $fillable = ['name', 'description', 'type_id', 'user_id', 'parent_id', 'percent_finished'];
 
     protected $defalutSettings = [
@@ -17,7 +23,14 @@ class Task extends Model
     
     public function __construct(array $attributes = [])
     {
-        
+        parent::__construct();
+    }
+
+    public function toArray(){
+        $t = parent::toArray();
+        $t['start_date'] = (new Carbon($t['start_date']))->toDateString();
+        $t['end_date'] = (new Carbon($t['end_date']))->toDateString();
+        return $t;
     }
 
     public function runReport(){

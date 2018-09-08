@@ -1,5 +1,5 @@
 <template>
-<v-container grid-list-lg>
+<v-container fluid grid-list-lg>
     <div style="position: absolute; bottom: 0px; width: 50vw; z-index: 999; left: 25vw;" class="elevation-6">
         <v-form @submit.prevent="assignUser">
             <v-card>
@@ -13,7 +13,7 @@
                     </v-btn>
                 </v-card-title>
                 <v-card-text>
-                    <v-container grid-list-lg>
+                    <v-container fluid grid-list-lg>
                         <v-layout row wrap>
                             <v-flex md6>
                                 <v-select

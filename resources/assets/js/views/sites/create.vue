@@ -5,16 +5,17 @@
         transition="dialog-transition">
         <v-card>
             <v-toolbar color="primary">
-                <v-btn color="white" flat icon to="/sites">
-                    <v-icon>chevron_left</v-icon>
-                </v-btn>
                 <h2 class="title">
                     Create a new site.
                 </h2>
+                <v-spacer></v-spacer>
+                <v-btn color="white" flat icon to="/sites">
+                    <v-icon>close</v-icon>
+                </v-btn>
             </v-toolbar>
             <v-form @submit.prevent="post">
                 <v-card-text>
-                    <v-container grid-list-lg>
+                    <v-container fluid grid-list-lg>
                         <v-layout row wrap>
                             <v-flex md6>
                                 <v-text-field

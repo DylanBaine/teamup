@@ -1,7 +1,7 @@
 <template>
-    <v-container grid-list-lg>
+    <v-container fluid grid-list-lg>
         <router-view></router-view>
-        <header>
+        <header class="mb-3">
             <h1>
                 Post Types
             </h1>
@@ -27,11 +27,11 @@
             </v-layout>
         </section>
             <div class="fixed bottom right">
-                <v-btn fab dark v-if="$user.can('create', 'post-types')"
-                    to="/post-types/create" color="accent">
+                <v-btn @click="$refs.addPostType.init()" fab dark v-if="$user.can('create', 'post-types')" color="accent">
                     <v-icon>add</v-icon>
                 </v-btn>
             </div>
+            <add-post-type ref="addPostType"></add-post-type>
     </v-container>
 </template>
 

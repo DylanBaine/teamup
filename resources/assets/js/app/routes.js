@@ -61,7 +61,9 @@ const routes = [
   {
     path: "/tasks",
     component: Tasks,
-    children: [{ path: "create", component: CreateTask }]
+    children: [
+      { path: "create", component: CreateTask, meta: { controller: true } }
+    ]
   },
   {
     path: "/tasks/:task/edit",
@@ -84,8 +86,7 @@ const routes = [
       { path: "create", component: CreateUser },
       {
         path: ":user",
-        component: ShowUser,
-        children: [{ path: "add-permissions", component: ManageUser }]
+        component: ShowUser
       }
     ]
   },

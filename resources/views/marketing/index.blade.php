@@ -35,7 +35,7 @@
             </div>
           </v-flex>
           <v-flex xs12>
-            <v-container grid-list-xl>
+            <v-container fluid grid-list-xl>
               <v-layout row wrap align-center>
                 <v-flex xs12 md4>
                   <v-card class="elevation-0 transparent">
@@ -104,7 +104,7 @@
       </section>
 
       <section>
-        <v-container grid-list-xl>
+        <v-container fluid grid-list-xl>
           <v-layout row wrap justify-center class="my-5">
             <v-flex xs12 sm4>
               <v-card class="elevation-0 transparent">
@@ -157,18 +157,5 @@
           </v-layout>
         </v-container>
       </section>
-
-      <v-footer class="blue darken-2">
-        <v-layout row wrap align-center>
-          <v-flex xs12>
-            <div class="white--text ml-3">
-              Made with
-              <v-icon class="red--text">favorite</v-icon>
-              by <a class="white--text" href="https://vuetifyjs.com" target="_blank">Vuetify</a>
-              and <a class="white--text" href="https://github.com/vwxyzjn">Costa Huang</a>
-            </div>
-          </v-flex>
-        </v-layout>
-      </v-footer>
     </v-content>
 @stop

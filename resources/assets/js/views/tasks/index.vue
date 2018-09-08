@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-lg>
+  <v-container fluid grid-list-lg>
     <router-view></router-view>
     <h1>
         All Tasks
@@ -22,8 +22,8 @@
             </div>
           </v-card-title>
           <v-card-text>
-            <p>
-              {{task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description}}
+            <p v-html="task.description">
+              <!-- {{task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description}} -->
             </p>
             <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
               <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
@@ -38,42 +38,21 @@
         No tasks yet.
       </h1>
     </v-layout>
-          <v-slide-x-transition>
-            <v-btn
-              v-if="!fam"
-              color="primary"
-              outline
-              fab
-              class="fixed bottom right"
-              @click="fam = !fam">
-              <v-icon>more_vert</v-icon>  
-            </v-btn>
-          </v-slide-x-transition>
-          <v-slide-x-reverse-transition>
-            <div class="fixed bottom right" v-if="fam">
-                <v-btn v-if="$user.can('manage', 'tasks')"
-                    fab
-                    color="info"
-                    dark @click="settings = true">
-                    <v-icon>settings</v-icon>
-                </v-btn>
-                <v-btn v-if="$user.can('create', 'tasks')"
-                    fab
-                    color="accent"
-                    dark
-                    :to="`/tasks/create`">
-                    <v-icon>add</v-icon>
-                </v-btn>
-                <v-btn
-                    fab
-                    color="primary"
-                    outline
-                    @click="fam = !fam">
-                    <v-icon>chevron_right</v-icon>
-                </v-btn>
-            </div>
-          </v-slide-x-reverse-transition>
-
+    <div class="fixed bottom right">
+        <v-btn v-if="$user.can('manage', 'tasks')"
+            fab
+            color="info"
+            dark @click="settings = true">
+            <v-icon>settings</v-icon>
+        </v-btn>
+        <v-btn v-if="$user.can('create', 'tasks')"
+            fab
+            color="accent"
+            dark
+            :to="`/tasks/create`">
+            <v-icon>add</v-icon>
+        </v-btn>
+    </div>
       <v-dialog v-model="settings" width="500px">
         <v-card>
             <v-card-title class="grey lighten-2 black--text">

@@ -1,3 +1,5 @@
+import { throws } from "assert";
+
 class Model {
   constructor(route, store) {
     this.postUrl = `${url}/${route.post}`;
@@ -9,6 +11,7 @@ class Model {
     this.instance = store.instance;
     this.store = store.store;
     this.model = this.constructor.name;
+    this.setToDelete = null;
   }
 
   _set_(data) {
@@ -23,11 +26,10 @@ class Model {
   }
   alert(message, type) {
     if (message == "Pleas log back in to continue working...") {
-      return this.instance.$root.$refs.app.$refs.alert.run(
-        message,
-        "error",
-        "/login"
-      );
+      return (window.location.href = url);
+    }
+    if (message == "Set your new password to start working.") {
+      return (window.location.href = url + "/set-password");
     }
     this.instance.$root.$refs.app.$refs.alert.run(message, type);
   }
@@ -49,6 +51,10 @@ class Model {
       "Task was successfully deleted...",
       "info"
     );
+  }
+
+  prompt(content, buttons) {
+    this.instance.$root.$refs.app.$refs.prompt.run(this, content, buttons);
   }
 
   /**
@@ -172,20 +178,40 @@ class Model {
    * Delete a record fromt the database
    * @param {integer} id id of the record to delete
    */
-  delete(id) {
+  delete(id, callback = null) {
+    this.setToDelete = id;
+    this.callback = callback;
+    var buttons = [
+      { text: "Confirm", action: "performDelete", color: "error" },
+      { text: "Cancel", action: "cancel", color: "primary" }
+    ];
+    this.prompt(
+      `
+      <h2 class="text-xs-center">Are you sure you want to delete this ${
+        this.model
+      }?</h2>
+    `,
+      buttons
+    );
+  }
+
+  performDelete() {
+    var id = this.setToDelete;
     this.showLoader("Deleting...");
     return axios
-      .post(`${this.deleteUrl}/${id}`, {
-        _method: "delete"
-      })
+      .post(`${this.deleteUrl}/${id}`, { _method: "delete" })
       .then(res => {
         this.showLoader();
         this.successfullyDeleted();
         this.get();
+        if (this.callback) {
+          this.instance[this.callback]();
+        }
+        this.setToDelete = null;
       })
       .catch(err => {
         this.showLoader();
-        this.showError(err.response.data.message);
+        if (err) this.showError(err.response.data.message);
       });
   }
 }

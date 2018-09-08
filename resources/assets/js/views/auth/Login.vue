@@ -9,7 +9,7 @@
             <v-btn small color="accent" :href="$root.url+'/register'">or register</v-btn>
           </v-card-title>
           <v-divider></v-divider>
-            <v-form :valid="valid" @submit.prevent="attempt" method="POST">
+            <v-form @submit.prevent="attempt" method="POST">
                 <input type="hidden" name="_token" :value="$root.csrf_token">
                 <v-card-text>
                     <div>
@@ -82,10 +82,13 @@ export default {
     },
     attempt() {
       axios.post(url + "/auth/login", this.user).then(res => {
-        if (res.data == 1) {
-          return (window.location.href = url + "/app");
+        if (res.data.status == "error") {
+          this.error = res.data.message;
+        } else if (res.data.status == "confirm_password") {
+          window.location.href = url + "/" + res.data.route;
+        } else if (res.data.status == "OK") {
+          window.location.href = url + "/app#" + res.data.route;
         }
-        this.error = res.data;
       });
     }
   }

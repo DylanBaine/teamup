@@ -3,12 +3,13 @@
         <v-card v-if="post">
             <v-form @submit.prevent="save()">
                 <v-toolbar dark color="primary" v-if="!$route.meta.forSite">
-                    <v-btn icon :to="`/${$route.params.type}`">
-                        <v-icon>chevron_left</v-icon>
-                    </v-btn>
                     <h2 class="title" v-if="type">
                         Create new {{type.name}}.
                     </h2>
+                    <v-spacer></v-spacer>
+                    <v-btn icon :to="`/${$route.params.type}`">
+                        <v-icon>close</v-icon>
+                    </v-btn>
                 </v-toolbar>  
                 <v-card-text>
                     <v-text-field

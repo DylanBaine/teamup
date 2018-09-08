@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-lg>
+  <v-container fluid grid-list-lg>
     <router-view></router-view>
     <h1>
       Sites

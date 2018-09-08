@@ -4,14 +4,15 @@
         transition="dialog-transition">
         <v-card>
             <v-toolbar color="primary">
-                <v-btn flat icon color="white" to="/users">
-                    <v-icon>chevron_left</v-icon>
-                </v-btn>
                 <h2 class="title">New User</h2>
+                <v-spacer></v-spacer>
+                <v-btn flat icon color="white" to="/users">
+                    <v-icon>close</v-icon>
+                </v-btn>
             </v-toolbar>
             <v-card-text>
                 <v-form @submit.prevent="post()">
-                    <v-container grid-list-lg>
+                    <v-container fluid grid-list-lg>
                         <v-layout row wrap>
                             <v-flex md6>
                                 <v-text-field
@@ -59,11 +60,11 @@ export default {
   },
   methods: {
     post() {
-      this.$user.create(this.user).then(()=>{
-          this.user = {
-              name: "",
-              email: ""
-          }
+      this.$user.create(this.user).then(() => {
+        this.user = {
+          name: "",
+          email: ""
+        };
       });
     }
   }

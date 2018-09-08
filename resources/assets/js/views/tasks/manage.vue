@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container fluid">
       <router-view></router-view>
-      <v-container grid-list-lg v-if="task">
+      <v-container fluid grid-list-lg v-if="task">
           <header>
               <h1>{{task.name}}</h1>
                 <h3 class="subheading">
@@ -13,9 +13,9 @@
               <h4 v-else>
                 Parent: <router-link to="/tasks">Tasks</router-link>
               </h4>
-              <p>{{task.description}}</p>
+              <p v-html="task.description"></p>
           </header>
-          <v-container v-if="task.type.name == 'Sprint'" grid-list-lg>
+          <v-container fluid v-if="task.type.name == 'Sprint'" grid-list-lg>
             <v-layout row wrap>
                 <draggable v-for="column in task.columns" :key="column.position"  :items="column.children" :options="{group:'tasks', element: '.drag-me'}" :id="`${column.id}`" class="task-row flex md3 mt-2" @end="add" @start="start">
                 <v-card>
@@ -25,9 +25,11 @@
                 </v-card>
                 <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
                     <v-card-title>
-                    <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
-                    <h3 class="subheader">{{child.type.name}}</h3>
-                    <p v-if="child.user">{{child.user}}</p>
+                      <div>
+                        <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
+                        <h3 class="subheader">{{child.type.name}}</h3>
+                        <p v-if="child.user">{{child.user}}</p>
+                      </div>
                     </v-card-title>
                     <v-card-text v-if="child.type.name !== 'Task'">
                     {{child.percent_finished}}% finished.
@@ -36,7 +38,7 @@
                     </div>
                     </v-card-text>
                     <v-card-text v-else>
-                    {{child.description}}
+                      <p v-html="child.description"></p>
                     </v-card-text>
                 </v-card>
                 </draggable>
@@ -70,57 +72,38 @@
           </v-layout>
           <basic-task-report v-if="task.type.name == 'Task'" :report="task.report"></basic-task-report>
           <project-report v-else-if="task.type.name == 'Project'" :report="task.report"></project-report>
-          <v-slide-x-transition>
-            <v-btn
-              v-if="!fam"
-              color="primary"
-              outline
-              fab
-              class="fixed bottom right"
-              @click="fam = !fam">
-              <v-icon>more_vert</v-icon>  
-            </v-btn>
-          </v-slide-x-transition>
-          <v-slide-x-reverse-transition>
-            <div class="fixed bottom right" v-if="fam">
-                <v-btn
-                    fab
-                    color="warning"
-                    dark
-                    @click="remove($route.params.task)">
-                    <v-icon>delete_forever</v-icon>
-                </v-btn>
-                <v-btn
-                    fab
-                    color="success"
-                    dark
-                    :to="`/tasks/${$route.params.task}/edit`">
-                    <v-icon>create</v-icon>
-                </v-btn>
-                <v-btn
-                    fab
-                    color="info"
-                    dark
-                    :to="`/tasks/${$route.params.task}/settings`">
-                    <v-icon>settings</v-icon>
-                </v-btn>
-                <v-btn
-                    v-if="task.type.name != 'Task'"
-                    fab
-                    color="accent"
-                    dark
-                    :to="`/tasks/${$route.params.task}/add`">
-                    <v-icon>add</v-icon>
-                </v-btn>
-                <v-btn
-                    fab
-                    color="primary"
-                    outline
-                    @click="fam = !fam">
-                    <v-icon>chevron_right</v-icon>
-                </v-btn>
-            </div>
-          </v-slide-x-reverse-transition>
+          <div class="fixed bottom right">
+              <v-btn
+                  fab
+                  color="warning"
+                  dark
+                  @click="remove($route.params.task)">
+                  <v-icon>delete_forever</v-icon>
+              </v-btn>
+              <v-btn
+                  fab
+                  color="success"
+                  dark
+                  :to="`/tasks/${$route.params.task}/edit`">
+                  <v-icon>create</v-icon>
+              </v-btn>
+              <v-btn
+                  fab
+                  color="info"
+                  dark
+                  @click="$refs.settings.init(task.id)">
+                  <v-icon>settings</v-icon>
+              </v-btn>
+              <v-btn
+                  v-if="task.type.name != 'Task'"
+                  fab
+                  color="accent"
+                  dark
+                  :to="`/tasks/${$route.params.task}/add`">
+                  <v-icon>add</v-icon>
+              </v-btn>
+          </div>
+          <task-settings ref="settings"></task-settings>
       </v-container>
   </div>
 </template>

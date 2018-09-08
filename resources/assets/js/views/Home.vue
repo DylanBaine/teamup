@@ -2,7 +2,7 @@
   <v-layout>
     <router-view></router-view>
     <v-container fluid grid-list-md>
-        <v-container grid-list-lg>
+        <v-container fluid grid-list-lg>
           <header>
             <h2 class="title">
               Your Tasks

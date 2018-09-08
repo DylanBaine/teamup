@@ -1,5 +1,5 @@
 <template>
-    <v-container grid-list-lg>
+    <v-container fluid grid-list-lg>
         <v-layout row wrap>
             <v-flex md6>
             <v-card v-if="report.changes">
@@ -22,9 +22,14 @@
             <v-flex md6>
             <v-card>
                 <v-card-title>
-                <h2 class="title">
-                    Chart
-                </h2>
+                    <div>
+                        <h2 class="title">
+                            Chart
+                        </h2>
+                        <p class="subheading">
+                            Compaired time in columns.
+                        </p>
+                    </div>
                 <v-spacer></v-spacer>
                 </v-card-title>
                 <v-card-text>

@@ -2,9 +2,6 @@
     <v-dialog v-model="showing" persistent>
         <v-card scrollable>
             <v-toolbar dark color="primary">
-                <v-btn icon :to="`/${$route.params.type}`">
-                    <v-icon>chevron_left</v-icon>
-                </v-btn>
                 <h2 class="title">
                     {{post.name}}
                 </h2>
@@ -20,6 +17,9 @@
                     :to="`/${$route.params.type}/${post.id}/edit`"
                     color="success">
                     <v-icon>edit</v-icon>
+                </v-btn>
+                <v-btn icon :to="`/${$route.params.type}`">
+                    <v-icon>close</v-icon>
                 </v-btn>
             </v-toolbar>
             <v-card-text v-html="post.content">

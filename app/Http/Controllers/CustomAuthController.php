@@ -20,11 +20,11 @@ class CustomAuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             if(!user()->password_confirmed){
-                return redirect('set-password');
+                return response()->json(['status' => 'confirm_password', 'route' => '/set-password']);
             }
-            return 1;
+            return response()->json(['status' => 'OK', 'route' => user()->last_route]);
         }
-        return $this->errorBag($request);
+        return response()->json(['status' => 'error', 'message' => $this->errorBag($request)]);
 
     }
 

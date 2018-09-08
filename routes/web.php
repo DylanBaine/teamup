@@ -1,4 +1,10 @@
 <?php
+//dd(bcrypt('secret'));
+// Set users last page with every request
+Route::post('set_last_page', function(){
+    user()->last_route = request('route');
+    user()->save();
+});
 //Search Route
 Route::get('toolbar-search', 'SearchController@index');
 //Marketing site routes

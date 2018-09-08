@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
+    <div class="container" style="padding: 0;">
         <router-view></router-view>
-        <v-container grid-list-md>
+        <v-container fluid grid-list-md>
             <header>
                 <h1>
                     All Users

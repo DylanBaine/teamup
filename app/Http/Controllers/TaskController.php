@@ -25,6 +25,32 @@ class TaskController extends Controller
         return company()->tasks()->where('parent_id', null)->with('children', 'type')->get();
     }
 
+    public function create(){
+        return response()->json([
+            'users' => company()->users,
+            'groups' => company()->groups,
+            'types' => company()->types()->where('model', 'Task')->get()
+        ]);
+    }
+
+    public function edit($id){
+        return response()->json([
+            'users' => company()->users,
+            'groups' => company()->groups,
+            'types' => company()->types()->where('model', 'Task')->get(),
+            'task' => Task::find($id)
+        ]);
+    }
+
+    public function add($parent){
+        return response()->json([
+            'users' => company()->users,
+            'groups' => company()->groups,
+            'types' => company()->types()->where('model', 'Task')->get(),
+            'parent' => Task::find($parent)
+        ]);        
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -47,8 +73,8 @@ class TaskController extends Controller
         $parent->columns()->first()->id :
         null;
         $t->report = 0;
-        $t->start_date = carbon_format($request->start_date);
-        $t->end_date = carbon_format($request->end_date);
+        $t->start_date = $request->start_date ? carbon_format($request->start_date) : null;
+        $t->end_date = $request->end_date ? carbon_format($request->end_date) : null;
         $t->save();
         $t->linkReport();
         if ($t->type->name === 'Sprint') {
@@ -102,7 +128,9 @@ class TaskController extends Controller
         $task = Task::find($id);
         if ($task->parent_id == null || $task->parent_id == 0) {
             foreach ($task->children()->get() as $child) {
-                $child->parent_id = 0;
+                $parentName = $task->name;
+                $child->parent_id = null;
+                $child->description .= "<p>(once a child to $parentName)</p>";
                 $child->save();
             }
         }

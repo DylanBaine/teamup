@@ -55,7 +55,6 @@ export default {
 .inner {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.2);
   text-align: center;
   display: inline-flex;
   align-items: center;

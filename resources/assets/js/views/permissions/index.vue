@@ -1,5 +1,5 @@
 <template>
-    <v-container grid-list-lg>
+    <v-container fluid grid-list-lg>
         <h1 class="mb-4">
             Permissions
         </h1>

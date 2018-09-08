@@ -2,16 +2,16 @@
     <v-dialog v-model="showing" :width="700">
         <v-card>
             <v-toolbar color="primary" dark>
-                <v-btn
+<!--                 <v-btn
                     flat icon
                     :to="`/tasks/${$route.params.task}/manage`"
                     color="white">
                     <v-icon>chevron_left</v-icon>
-                </v-btn>
+                </v-btn> -->
                 <h2 class="title">{{task.name}} Settings</h2>
             </v-toolbar>
             <v-card-text>
-                <v-container grid-list-lg>
+                <v-container fluid grid-list-lg>
                     <v-layout row wrap>
                         <!-- <v-flex md4>
                             <div ref="scrollMe" class="scroll-me" v-if="task.columns && task.columns.length">
@@ -77,15 +77,15 @@
                             </div>
                             <div class="relative">
                                 <div>
-                                    <v-select
+                                    <v-autocomplete
                                         label="Add users to notify when something changes with this task."
                                         v-model="newSub"
                                         :search-input.sync="search"
-                                        autocomplete
                                         :items="users"
                                         item-text="name"
+                                        item-value="id"
                                         @keyup.native.enter="addSub"
-                                    ></v-select>
+                                    ></v-autocomplete>
                                 </div>
                                 <v-btn
                                     absolute
@@ -126,6 +126,7 @@ export default {
       subs: []
     };
   },
+  props: ["taskId"],
   computed: {
     $task() {
       return new Task(this, "task");
@@ -153,11 +154,12 @@ export default {
     }
   },
   mounted() {
-    this.init();
+    //this.init();
   },
   methods: {
-    init() {
-      if (this.task == "") this.$task.find(this.$route.params.task);
+    init(id = null) {
+      var finalId = id == null ? this.$route.params.task : id;
+      this.$task.find(finalId);
       this.showing = true;
       this.$taskType.get();
       this.$task.find(this.$route.params.task);
@@ -190,15 +192,13 @@ export default {
         .subscribeUserToTask({
           subscribable_id: this.task.id,
           subscribable_type: "App\\Models\\Task",
-          user_id: this.newSub.id
+          user_id: this.newSub
         })
         .then(() => {
           if (!this.$root.errors) {
             this.$task.find(this.$route.params.task);
             this.search = "";
-            this.newSub = {
-              name: ""
-            };
+            this.newSub = null;
           }
         });
     },

@@ -2,12 +2,13 @@
     <v-dialog v-model="showing" :width="500" persistent>
         <v-card>
             <v-toolbar color="primary" dark>
-                <v-btn flat icon to="/post-types">
-                    <v-icon>chevron_left</v-icon>
-                </v-btn>
                 <h2 class="title">
                     Create Post Types
                 </h2>
+                <v-spacer></v-spacer>
+                <v-btn flat icon @click="showing = false">
+                    <v-icon>close</v-icon>
+                </v-btn>
             </v-toolbar>
             <v-form @submit.prevent="createType">
                 <v-card-text>
@@ -17,7 +18,7 @@
                         ></v-text-field>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn color="primary" block>
+                    <v-btn color="primary" type="submit" block>
                         Save
                     </v-btn>
                 </v-card-actions>
@@ -38,11 +39,11 @@ export default {
     };
   },
   mounted() {
-    this.init();
+    //this.init();
   },
   computed: {
     $type() {
-      return new Type(this.$root, "types");
+      return new Type(this.$parent, "types");
     }
   },
   methods: {

@@ -47,21 +47,24 @@
 				<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
 				<span class="hidden-sm-and-down">{{$root.company.name}}</span>
 			</v-toolbar-title>
-			<v-select
-				autocomplete clearable
+			<v-autocomplete
+				clearable
 				flat solo-inverted v-model="quickLink"
 				prepend-icon="search" label="Search modules"
 				:search-input.sync="search" class="hidden-sm-and-down"
 				:items="results" @input="$router.push('/'+quickLink.type.slug)"
 				item-text="type.name" item-value="quickLink"
-			></v-select>
+			></v-autocomplete>
 			<v-spacer></v-spacer>
 			<!-- <v-btn icon @click="dark = !dark">
 				<v-icon>highlight</v-icon>
 			</v-btn> -->
-			<v-btn icon @click="$user.logout()">
-				<v-icon>close</v-icon>
-			</v-btn>
+			<v-tooltip left>
+				<v-btn slot="activator" icon @click="$user.logout()">
+					<v-icon>exit_to_app</v-icon>
+				</v-btn>
+				<span>Log Out</span>
+			</v-tooltip>
 		</v-toolbar>
 		<v-content>
 			<v-container fluid fill-height>
@@ -84,6 +87,7 @@
 		</v-btn>
 		<loader ref="loader"></loader>
     <alerts ref="alert"></alerts>
+		<prompt ref="prompt"></prompt>
 	</div>
 </template>
 

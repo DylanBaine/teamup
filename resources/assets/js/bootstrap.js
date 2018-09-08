@@ -56,10 +56,16 @@ Vue.component("draggable", require("vuedraggable"));
 Vue.component("user-manage-modal", require("./components/UserManageModal.vue"));
 Vue.component("page-builder", require("./components/PageBuilder.vue"));
 Vue.component("register", require("./views/auth/Register.vue"));
+Vue.component("prompt", require("./components/Prompt.vue"));
+
 Vue.component("pie-chart", require("./components/PieChart.vue"));
 
 Vue.component("basic-task-report", require("./components/BasicTaskReport.vue"));
 Vue.component("project-report", require("./components/ProjectReport.vue"));
+
+Vue.component("task-preview", require("./views/tasks/show.vue"));
+Vue.component("task-settings", require("./views/tasks/settings.vue"));
+Vue.component("add-post-type", require("./views/posts/manage.vue"));
 
 Array.prototype.hasProp = function(needle, haystack) {
   for (let i = 0; i < this.length; i++) {

@@ -6,7 +6,7 @@ Route::get('set-password', function(){
 })->middleware('auth');
 
 Route::post('set-password', function(){ 
-    user()->password = request('password');
+    user()->password = bcrypt(request('password'));
     user()->password_confirmed = 1;
     user()->save();
     return redirect('/app');
