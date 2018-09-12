@@ -82,13 +82,12 @@ const routes = [
   {
     path: "/users",
     component: Users,
-    children: [
-      { path: "create", component: CreateUser },
-      {
-        path: ":user",
-        component: ShowUser
-      }
-    ]
+    children: [{ path: "create", component: CreateUser }]
+  },
+  {
+    path: "/users/:user",
+    component: ShowUser,
+    meta: { controller: true }
   },
   {
     path: "/:type",

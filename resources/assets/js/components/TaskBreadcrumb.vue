@@ -1,16 +1,16 @@
 <template>
     <span>
-        <task-breadcrumb v-if="item && item.parent" :item="item.parent"></task-breadcrumb>
-        <v-icon v-if="item" small>chevron_right</v-icon>
+        <task-breadcrumb :icon="icon" :icon-size="iconSize" :icon-color="iconColor" v-if="item && item.parent" :item="item.parent"></task-breadcrumb>
+        <v-icon :color="iconColor" v-if="item" :size="iconSize">{{icon ? icon : 'chevron_right'}}</v-icon>
         <router-link v-if="item" :to="`/tasks/${item.id}/manage`">{{item.name}}</router-link>
-        <v-icon small v-if="original">chevron_right</v-icon>
+        <v-icon :color="iconColor" :size="iconSize" v-if="original">{{icon ? icon : 'chevron_right'}}</v-icon>
         <span v-if="original">{{original.name}}</span>
     </span>
 </template>
 
 <script>
 export default {
-  props: ["item", "original"]
+  props: ["item", "original", "iconColor", "icon", "iconSize"]
 };
 </script>
 

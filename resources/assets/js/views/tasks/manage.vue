@@ -8,10 +8,10 @@
                   ID: {{task.id}}
                 </h3>
                 <h3 v-if="task.user" class="subheading">
-                  User: {{task.user.name}}
+                  User: <router-link :to="`/users/${task.user.id}`">{{task.user.name}}</router-link>
                 </h3>
                 <router-link to="/tasks">Tasks</router-link>
-                <task-breadcrumb :item="task.parent" :original="task"></task-breadcrumb>
+                <task-breadcrumb :icon-size="14" :item="task.parent" :original="task"></task-breadcrumb>
               <p v-html="task.description"></p>
           </header>
           <v-container fluid v-if="task.type.name == 'Sprint'" grid-list-lg>

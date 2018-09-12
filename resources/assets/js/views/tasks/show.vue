@@ -10,7 +10,7 @@
                     ID: {{task.id}}
                 </h3>
                 <v-spacer></v-spacer>
-                <v-btn flat color="white">Manage</v-btn>
+                <v-btn flat :to="`/tasks/${task.id}/manage`" color="white">Manage</v-btn>
                 <v-btn flat icon color="white">
                     <v-icon @click="showing = false">close</v-icon>
                 </v-btn>

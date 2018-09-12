@@ -37071,10 +37071,11 @@ var routes = [{ path: "/", component: __WEBPACK_IMPORTED_MODULE_0__views_Home_vu
 }, { path: "/tasks/:task/settings", component: __WEBPACK_IMPORTED_MODULE_8__views_tasks_settings_vue___default.a }, {
   path: "/users",
   component: __WEBPACK_IMPORTED_MODULE_20__views_users_index_vue___default.a,
-  children: [{ path: "create", component: __WEBPACK_IMPORTED_MODULE_22__views_users_create_vue___default.a }, {
-    path: ":user",
-    component: __WEBPACK_IMPORTED_MODULE_21__views_users_show_vue___default.a
-  }]
+  children: [{ path: "create", component: __WEBPACK_IMPORTED_MODULE_22__views_users_create_vue___default.a }]
+}, {
+  path: "/users/:user",
+  component: __WEBPACK_IMPORTED_MODULE_21__views_users_show_vue___default.a,
+  meta: { controller: true }
 }, {
   path: "/:type",
   component: __WEBPACK_IMPORTED_MODULE_9__views_posts_type_vue___default.a,
@@ -39915,7 +39916,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   mounted: function mounted() {
     this.init();
-    console.log("mounting");
   },
 
   methods: {
@@ -40831,9 +40831,17 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
-                  _c("v-btn", { attrs: { flat: "", color: "white" } }, [
-                    _vm._v("Manage")
-                  ]),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: {
+                        flat: "",
+                        to: "/tasks/" + _vm.task.id + "/manage",
+                        color: "white"
+                      }
+                    },
+                    [_vm._v("Manage")]
+                  ),
                   _vm._v(" "),
                   _c(
                     "v-btn",
@@ -41338,13 +41346,19 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _vm.task.user
-                    ? _c("h3", { staticClass: "subheading" }, [
-                        _vm._v(
-                          "\n                User: " +
-                            _vm._s(_vm.task.user.name) +
-                            "\n              "
-                        )
-                      ])
+                    ? _c(
+                        "h3",
+                        { staticClass: "subheading" },
+                        [
+                          _vm._v("\n                User: "),
+                          _c(
+                            "router-link",
+                            { attrs: { to: "/users/" + _vm.task.user.id } },
+                            [_vm._v(_vm._s(_vm.task.user.name))]
+                          )
+                        ],
+                        1
+                      )
                     : _vm._e(),
                   _vm._v(" "),
                   _c("router-link", { attrs: { to: "/tasks" } }, [
@@ -41352,7 +41366,11 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("task-breadcrumb", {
-                    attrs: { item: _vm.task.parent, original: _vm.task }
+                    attrs: {
+                      "icon-size": 14,
+                      item: _vm.task.parent,
+                      original: _vm.task
+                    }
                   }),
                   _vm._v(" "),
                   _c("p", {
@@ -45265,6 +45283,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -45334,18 +45355,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     init: function init() {
-      this.showing = true;
-      this.$user.find(this.$route.params.user);
+      var _this = this;
+
+      this.$root.getPage().then(function () {
+        var p = _this.$root.page;
+        _this.user = p.user;
+        _this.modes = p.modes;
+        _this.types = p.types;
+        _this.showing = true;
+      });
+      /*       this.$user.find(this.$route.params.user);
       this.$modes.get();
-      this.$types.get();
+      this.$types.get(); */
     },
     assignUser: function assignUser() {
-      var _this = this;
+      var _this2 = this;
 
       this.assign.user = this.user.id;
       this.$permissions.create(this.assign).then(function () {
-        _this.init();
-        _this.assign = {
+        _this2.init();
+        _this2.assign = {
           type: null,
           mode: null,
           user: null
@@ -45508,21 +45537,55 @@ var render = function() {
                                                 task.column
                                                   ? _c(
                                                       "h5",
-                                                      {
-                                                        staticClass:
-                                                          "subheading"
-                                                      },
                                                       [
+                                                        _c("task-breadcrumb", {
+                                                          attrs: {
+                                                            "icon-color":
+                                                              "black",
+                                                            "icon-size": 13,
+                                                            item: task
+                                                          }
+                                                        }),
                                                         _vm._v(
-                                                          "\n                                                " +
+                                                          " " +
+                                                            _vm._s(
+                                                              task.type.name
+                                                            ) +
+                                                            " "
+                                                        ),
+                                                        _c(
+                                                          "v-icon",
+                                                          {
+                                                            attrs: {
+                                                              color: "black",
+                                                              size: 13
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "arrow_forward"
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(
+                                                          " " +
                                                             _vm._s(
                                                               task.column.value
                                                             ) +
                                                             "\n                                            "
                                                         )
-                                                      ]
+                                                      ],
+                                                      1
                                                     )
-                                                  : _vm._e()
+                                                  : _c("h5", [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            task.type.name
+                                                          ) +
+                                                          "\n                                            "
+                                                      )
+                                                    ])
                                               ])
                                             ],
                                             1
@@ -45548,7 +45611,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-tab-item",
-                { attrs: { flat: "", id: "permissions" } },
+                { attrs: { id: "permissions" } },
                 [
                   _c(
                     "v-card",
@@ -45960,11 +46023,11 @@ var render = function() {
                                               [
                                                 _c("v-list-tile-content", [
                                                   _vm._v(
-                                                    "\n                                                    " +
+                                                    "\n                                                " +
                                                       _vm._s(
                                                         permission.type.name
                                                       ) +
-                                                      "\n                                                "
+                                                      "\n                                            "
                                                   )
                                                 ]),
                                                 _vm._v(" "),
@@ -73746,7 +73809,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["item", "original"]
+  props: ["item", "original", "iconColor", "icon", "iconSize"]
 });
 
 /***/ }),
@@ -73761,11 +73824,22 @@ var render = function() {
     "span",
     [
       _vm.item && _vm.item.parent
-        ? _c("task-breadcrumb", { attrs: { item: _vm.item.parent } })
+        ? _c("task-breadcrumb", {
+            attrs: {
+              icon: _vm.icon,
+              "icon-size": _vm.iconSize,
+              "icon-color": _vm.iconColor,
+              item: _vm.item.parent
+            }
+          })
         : _vm._e(),
       _vm._v(" "),
       _vm.item
-        ? _c("v-icon", { attrs: { small: "" } }, [_vm._v("chevron_right")])
+        ? _c(
+            "v-icon",
+            { attrs: { color: _vm.iconColor, size: _vm.iconSize } },
+            [_vm._v(_vm._s(_vm.icon ? _vm.icon : "chevron_right"))]
+          )
         : _vm._e(),
       _vm._v(" "),
       _vm.item
@@ -73777,7 +73851,11 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _vm.original
-        ? _c("v-icon", { attrs: { small: "" } }, [_vm._v("chevron_right")])
+        ? _c(
+            "v-icon",
+            { attrs: { color: _vm.iconColor, size: _vm.iconSize } },
+            [_vm._v(_vm._s(_vm.icon ? _vm.icon : "chevron_right"))]
+          )
         : _vm._e(),
       _vm._v(" "),
       _vm.original ? _c("span", [_vm._v(_vm._s(_vm.original.name))]) : _vm._e()

@@ -33,7 +33,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::find($id)->load('permissions', 'tasks', 'columns');
+        return response()->json([
+            'user' => User::find($id)->load('permissions', 'tasks', 'columns'),
+            'modes' => company()->permissionModes()->get(),
+            'types' => company()->types()->get()
+        ]);
     }
 
     public function store(Request $request)

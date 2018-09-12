@@ -243,7 +243,6 @@ export default {
   },
   mounted() {
     this.init();
-    console.log("mounting");
   },
   methods: {
     valid(items) {

@@ -23,7 +23,7 @@
             <v-tabs-items v-model="tab" style="height: 70vh; overflow: auto">
                 <v-tab-item id="tasks">
                     <v-card flat v-if="user.tasks.length">
-                        <v-card-title>
+                      <v-card-title>
                             <h3>Tasks</h3>
                         </v-card-title>
                         <v-card-text style="max-height: 585px; overflow: auto;">
@@ -35,8 +35,11 @@
                                                 <h4>
                                                     {{task.name}}
                                                 </h4>
-                                                <h5 class="subheading" v-if="task.column">
-                                                    {{task.column.value}}
+                                                <h5 v-if="task.column">
+                                                    <task-breadcrumb icon-color="black" :icon-size="13" :item="task"></task-breadcrumb> {{task.type.name}} <v-icon color="black" :size="13">arrow_forward</v-icon> {{task.column.value}}
+                                                </h5>
+                                                <h5 v-else>
+                                                    {{task.type.name}}
                                                 </h5>
                                             </v-card-text>
                                         </v-card>
@@ -46,7 +49,7 @@
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
-                <v-tab-item flat id="permissions">
+                <v-tab-item id="permissions">
                     <v-card flat>
                         <v-card-title>
                             <h3>Permissions</h3>
@@ -138,15 +141,15 @@
                                         </h4>
                                         <v-divider></v-divider>
                                         <v-list>
-                                                <v-list-tile v-for="permission in $user.permissions('manage')" :key="permission.id">
-                                                    <v-list-tile-content>
-                                                        {{permission.type.name}}
-                                                    </v-list-tile-content>
-                                                    <v-list-tile-action>
-                                                        <v-btn flat icon color="error" @click="deletePermission(permission.id)">
-                                                            <v-icon size="20px">delete_forever</v-icon>
-                                                        </v-btn>
-                                                    </v-list-tile-action>
+                                            <v-list-tile v-for="permission in $user.permissions('manage')" :key="permission.id">
+                                                <v-list-tile-content>
+                                                    {{permission.type.name}}
+                                                </v-list-tile-content>
+                                                <v-list-tile-action>
+                                                    <v-btn flat icon color="error" @click="deletePermission(permission.id)">
+                                                        <v-icon size="20px">delete_forever</v-icon>
+                                                    </v-btn>
+                                                </v-list-tile-action>
                                             </v-list-tile>
                                         </v-list>
                                     </v-flex>
@@ -291,10 +294,16 @@ export default {
   },
   methods: {
     init() {
-      this.showing = true;
-      this.$user.find(this.$route.params.user);
+      this.$root.getPage().then(() => {
+        var p = this.$root.page;
+        this.user = p.user;
+        this.modes = p.modes;
+        this.types = p.types;
+        this.showing = true;
+      });
+      /*       this.$user.find(this.$route.params.user);
       this.$modes.get();
-      this.$types.get();
+      this.$types.get(); */
     },
     assignUser() {
       this.assign.user = this.user.id;
