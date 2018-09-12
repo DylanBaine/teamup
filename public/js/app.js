@@ -43582,59 +43582,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -43821,35 +43768,7 @@ var render = function() {
                                         _vm._s(mode.name) +
                                         "\n                            "
                                     )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-list-tile-action",
-                                    [
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            color: "grey",
-                                            flat: "",
-                                            icon: ""
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.removeMode(mode.id)
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c("v-icon", [
-                                            _vm._v("delete_forever")
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
+                                  ])
                                 ],
                                 1
                               )
@@ -43858,61 +43777,7 @@ var render = function() {
                         : _vm._e()
                     ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _vm.$user.can("create", "permission-modes")
-                    ? _c(
-                        "v-card-actions",
-                        [
-                          _c(
-                            "v-form",
-                            {
-                              staticStyle: { width: "100%" },
-                              on: {
-                                submit: function($event) {
-                                  $event.preventDefault()
-                                  _vm.addMode()
-                                }
-                              }
-                            },
-                            [
-                              _c("v-text-field", {
-                                attrs: { label: "New Permission Mode" },
-                                model: {
-                                  value: _vm.newMode,
-                                  callback: function($$v) {
-                                    _vm.newMode = $$v
-                                  },
-                                  expression: "newMode"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: {
-                                    type: "submit",
-                                    fab: "",
-                                    color: "success",
-                                    absolute: "",
-                                    bottom: "",
-                                    right: ""
-                                  }
-                                },
-                                [
-                                  _c("v-icon", { attrs: { dark: "" } }, [
-                                    _vm._v("add")
-                                  ])
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._e()
+                  )
                 ],
                 1
               )
@@ -43957,35 +43822,7 @@ var render = function() {
                                         _vm._s(type.name) +
                                         "\n                            "
                                     )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-list-tile-action",
-                                    [
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            color: "grey",
-                                            flat: "",
-                                            icon: ""
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.removeType(type.id)
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c("v-icon", [
-                                            _vm._v("delete_forever")
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
+                                  ])
                                 ],
                                 1
                               )
@@ -43994,154 +43831,7 @@ var render = function() {
                         : _vm._e()
                     ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _vm.$user.can("create", "permission-types")
-                    ? _c(
-                        "v-card-actions",
-                        [
-                          _c(
-                            "v-form",
-                            {
-                              staticStyle: { width: "100%" },
-                              on: {
-                                submit: function($event) {
-                                  $event.preventDefault()
-                                  _vm.addType()
-                                }
-                              }
-                            },
-                            [
-                              _c(
-                                "v-dialog",
-                                {
-                                  attrs: { width: 500 },
-                                  model: {
-                                    value: _vm.selectingIcon,
-                                    callback: function($$v) {
-                                      _vm.selectingIcon = $$v
-                                    },
-                                    expression: "selectingIcon"
-                                  }
-                                },
-                                [
-                                  _c("icon-selector", {
-                                    model: {
-                                      value: _vm.newType.icon,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.newType, "icon", $$v)
-                                      },
-                                      expression: "newType.icon"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-layout",
-                                { attrs: { row: "", wrap: "" } },
-                                [
-                                  _c(
-                                    "v-flex",
-                                    { attrs: { md5: "" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: { label: "New Permissable" },
-                                        model: {
-                                          value: _vm.newType.name,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.newType, "name", $$v)
-                                          },
-                                          expression: "newType.name"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-flex",
-                                    {
-                                      staticClass: "d-flex align-center",
-                                      attrs: { md3: "" }
-                                    },
-                                    [
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: { outline: "", color: "grey" },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.selectingIcon = true
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                    Icon\n                                "
-                                          )
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-flex",
-                                    { attrs: { md4: "" } },
-                                    [
-                                      _c("v-select", {
-                                        attrs: {
-                                          items: [
-                                            "Post",
-                                            "Task",
-                                            "Group",
-                                            "File"
-                                          ],
-                                          label: "Model"
-                                        },
-                                        model: {
-                                          value: _vm.newType.model,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.newType, "model", $$v)
-                                          },
-                                          expression: "newType.model"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: {
-                                    type: "submit",
-                                    fab: "",
-                                    color: "success",
-                                    absolute: "",
-                                    bottom: "",
-                                    right: ""
-                                  }
-                                },
-                                [
-                                  _c("v-icon", { attrs: { dark: "" } }, [
-                                    _vm._v("add")
-                                  ])
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._e()
+                  )
                 ],
                 1
               )

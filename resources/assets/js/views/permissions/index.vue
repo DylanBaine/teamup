@@ -17,25 +17,9 @@
                                 <v-list-tile-content>
                                     {{mode.name}}
                                 </v-list-tile-content>
-                                <v-list-tile-action>
-                                    <v-btn color="grey" flat icon @click="removeMode(mode.id)">
-                                        <v-icon>delete_forever</v-icon>
-                                    </v-btn>
-                                </v-list-tile-action>
                             </v-list-tile>
                         </v-list>
                     </v-card-text>
-                    <v-card-actions v-if="$user.can('create', 'permission-modes')">
-                        <v-form @submit.prevent="addMode()" style="width: 100%;">
-                            <v-text-field
-                                label="New Permission Mode"
-                                v-model="newMode"
-                            ></v-text-field>
-                            <v-btn type="submit" fab color="success" absolute bottom right>
-                                <v-icon dark>add</v-icon>
-                            </v-btn>
-                        </v-form>
-                    </v-card-actions>
                 </v-card>
             </v-flex>
             <v-flex md6>
@@ -51,46 +35,9 @@
                                 <v-list-tile-content>
                                     {{type.name}}
                                 </v-list-tile-content>
-                                <v-list-tile-action>
-                                    <v-btn color="grey" flat icon @click="removeType(type.id)">
-                                        <v-icon>delete_forever</v-icon>
-                                    </v-btn>
-                                </v-list-tile-action>
                             </v-list-tile>
                         </v-list>
                     </v-card-text>
-                    <v-card-actions v-if="$user.can('create', 'permission-types')">
-                        <v-form @submit.prevent="addType()" style="width: 100%;">
-                            <v-dialog v-model="selectingIcon" :width="500">
-                                <icon-selector v-model="newType.icon"></icon-selector>
-                            </v-dialog>
-                            <v-layout row wrap>
-                                <v-flex md5>
-                                    <v-text-field
-                                        label="New Permissable"
-                                        v-model="newType.name"
-                                    ></v-text-field>                                    
-                                </v-flex>
-                                <v-flex md3 class="d-flex align-center">
-                                    <v-btn outline color="grey" @click="selectingIcon = true">
-                                        Icon
-                                    </v-btn>
-                                </v-flex>
-                                <v-flex md4>
-                                    <v-select
-                                        :items="[
-                                            'Post', 'Task', 'Group', 'File'
-                                        ]"
-                                        v-model="newType.model"
-                                        label="Model"
-                                    ></v-select>
-                                </v-flex>
-                            </v-layout>
-                            <v-btn type="submit" fab color="success" absolute bottom right>
-                                <v-icon dark>add</v-icon>
-                            </v-btn>
-                        </v-form>
-                    </v-card-actions>
                 </v-card>
             </v-flex>
         </v-layout>
