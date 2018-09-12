@@ -1,5 +1,5 @@
 <template>
-    <div class="container" style="padding: 0;">
+    <div class="container fluid" style="padding: 0;">
         <router-view></router-view>
         <v-container fluid grid-list-md>
             <header>

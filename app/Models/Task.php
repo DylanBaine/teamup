@@ -15,6 +15,8 @@ class Task extends Model
 
     protected $fillable = ['name', 'description', 'type_id', 'user_id', 'parent_id', 'percent_finished'];
 
+    protected $with = ['parent'];
+
     protected $defalutSettings = [
         'column' => 'Back Log',
         'column' => 'In Progress',
@@ -113,7 +115,7 @@ class Task extends Model
 
     public function parent()
     {
-        return $this->belongsTo(Task::class, 'perent_id');
+        return $this->belongsTo(Task::class);
     }
 
     public function children()

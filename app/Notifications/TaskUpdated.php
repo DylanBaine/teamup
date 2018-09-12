@@ -47,7 +47,7 @@ class TaskUpdated extends Notification
         return (new MailMessage)
             ->greeting('There were changes to "' . $parent->name . '"')
             ->line('"' . $task->name . '" was updated to ' . $column->value . '.')
-            ->action('See changes', url('/#/tasks/' . $parent->id . '/manage'));
+            ->action('See changes', url('/app#/tasks/' . $parent->id . '/manage'));
     }
 
     /**

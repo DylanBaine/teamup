@@ -3,10 +3,11 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class UserCreated extends Notification
+class ResetPasswordNotification extends Notification
 {
     use Queueable;
 
@@ -15,10 +16,9 @@ class UserCreated extends Notification
      *
      * @return void
      */
-    public function __construct($user, $token, $company)
+    public function __construct($user, $token)
     {
         $this->user = $user;
-        $this->company = $company;
         $this->token = $token;
     }
 
@@ -43,8 +43,8 @@ class UserCreated extends Notification
     {
         return (new MailMessage)
             ->line("Hey there, $this->user!")
-            ->line(user('name') . ' added you to ' . company('name') . ' on TeamUp.')
-            ->action('Login now!', url('/set-password?token='.$this->token))
+            ->line('Sorry you lost your password...')
+            ->action('Click here to reset.', url('/set-password?token='.$this->token))
             ->line('Thank you for using our application!');
     }
 

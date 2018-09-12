@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Models\Group;
+use App\PasswordReset;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Carbon\Carbon;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -24,6 +27,24 @@ class User extends Authenticatable
             return $this->morphMany(Setting::class, 'settable')->where('name', $name)->orderBy('position');
         }
         return $this->morphMany(Setting::class, 'settable')->orderBy('position');
+    }
+
+    public function getPasswordToken(){
+        return PasswordReset::where('email', $this->email)->first()->token;
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($this->name, $token));
+    }
+
+    public function createPasswordReset(){
+        \DB::table('password_resets')->insert([
+            'email' => $this->email,
+            'token' => str_random(40) . $this->id,
+            'created_at' => Carbon::now()->toDateTimeString()
+        ]);
+        return \DB::table('password_resets')->where('email', $this->email)->orderBy('created_at', 'desc')->first()->token;
     }
 
     public function createDefaultSettings()

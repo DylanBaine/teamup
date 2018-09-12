@@ -20,6 +20,15 @@
 <body>
     <div id="app" v-cloak>
         <v-app :dark="dark" id="inspire">
+            @if(session('success'))
+            <v-snackbar
+                color="info"
+                :value="true" top
+                :timeout="3000">
+                <v-icon class="mr-3" color="white">info</v-icon>
+                {{session('success')}}
+            </v-snackbar>
+            @endif
             <application
                 ref="app"
                 :user="user"

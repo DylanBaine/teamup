@@ -101,7 +101,6 @@ class TaskController extends Controller
     {
         $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type', 'changes');
         $task->report = $task->runReport();
-        $task->parent = Task::find($task->parent_id);
         return $task;
     }
 

@@ -27,6 +27,7 @@
                             name="password"
                         ></v-text-field>
                     </div>
+                    <span>Forget your password? Click <a :href="`${$root.url}/set-password`">here.</a></span>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn type="submit" color="primary">Login</v-btn>

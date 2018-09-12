@@ -66,6 +66,7 @@ Vue.component("project-report", require("./components/ProjectReport.vue"));
 Vue.component("task-preview", require("./views/tasks/show.vue"));
 Vue.component("task-settings", require("./views/tasks/settings.vue"));
 Vue.component("add-post-type", require("./views/posts/manage.vue"));
+Vue.component("task-breadcrumb", require("./components/TaskBreadcrumb.vue"));
 
 Array.prototype.hasProp = function(needle, haystack) {
   for (let i = 0; i < this.length; i++) {

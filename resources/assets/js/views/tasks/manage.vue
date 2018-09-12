@@ -3,16 +3,15 @@
       <router-view></router-view>
       <v-container fluid grid-list-lg v-if="task">
           <header>
-              <h1>{{task.name}}</h1>
+              <h1>{{task.name}} ({{task.type.name}})</h1>
                 <h3 class="subheading">
-                    ID: {{task.id}}
+                  ID: {{task.id}}
                 </h3>
-              <h4 v-if="task.parent_id">
-                Parent: <router-link :to="`/tasks/${task.parent_id}/manage`">{{task.parent.name}}</router-link>
-              </h4>
-              <h4 v-else>
-                Parent: <router-link to="/tasks">Tasks</router-link>
-              </h4>
+                <h3 v-if="task.user" class="subheading">
+                  User: {{task.user.name}}
+                </h3>
+                <router-link to="/tasks">Tasks</router-link>
+                <task-breadcrumb :item="task.parent" :original="task"></task-breadcrumb>
               <p v-html="task.description"></p>
           </header>
           <v-container fluid v-if="task.type.name == 'Sprint'" grid-list-lg>

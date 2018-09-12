@@ -18,6 +18,24 @@
 <body>
     <div id="app" v-cloak>
         <v-app id="inspire">
+            @if(session('success'))
+            <v-snackbar
+                color="info"
+                :value="true" top
+                :timeout="3000">
+                <v-icon class="mr-3" color="white">info</v-icon>
+                {{session('success')}}
+            </v-snackbar>
+            @endif
+            @if(session('error'))
+            <v-snackbar
+                color="error"
+                :value="true" top
+                :timeout="3000">
+                <v-icon class="mr-3" color="white">error</v-icon>
+                {{session('error')}}
+            </v-snackbar>
+            @endif
             <v-toolbar class="white" dark color="primary">
                 <v-btn flat class="btn__fill-height" large href="{{url('/')}}">TeamUp</v-btn>
                 <v-spacer></v-spacer>

@@ -25,11 +25,9 @@ class UpdateTaskResponse implements Responsable
         $t->user_id = $request->user_id;
         $t->icon = $request->icon;
         $t->save();
-        if ($request->parent_id !== null) {
-            $this->updateProgress($t);
-        }
         $type = $t->type->name;
         if($type == 'Sprint'){
+            $this->updateProgress($t);
             $t->createDefaultSettings();
         }
     }

@@ -131,7 +131,7 @@
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn @click="post">Save</v-btn>
+                          <v-btn color="primary" large block @click="post">Save</v-btn>
                           <v-spacer></v-spacer>
                         </v-card-actions>
                       </v-card>
@@ -140,7 +140,7 @@
               </v-stepper>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="accent" @click="stepBack">
+                <v-btn color="accent" v-if="step != 1" @click="stepBack">
                   Back
                 </v-btn>
                 <v-btn v-if="step !=4" color="primary" @click="stepUp">
@@ -190,8 +190,12 @@ export default {
   watch: {
     step() {},
     date() {
-      this.task.start_date = this.date[0];
-      this.task.end_date = this.date[1];
+      if (this.date.length <= 2) {
+        this.task.start_date = this.date[0];
+        this.task.end_date = this.date[1];
+      } else {
+        this.date.splice(this.date.length - 1, 1);
+      }
     }
   },
   computed: {
@@ -251,16 +255,20 @@ export default {
       return false;
     },
     stepUp() {
-      if (this.step == 2 && this.setType == "Team") {
+      if (this.step != 4) {
+        if (this.step == 2 && this.setType == "Team") {
+          this.step++;
+        }
         this.step++;
       }
-      this.step++;
     },
     stepBack() {
-      if (this.step == 4 && this.setType == "Team") {
+      if (this.step != 1) {
+        if (this.step == 4 && this.setType == "Team") {
+          this.step--;
+        }
         this.step--;
       }
-      this.step--;
     },
     init() {
       this.$root.getPage().then(() => {

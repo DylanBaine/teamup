@@ -44,8 +44,9 @@ class UserController extends Controller
         $user->password = bcrypt('secret');
         $user->company_id = company('id');
         if ($user->save()) {
+            $user->createPasswordReset();
             $user->createDefaultSettings();
-            Notification::send($user, new UserCreated($request->name, company('name')));
+            Notification::send($user, new UserCreated($user->name, $user->getPasswordToken(), company('name')));
         };
     }
 

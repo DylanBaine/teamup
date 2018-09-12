@@ -56,7 +56,7 @@
                             </div>
                         </v-flex> -->
                         <v-flex class="relative">
-                            <div class="scroll-me" v-if="task.subscribers.length">
+                            <div class="scroll-me" v-if="task.subscribers">
                                 <header>
                                     <h2>
                                         Users subscribed to "{{task.name}} ID: {{task.id}}".
