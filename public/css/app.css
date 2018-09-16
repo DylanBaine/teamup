@@ -13099,22 +13099,36 @@ table.v-table tfoot tr td {
 }
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgba(160, 160, 193, 0.263);
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(160, 160, 193, 0.563);
+  background: black;
+}
+
+html {
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+body {
+  width: 100vw;
+}
+
+.v-toolbar.top-bar {
+  width: 100vw;
 }
 
 .alert-container .snack {
@@ -13132,8 +13146,8 @@ table.v-table tfoot tr td {
 
 input.ghost {
   border: solid 1px transparent;
-  -webkit-transition: all .6s;
-  transition: all .6s;
+  -webkit-transition: all 0.6s;
+  transition: all 0.6s;
 }
 
 input.ghost:focus {

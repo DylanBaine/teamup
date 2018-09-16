@@ -4,7 +4,8 @@
 Route::post('set_last_page', function(){
     user()->last_route = request('route');
     user()->save();
-});
+    return user()->load('permissions', 'tasks', 'columns');
+})->middleware('auth');
 //Search Route
 Route::get('toolbar-search', 'SearchController@index');
 //Marketing site routes

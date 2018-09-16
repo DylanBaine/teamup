@@ -9,6 +9,10 @@
                 <h3 class="subheading">
                     ID: {{task.id}}
                 </h3>
+                <p>
+                    Start: {{task.start_date}}
+                    End: {{task.end_date}}
+                </p>
                 <v-spacer></v-spacer>
                 <v-btn flat :to="`/tasks/${task.id}/manage`" color="white">Manage</v-btn>
                 <v-btn flat icon color="white">

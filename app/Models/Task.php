@@ -11,7 +11,7 @@ class Task extends Model
 
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'created_at', 'updated_at', 'start_date', 'end_date'];
 
     protected $fillable = ['name', 'description', 'type_id', 'user_id', 'parent_id', 'percent_finished'];
 
@@ -30,8 +30,10 @@ class Task extends Model
 
     public function toArray(){
         $t = parent::toArray();
-        $t['start_date'] = (new Carbon($t['start_date']))->toDateString();
-        $t['end_date'] = (new Carbon($t['end_date']))->toDateString();
+        $t['start_date'] = $this->start_date != null ? (new Carbon($t['start_date']))->toDateString() : null;
+        $t['end_date'] = $this->end_date != null ? (new Carbon($t['end_date']))->toDateString() : null;
+        $t['start_date_string'] = $this->start_date != null ? (new Carbon($t['start_date']))->toFormattedDateString() : null;
+        $t['end_date_string'] = $this->end_date != null ? (new Carbon($t['end_date']))->toFormattedDateString() : null;
         return $t;
     }
 

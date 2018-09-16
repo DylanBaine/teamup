@@ -7,7 +7,6 @@ use App\Timmatic\Responses\UpdateTaskResponse;
 use Illuminate\Http\Request;
 use App\Models\ProgressChange;
 use App\Timmatic\BLL\TaskLogic;
-
 class TaskController extends Controller
 {
 
@@ -45,12 +44,20 @@ class TaskController extends Controller
         ]);
     }
 
-    public function add($parent){
+    public function add($parentId){
+        $parent = Task::find($parentId);
+        $dates = [];
+        if($parent->start_date){
+            for($date = $parent->start_date; $date->lte($parent->end_date); $date->addDay()) {
+                $dates[] = $date->format('Y-m-d');
+            }
+        }
         return response()->json([
             'users' => company()->users,
             'groups' => company()->groups,
             'types' => company()->types()->where('model', 'Task')->get(),
-            'parent' => Task::find($parent)
+            'parent' => $parent,
+            'allowed_dates' => $dates
         ]);        
     }
 

@@ -189,89 +189,91 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var User = function (_Model) {
-    _inherits(User, _Model);
+  _inherits(User, _Model);
 
-    function User(instance, store) {
-        _classCallCheck(this, User);
+  function User(instance, store) {
+    _classCallCheck(this, User);
 
-        var _this = _possibleConstructorReturn(this, (User.__proto__ || Object.getPrototypeOf(User)).call(this, {
-            post: 'users',
-            get: 'users'
-        }, { instance: instance, store: store }));
+    var _this = _possibleConstructorReturn(this, (User.__proto__ || Object.getPrototypeOf(User)).call(this, {
+      post: "users",
+      get: "users"
+    }, { instance: instance, store: store }));
 
-        _this.root = instance.$root;
-        return _this;
+    _this.root = instance.$root;
+    return _this;
+  }
+
+  _createClass(User, [{
+    key: "login",
+    value: function login(user) {
+      var _this2 = this;
+
+      this.instance.showLoader("Logging you in...");
+      return axios.post(url + "/auth/login", user).then(function (res) {
+        window.location.href = "/app";
+      }).catch(function (err) {
+        _this2.instance.showLoader();
+        _this2.instance.error = err.response.data.message;
+        if (!err.response.data.message) {
+          window.location.reload();
+        }
+      });
     }
+  }, {
+    key: "register",
+    value: function register(user) {
+      var _this3 = this;
 
-    _createClass(User, [{
-        key: 'login',
-        value: function login(user) {
-            var _this2 = this;
-
-            this.instance.showLoader('Logging you in...');
-            return axios.post(url + '/auth/login', user).then(function (res) {
-                window.location.href = "/app";
-            }).catch(function (err) {
-                _this2.instance.showLoader();
-                _this2.instance.error = err.response.data.message;
-                if (!err.response.data.message) {
-                    window.location.reload();
-                }
-            });
+      this.instance.showLoader("Setting things up...");
+      return axios.post(url + "/auth/register", user).then(function (res) {
+        window.location.href = "/app";
+        _this3.root.user = res.data;
+      }).catch(function (err) {
+        _this3.instance.showLoader();
+        _this3.instance.error = err.response.data.message;
+        if (!err.response.data.message) {
+          window.location.reload();
         }
-    }, {
-        key: 'register',
-        value: function register(user) {
-            var _this3 = this;
+      });
+    }
+  }, {
+    key: "logout",
+    value: function logout() {
+      var _this4 = this;
 
-            this.instance.showLoader('Setting things up...');
-            return axios.post(url + '/auth/register', user).then(function (res) {
-                window.location.href = "/app";
-                _this3.root.user = res.data;
-            }).catch(function (err) {
-                _this3.instance.showLoader();
-                _this3.instance.error = err.response.data.message;
-                if (!err.response.data.message) {
-                    window.location.reload();
-                }
-            });
-        }
-    }, {
-        key: 'logout',
-        value: function logout() {
-            var _this4 = this;
+      this.instance.showLoader("Logging you out...");
+      return axios.post(url + "/auth/logout").then(function (res) {
+        _this4.instance.showLoader();
+        _this4.root.user = false;
+        window.location.href = "/";
+      });
+    }
+  }, {
+    key: "permissions",
+    value: function permissions() {
+      var mode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-            this.instance.showLoader('Logging you out...');
-            return axios.post(url + '/auth/logout').then(function (res) {
-                _this4.instance.showLoader();
-                _this4.root.user = false;
-                window.location.href = "/";
-            });
-        }
-    }, {
-        key: 'permissions',
-        value: function permissions() {
-            var mode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      if (mode !== null && this.has("permissions")) {
+        return this.has("permissions").filter(function (permission) {
+          return permission.mode.name == mode;
+        });
+      } else {
+        return this.has("permissions");
+      }
+    }
+  }, {
+    key: "can",
+    value: function can(action, type) {
+      var permissions = this.permissions(action);
+      if (permissions) {
+        return permissions.filter(function (permission) {
+          return permission.type.slug == type;
+        }).length > 0;
+      }
+    }
+  }]);
 
-            if (mode !== null) {
-                return this.has('permissions').filter(function (permission) {
-                    return permission.mode.name == mode;
-                });
-            } else {
-                return this.has('permissions');
-            }
-        }
-    }, {
-        key: 'can',
-        value: function can(action, type) {
-            var permissions = this.permissions(action);
-            return permissions.filter(function (permission) {
-                return permission.type.slug == type;
-            }).length > 0;
-        }
-    }]);
-
-    return User;
+  return User;
 }(__WEBPACK_IMPORTED_MODULE_0__library_Model__["a" /* default */]);
 
 /* harmony default export */ __webpack_exports__["a"] = (User);
@@ -13348,12 +13350,14 @@ var app = new Vue({
     url: window.url,
     page: null,
     route: null,
-    loading: false
+    loading: false,
+    mounted: false
   },
   watch: {
     $route: function $route() {
       document.documentElement.scrollTop = 0;
       this.getHashRoute();
+      this.mounted = false;
     },
     $user: function $user() {
       return new __WEBPACK_IMPORTED_MODULE_0__app_models_User__["a" /* default */](this, "user");
@@ -13384,10 +13388,12 @@ var app = new Vue({
       this.route = route;
       axios.post(this.url + "/set_last_page", {
         route: route
-      });
-      this.$user.find(this.user.id).then(function () {
-        _this.user = _this.user.user;
-      });
+      }).then(function (res) {
+        _this.user = res.data;
+      }); /* 
+          this.$user.find(this.user.id).then(() => {
+          this.user = this.user.user;
+          }); */
     },
     getPage: function getPage() {
       var _this2 = this;
@@ -39877,6 +39883,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -39890,6 +39902,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       step: 1,
       showing: false,
       date: [],
+      allowedDates: [],
       task: {
         icon: null,
         parent_id: this.$route.params.task ? this.$route.params.task : null,
@@ -40008,20 +40021,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this5 = this;
 
-      this.$root.getPage().then(function () {
-        var p = _this5.$root.page;
-        _this5.types = p.types;
-        _this5.users = p.users;
-        _this5.groups = p.groups;
-        if (_this5.editing) {
-          _this5.task = p.task;
-          _this5.date = [p.task.start_date, p.task.end_date];
-        }
-        if (_this5.$route.params.task) {
-          _this5.parent = p.parent;
-        }
-        _this5.showing = true;
-      });
+      if (!this.$root.mounted) {
+        this.$root.getPage().then(function () {
+          var p = _this5.$root.page;
+          _this5.parent = _this5.task.parent;
+          _this5.types = p.types;
+          _this5.users = p.users;
+          _this5.groups = p.groups;
+          if (_this5.editing) {
+            _this5.task = p.task;
+            _this5.date = [p.task.start_date, p.task.end_date];
+            _this5.parent = p.parent;
+          }
+          if (_this5.$route.params.task) {
+            _this5.parent = p.parent;
+          }
+          _this5.showing = true;
+        });
+      }
+      this.$root.mounted = true;
     },
     post: function post() {
       if (this.editing) {
@@ -40128,7 +40146,7 @@ var render = function() {
             "v-toolbar",
             { attrs: { dark: "", color: "primary" } },
             [
-              _vm.parent
+              !_vm.editing && _vm.parent
                 ? _c("h2", { staticClass: "title" }, [
                     _vm._v(
                       "\n          Creating a child of " +
@@ -40136,7 +40154,17 @@ var render = function() {
                         "\n        "
                     )
                   ])
-                : _vm._e(),
+                : _vm.editing
+                  ? _c("h2", { staticClass: "title" }, [
+                      _vm._v(
+                        "\n          Editing " +
+                          _vm._s(_vm.task.name) +
+                          "\n        "
+                      )
+                    ])
+                  : _c("h2", { staticClass: "title" }, [
+                      _vm._v("\n          Creating a new Task\n        ")
+                    ]),
               _vm._v(" "),
               _c("v-spacer"),
               _vm._v(" "),
@@ -40294,63 +40322,59 @@ var render = function() {
                                       1
                                     ),
                                     _vm._v(" "),
-                                    _vm.setType != "Team"
+                                    _vm.$root.$user.can("assign", "tasks") ||
+                                    _vm.$root.$user.can("manage", "tasks")
                                       ? _c(
                                           "v-flex",
                                           { attrs: { md4: "" } },
                                           [
-                                            _c("v-autocomplete", {
-                                              attrs: {
-                                                label: _vm.taskUserLabel,
-                                                items: _vm.users,
-                                                "item-value": "id",
-                                                "item-text": "name",
-                                                hint:
-                                                  "Start typing to find a user."
-                                              },
-                                              model: {
-                                                value: _vm.task.user_id,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.task,
-                                                    "user_id",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression: "task.user_id"
-                                              }
-                                            })
+                                            _vm.setType != "Team"
+                                              ? _c("v-autocomplete", {
+                                                  attrs: {
+                                                    label: _vm.taskUserLabel,
+                                                    items: _vm.users,
+                                                    "item-value": "id",
+                                                    "item-text": "name",
+                                                    hint:
+                                                      "Start typing to find a user."
+                                                  },
+                                                  model: {
+                                                    value: _vm.task.user_id,
+                                                    callback: function($$v) {
+                                                      _vm.$set(
+                                                        _vm.task,
+                                                        "user_id",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression: "task.user_id"
+                                                  }
+                                                })
+                                              : _c("v-autocomplete", {
+                                                  attrs: {
+                                                    label: "Group",
+                                                    items: _vm.groups,
+                                                    "item-value": "id",
+                                                    "item-text": "name",
+                                                    hint:
+                                                      "Start typing to find a group."
+                                                  },
+                                                  model: {
+                                                    value: _vm.task.user_id,
+                                                    callback: function($$v) {
+                                                      _vm.$set(
+                                                        _vm.task,
+                                                        "user_id",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression: "task.user_id"
+                                                  }
+                                                })
                                           ],
                                           1
                                         )
-                                      : _c(
-                                          "v-flex",
-                                          { attrs: { md4: "" } },
-                                          [
-                                            _c("v-autocomplete", {
-                                              attrs: {
-                                                label: "Group",
-                                                items: _vm.groups,
-                                                "item-value": "id",
-                                                "item-text": "name",
-                                                hint:
-                                                  "Start typing to find a group."
-                                              },
-                                              model: {
-                                                value: _vm.task.user_id,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.task,
-                                                    "user_id",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression: "task.user_id"
-                                              }
-                                            })
-                                          ],
-                                          1
-                                        )
+                                      : _vm._e()
                                   ],
                                   1
                                 ),
@@ -40490,6 +40514,13 @@ var render = function() {
                                                     _c("v-date-picker", {
                                                       attrs: {
                                                         multiple: "",
+                                                        min: _vm.parent
+                                                          ? _vm.parent
+                                                              .start_date
+                                                          : null,
+                                                        max: _vm.parent
+                                                          ? _vm.parent.end_date
+                                                          : null,
                                                         color:
                                                           "primary white--text"
                                                       },
@@ -40802,6 +40833,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -40885,6 +40920,16 @@ var render = function() {
                     _vm._v(
                       "\r\n                    ID: " +
                         _vm._s(_vm.task.id) +
+                        "\r\n                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("p", [
+                    _vm._v(
+                      "\r\n                    Start: " +
+                        _vm._s(_vm.task.start_date) +
+                        "\r\n                    End: " +
+                        _vm._s(_vm.task.end_date) +
                         "\r\n                "
                     )
                   ]),
@@ -41254,6 +41299,71 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -41261,6 +41371,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      fullDescription: false,
       task: null,
       types: [],
       tasks: [],
@@ -41387,43 +41498,121 @@ var render = function() {
       _vm.task
         ? _c(
             "v-container",
-            { attrs: { fluid: "", "grid-list-lg": "" } },
+            { staticClass: "mb-4", attrs: { fluid: "", "grid-list-lg": "" } },
             [
               _c(
                 "header",
                 [
-                  _c("h1", [
-                    _vm._v(
-                      _vm._s(_vm.task.name) +
-                        " (" +
-                        _vm._s(_vm.task.type.name) +
-                        ")"
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("h3", { staticClass: "subheading" }, [
-                    _vm._v(
-                      "\n                ID: " +
-                        _vm._s(_vm.task.id) +
-                        "\n              "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _vm.task.user
-                    ? _c(
-                        "h3",
-                        { staticClass: "subheading" },
-                        [
-                          _vm._v("\n                User: "),
-                          _c(
-                            "router-link",
-                            { attrs: { to: "/users/" + _vm.task.user.id } },
-                            [_vm._v(_vm._s(_vm.task.user.name))]
+                  _c(
+                    "v-layout",
+                    { attrs: { "align-center": "", row: "", wrap: "" } },
+                    [
+                      _c("v-flex", { attrs: { md3: "" } }, [
+                        _c("h1", [
+                          _vm._v(
+                            _vm._s(_vm.task.name) +
+                              " (" +
+                              _vm._s(_vm.task.type.name) +
+                              ")"
                           )
-                        ],
-                        1
+                        ]),
+                        _vm._v(" "),
+                        _c("h3", { staticClass: "subheading" }, [
+                          _vm._v(
+                            "\n                  ID: " +
+                              _vm._s(_vm.task.id) +
+                              "\n                "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("ul", [
+                          _c("li", [
+                            _vm._v(
+                              "\n                    Start: " +
+                                _vm._s(_vm.task.start_date_string) +
+                                "\n                  "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("li", [
+                            _vm._v(
+                              "\n                    End: " +
+                                _vm._s(_vm.task.end_date_string) +
+                                "\n                  "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _vm.task.user
+                          ? _c(
+                              "h3",
+                              { staticClass: "subheading" },
+                              [
+                                _vm._v("\n                  User: "),
+                                _c(
+                                  "router-link",
+                                  {
+                                    attrs: { to: "/users/" + _vm.task.user.id }
+                                  },
+                                  [_vm._v(_vm._s(_vm.task.user.name))]
+                                )
+                              ],
+                              1
+                            )
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-flex",
+                        {
+                          staticStyle: { position: "relative" },
+                          attrs: { md8: "" }
+                        },
+                        [
+                          _c(
+                            "h2",
+                            { staticClass: "title" },
+                            [
+                              _vm._v(
+                                "\n                Description:\n                "
+                              ),
+                              _vm.task.description.length > 300
+                                ? _c(
+                                    "v-btn",
+                                    {
+                                      attrs: { small: "", flat: "" },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.fullDescription = true
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("v-icon", [_vm._v("fullscreen")]),
+                                      _vm._v(" Fullscreen\n                ")
+                                    ],
+                                    1
+                                  )
+                                : _vm._e()
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("p", {
+                            staticClass: "mt-2",
+                            staticStyle: {
+                              "max-height": "100px",
+                              overflow: "auto"
+                            },
+                            domProps: {
+                              innerHTML: _vm._s(_vm.task.description)
+                            }
+                          })
+                        ]
                       )
-                    : _vm._e(),
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c("router-link", { attrs: { to: "/tasks" } }, [
                     _vm._v("Tasks")
@@ -41435,10 +41624,6 @@ var render = function() {
                       item: _vm.task.parent,
                       original: _vm.task
                     }
-                  }),
-                  _vm._v(" "),
-                  _c("p", {
-                    domProps: { innerHTML: _vm._s(_vm.task.description) }
                   })
                 ],
                 1
@@ -41704,69 +41889,193 @@ var render = function() {
                   : _vm._e(),
               _vm._v(" "),
               _c(
-                "div",
-                { staticClass: "fixed bottom right" },
+                "v-dialog",
+                {
+                  attrs: { fullscreen: "" },
+                  model: {
+                    value: _vm.fullDescription,
+                    callback: function($$v) {
+                      _vm.fullDescription = $$v
+                    },
+                    expression: "fullDescription"
+                  }
+                },
                 [
                   _c(
-                    "v-btn",
-                    {
-                      attrs: { fab: "", color: "warning", dark: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.remove(_vm.$route.params.task)
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("delete_forever")])],
+                    "v-card",
+                    [
+                      _c(
+                        "v-card-title",
+                        [
+                          _c("h2", { staticClass: "title" }, [
+                            _vm._v("Description:")
+                          ]),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { flat: "", icon: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.fullDescription = false
+                                }
+                              }
+                            },
+                            [_c("v-icon", [_vm._v("close")])],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-card-text", {
+                        domProps: { innerHTML: _vm._s(_vm.task.description) }
+                      })
+                    ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: {
-                        fab: "",
-                        color: "success",
-                        dark: "",
-                        to: "/tasks/" + _vm.$route.params.task + "/edit"
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("create")])],
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              !_vm.$root.$user.can("manage", "tasks")
+                ? _c(
+                    "div",
+                    { staticClass: "fixed bottom right" },
+                    [
+                      _vm.$root.$user.can("delete", "tasks")
+                        ? _c(
+                            "v-btn",
+                            {
+                              attrs: { fab: "", color: "warning", dark: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.remove(_vm.$route.params.task)
+                                }
+                              }
+                            },
+                            [_c("v-icon", [_vm._v("delete_forever")])],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.$root.$user.can("update", "tasks")
+                        ? _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                fab: "",
+                                color: "success",
+                                dark: "",
+                                to: "/tasks/" + _vm.$route.params.task + "/edit"
+                              }
+                            },
+                            [_c("v-icon", [_vm._v("create")])],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.$root.$user.can("create", "Notifications")
+                        ? _c(
+                            "v-btn",
+                            {
+                              attrs: { fab: "", color: "info", dark: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.$refs.settings.init(_vm.task.id)
+                                }
+                              }
+                            },
+                            [_c("v-icon", [_vm._v("settings")])],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.task.type.name != "Task" &&
+                      _vm.$root.$user.can("create", "tasks")
+                        ? _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                fab: "",
+                                color: "accent",
+                                dark: "",
+                                to: "/tasks/" + _vm.$route.params.task + "/add"
+                              }
+                            },
+                            [_c("v-icon", [_vm._v("add")])],
+                            1
+                          )
+                        : _vm._e()
+                    ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { fab: "", color: "info", dark: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.$refs.settings.init(_vm.task.id)
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("settings")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _vm.task.type.name != "Task"
-                    ? _c(
+                  )
+                : _c(
+                    "div",
+                    { staticClass: "fixed bottom right" },
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { fab: "", color: "warning", dark: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.remove(_vm.$route.params.task)
+                            }
+                          }
+                        },
+                        [_c("v-icon", [_vm._v("delete_forever")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
                         "v-btn",
                         {
                           attrs: {
                             fab: "",
-                            color: "accent",
+                            color: "success",
                             dark: "",
-                            to: "/tasks/" + _vm.$route.params.task + "/add"
+                            to: "/tasks/" + _vm.$route.params.task + "/edit"
                           }
                         },
-                        [_c("v-icon", [_vm._v("add")])],
+                        [_c("v-icon", [_vm._v("create")])],
                         1
-                      )
-                    : _vm._e()
-                ],
-                1
-              ),
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { fab: "", color: "info", dark: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.$refs.settings.init(_vm.task.id)
+                            }
+                          }
+                        },
+                        [_c("v-icon", [_vm._v("settings")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _vm.task.type.name != "Task"
+                        ? _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                fab: "",
+                                color: "accent",
+                                dark: "",
+                                to: "/tasks/" + _vm.$route.params.task + "/add"
+                              }
+                            },
+                            [_c("v-icon", [_vm._v("add")])],
+                            1
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  ),
               _vm._v(" "),
               _c("task-settings", { ref: "settings" })
             ],
@@ -45718,13 +46027,13 @@ var render = function() {
                             "v-tooltip",
                             { attrs: { right: "" } },
                             [
-                              _vm.$authUser.can("assign", "permissions")
+                              _vm.$root.$user.can("assign", "permissions")
                                 ? _c(
                                     "v-btn",
                                     {
                                       attrs: {
                                         slot: "activator",
-                                        color: "primary",
+                                        color: "accent",
                                         icon: ""
                                       },
                                       on: {
@@ -45766,7 +46075,14 @@ var render = function() {
                                 [
                                   _c(
                                     "v-flex",
-                                    { attrs: { md2: "" } },
+                                    {
+                                      attrs: {
+                                        lg2: "",
+                                        md3: "",
+                                        sm4: "",
+                                        sx6: ""
+                                      }
+                                    },
                                     [
                                       _c("h4", [
                                         _vm._v(
@@ -45798,41 +46114,46 @@ var render = function() {
                                                 _c(
                                                   "v-list-tile-action",
                                                   [
-                                                    _c(
-                                                      "v-btn",
-                                                      {
-                                                        attrs: {
-                                                          flat: "",
-                                                          icon: "",
-                                                          color: "error"
-                                                        },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            _vm.deletePermission(
-                                                              permission.id
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-icon",
+                                                    _vm.$root.$user.can(
+                                                      "delete",
+                                                      "permissions"
+                                                    )
+                                                      ? _c(
+                                                          "v-btn",
                                                           {
                                                             attrs: {
-                                                              size: "20px"
+                                                              flat: "",
+                                                              icon: "",
+                                                              color: "error"
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                _vm.deletePermission(
+                                                                  permission.id
+                                                                )
+                                                              }
                                                             }
                                                           },
                                                           [
-                                                            _vm._v(
-                                                              "delete_forever"
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  size: "20px"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "delete_forever"
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
+                                                          ],
+                                                          1
                                                         )
-                                                      ],
-                                                      1
-                                                    )
+                                                      : _vm._e()
                                                   ],
                                                   1
                                                 )
@@ -45848,7 +46169,14 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "v-flex",
-                                    { attrs: { md2: "" } },
+                                    {
+                                      attrs: {
+                                        lg2: "",
+                                        md3: "",
+                                        sm4: "",
+                                        sx6: ""
+                                      }
+                                    },
                                     [
                                       _c("h4", [
                                         _vm._v(
@@ -45880,41 +46208,46 @@ var render = function() {
                                                 _c(
                                                   "v-list-tile-action",
                                                   [
-                                                    _c(
-                                                      "v-btn",
-                                                      {
-                                                        attrs: {
-                                                          flat: "",
-                                                          icon: "",
-                                                          color: "error"
-                                                        },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            _vm.deletePermission(
-                                                              permission.id
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-icon",
+                                                    _vm.$root.$user.can(
+                                                      "delete",
+                                                      "permissions"
+                                                    )
+                                                      ? _c(
+                                                          "v-btn",
                                                           {
                                                             attrs: {
-                                                              size: "20px"
+                                                              flat: "",
+                                                              icon: "",
+                                                              color: "error"
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                _vm.deletePermission(
+                                                                  permission.id
+                                                                )
+                                                              }
                                                             }
                                                           },
                                                           [
-                                                            _vm._v(
-                                                              "delete_forever"
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  size: "20px"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "delete_forever"
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
+                                                          ],
+                                                          1
                                                         )
-                                                      ],
-                                                      1
-                                                    )
+                                                      : _vm._e()
                                                   ],
                                                   1
                                                 )
@@ -45930,7 +46263,14 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "v-flex",
-                                    { attrs: { md2: "" } },
+                                    {
+                                      attrs: {
+                                        lg2: "",
+                                        md3: "",
+                                        sm4: "",
+                                        sx6: ""
+                                      }
+                                    },
                                     [
                                       _c("h4", [
                                         _vm._v(
@@ -45962,41 +46302,46 @@ var render = function() {
                                                 _c(
                                                   "v-list-tile-action",
                                                   [
-                                                    _c(
-                                                      "v-btn",
-                                                      {
-                                                        attrs: {
-                                                          flat: "",
-                                                          icon: "",
-                                                          color: "error"
-                                                        },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            _vm.deletePermission(
-                                                              permission.id
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-icon",
+                                                    _vm.$root.$user.can(
+                                                      "delete",
+                                                      "permissions"
+                                                    )
+                                                      ? _c(
+                                                          "v-btn",
                                                           {
                                                             attrs: {
-                                                              size: "20px"
+                                                              flat: "",
+                                                              icon: "",
+                                                              color: "error"
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                _vm.deletePermission(
+                                                                  permission.id
+                                                                )
+                                                              }
                                                             }
                                                           },
                                                           [
-                                                            _vm._v(
-                                                              "delete_forever"
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  size: "20px"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "delete_forever"
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
+                                                          ],
+                                                          1
                                                         )
-                                                      ],
-                                                      1
-                                                    )
+                                                      : _vm._e()
                                                   ],
                                                   1
                                                 )
@@ -46012,7 +46357,14 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "v-flex",
-                                    { attrs: { md2: "" } },
+                                    {
+                                      attrs: {
+                                        lg2: "",
+                                        md3: "",
+                                        sm4: "",
+                                        sx6: ""
+                                      }
+                                    },
                                     [
                                       _c("h4", [
                                         _vm._v(
@@ -46044,41 +46396,46 @@ var render = function() {
                                                 _c(
                                                   "v-list-tile-action",
                                                   [
-                                                    _c(
-                                                      "v-btn",
-                                                      {
-                                                        attrs: {
-                                                          flat: "",
-                                                          icon: "",
-                                                          color: "error"
-                                                        },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            _vm.deletePermission(
-                                                              permission.id
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-icon",
+                                                    _vm.$root.$user.can(
+                                                      "delete",
+                                                      "permissions"
+                                                    )
+                                                      ? _c(
+                                                          "v-btn",
                                                           {
                                                             attrs: {
-                                                              size: "20px"
+                                                              flat: "",
+                                                              icon: "",
+                                                              color: "error"
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                _vm.deletePermission(
+                                                                  permission.id
+                                                                )
+                                                              }
                                                             }
                                                           },
                                                           [
-                                                            _vm._v(
-                                                              "delete_forever"
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  size: "20px"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "delete_forever"
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
+                                                          ],
+                                                          1
                                                         )
-                                                      ],
-                                                      1
-                                                    )
+                                                      : _vm._e()
                                                   ],
                                                   1
                                                 )
@@ -46094,7 +46451,14 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "v-flex",
-                                    { attrs: { md2: "" } },
+                                    {
+                                      attrs: {
+                                        lg2: "",
+                                        md3: "",
+                                        sm4: "",
+                                        sx6: ""
+                                      }
+                                    },
                                     [
                                       _c("h4", [
                                         _vm._v(
@@ -46126,41 +46490,46 @@ var render = function() {
                                                 _c(
                                                   "v-list-tile-action",
                                                   [
-                                                    _c(
-                                                      "v-btn",
-                                                      {
-                                                        attrs: {
-                                                          flat: "",
-                                                          icon: "",
-                                                          color: "error"
-                                                        },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            _vm.deletePermission(
-                                                              permission.id
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-icon",
+                                                    _vm.$root.$user.can(
+                                                      "delete",
+                                                      "permissions"
+                                                    )
+                                                      ? _c(
+                                                          "v-btn",
                                                           {
                                                             attrs: {
-                                                              size: "20px"
+                                                              flat: "",
+                                                              icon: "",
+                                                              color: "error"
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                _vm.deletePermission(
+                                                                  permission.id
+                                                                )
+                                                              }
                                                             }
                                                           },
                                                           [
-                                                            _vm._v(
-                                                              "delete_forever"
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  size: "20px"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "delete_forever"
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
+                                                          ],
+                                                          1
                                                         )
-                                                      ],
-                                                      1
-                                                    )
+                                                      : _vm._e()
                                                   ],
                                                   1
                                                 )
@@ -46176,7 +46545,14 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "v-flex",
-                                    { attrs: { md2: "" } },
+                                    {
+                                      attrs: {
+                                        lg2: "",
+                                        md3: "",
+                                        sm4: "",
+                                        sx6: ""
+                                      }
+                                    },
                                     [
                                       _c("h4", [
                                         _vm._v(
@@ -46208,41 +46584,46 @@ var render = function() {
                                                 _c(
                                                   "v-list-tile-action",
                                                   [
-                                                    _c(
-                                                      "v-btn",
-                                                      {
-                                                        attrs: {
-                                                          flat: "",
-                                                          icon: "",
-                                                          color: "error"
-                                                        },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            _vm.deletePermission(
-                                                              permission.id
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-icon",
+                                                    _vm.$root.$user.can(
+                                                      "delete",
+                                                      "permissions"
+                                                    )
+                                                      ? _c(
+                                                          "v-btn",
                                                           {
                                                             attrs: {
-                                                              size: "20px"
+                                                              flat: "",
+                                                              icon: "",
+                                                              color: "error"
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                _vm.deletePermission(
+                                                                  permission.id
+                                                                )
+                                                              }
                                                             }
                                                           },
                                                           [
-                                                            _vm._v(
-                                                              "delete_forever"
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  size: "20px"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "delete_forever"
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
+                                                          ],
+                                                          1
                                                         )
-                                                      ],
-                                                      1
-                                                    )
+                                                      : _vm._e()
                                                   ],
                                                   1
                                                 )
@@ -46920,89 +47301,91 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var User = function (_Model) {
-    _inherits(User, _Model);
+  _inherits(User, _Model);
 
-    function User(instance, store) {
-        _classCallCheck(this, User);
+  function User(instance, store) {
+    _classCallCheck(this, User);
 
-        var _this = _possibleConstructorReturn(this, (User.__proto__ || Object.getPrototypeOf(User)).call(this, {
-            post: 'users',
-            get: 'users'
-        }, { instance: instance, store: store }));
+    var _this = _possibleConstructorReturn(this, (User.__proto__ || Object.getPrototypeOf(User)).call(this, {
+      post: "users",
+      get: "users"
+    }, { instance: instance, store: store }));
 
-        _this.root = instance.$root;
-        return _this;
+    _this.root = instance.$root;
+    return _this;
+  }
+
+  _createClass(User, [{
+    key: "login",
+    value: function login(user) {
+      var _this2 = this;
+
+      this.instance.showLoader("Logging you in...");
+      return axios.post(url + "/auth/login", user).then(function (res) {
+        window.location.href = "/app";
+      }).catch(function (err) {
+        _this2.instance.showLoader();
+        _this2.instance.error = err.response.data.message;
+        if (!err.response.data.message) {
+          window.location.reload();
+        }
+      });
     }
+  }, {
+    key: "register",
+    value: function register(user) {
+      var _this3 = this;
 
-    _createClass(User, [{
-        key: 'login',
-        value: function login(user) {
-            var _this2 = this;
-
-            this.instance.showLoader('Logging you in...');
-            return axios.post(url + '/auth/login', user).then(function (res) {
-                window.location.href = "/app";
-            }).catch(function (err) {
-                _this2.instance.showLoader();
-                _this2.instance.error = err.response.data.message;
-                if (!err.response.data.message) {
-                    window.location.reload();
-                }
-            });
+      this.instance.showLoader("Setting things up...");
+      return axios.post(url + "/auth/register", user).then(function (res) {
+        window.location.href = "/app";
+        _this3.root.user = res.data;
+      }).catch(function (err) {
+        _this3.instance.showLoader();
+        _this3.instance.error = err.response.data.message;
+        if (!err.response.data.message) {
+          window.location.reload();
         }
-    }, {
-        key: 'register',
-        value: function register(user) {
-            var _this3 = this;
+      });
+    }
+  }, {
+    key: "logout",
+    value: function logout() {
+      var _this4 = this;
 
-            this.instance.showLoader('Setting things up...');
-            return axios.post(url + '/auth/register', user).then(function (res) {
-                window.location.href = "/app";
-                _this3.root.user = res.data;
-            }).catch(function (err) {
-                _this3.instance.showLoader();
-                _this3.instance.error = err.response.data.message;
-                if (!err.response.data.message) {
-                    window.location.reload();
-                }
-            });
-        }
-    }, {
-        key: 'logout',
-        value: function logout() {
-            var _this4 = this;
+      this.instance.showLoader("Logging you out...");
+      return axios.post(url + "/auth/logout").then(function (res) {
+        _this4.instance.showLoader();
+        _this4.root.user = false;
+        window.location.href = "/";
+      });
+    }
+  }, {
+    key: "permissions",
+    value: function permissions() {
+      var mode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-            this.instance.showLoader('Logging you out...');
-            return axios.post(url + '/auth/logout').then(function (res) {
-                _this4.instance.showLoader();
-                _this4.root.user = false;
-                window.location.href = "/";
-            });
-        }
-    }, {
-        key: 'permissions',
-        value: function permissions() {
-            var mode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      if (mode !== null && this.has("permissions")) {
+        return this.has("permissions").filter(function (permission) {
+          return permission.mode.name == mode;
+        });
+      } else {
+        return this.has("permissions");
+      }
+    }
+  }, {
+    key: "can",
+    value: function can(action, type) {
+      var permissions = this.permissions(action);
+      if (permissions) {
+        return permissions.filter(function (permission) {
+          return permission.type.slug == type;
+        }).length > 0;
+      }
+    }
+  }]);
 
-            if (mode !== null) {
-                return this.has('permissions').filter(function (permission) {
-                    return permission.mode.name == mode;
-                });
-            } else {
-                return this.has('permissions');
-            }
-        }
-    }, {
-        key: 'can',
-        value: function can(action, type) {
-            var permissions = this.permissions(action);
-            return permissions.filter(function (permission) {
-                return permission.type.slug == type;
-            }).length > 0;
-        }
-    }]);
-
-    return User;
+  return User;
 }(__WEBPACK_IMPORTED_MODULE_0__library_Model__["a" /* default */]);
 
 /* harmony default export */ __webpack_exports__["a"] = (User);
@@ -68830,6 +69213,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -68911,7 +69301,10 @@ var render = function() {
             [
               _c(
                 "v-toolbar",
-                { attrs: { dark: "", color: "primary darken-1" } },
+                {
+                  staticStyle: { width: "100%" },
+                  attrs: { dark: "", color: "primary darken-1" }
+                },
                 [
                   _c("v-spacer"),
                   _vm._v(" "),
@@ -68955,38 +69348,58 @@ var render = function() {
             "v-list",
             { attrs: { dense: "" } },
             [
-              _vm._l(_vm.$user.permissions("read"), function(permission) {
+              _vm._l(_vm.$user.permissions("read"), function(permission, key) {
                 return [
                   _c(
-                    "v-list-tile",
+                    "v-tooltip",
                     {
-                      key: permission.key,
-                      attrs: { to: "/" + permission.type.slug }
+                      key: key,
+                      attrs: {
+                        color: (key + 1) % 2 == 0 ? "primary" : "accent",
+                        right: ""
+                      }
                     },
                     [
                       _c(
-                        "v-list-tile-action",
+                        "v-list-tile",
+                        {
+                          attrs: {
+                            slot: "activator",
+                            to: "/" + permission.type.slug
+                          },
+                          slot: "activator"
+                        },
                         [
-                          _c("v-icon", { attrs: { size: "15px" } }, [
-                            _vm._v(_vm._s(permission.type.icon))
-                          ])
+                          _c(
+                            "v-list-tile-action",
+                            [
+                              _c("v-icon", { attrs: { size: "15px" } }, [
+                                _vm._v(_vm._s(permission.type.icon))
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [
+                                _vm._v(
+                                  "\n\t\t\t\t\t\t\t\t\t" +
+                                    _vm._s(permission.type.name) +
+                                    "\n\t\t\t\t\t\t\t\t"
+                                )
+                              ])
+                            ],
+                            1
+                          )
                         ],
                         1
                       ),
                       _vm._v(" "),
-                      _c(
-                        "v-list-tile-content",
-                        [
-                          _c("v-list-tile-title", [
-                            _vm._v(
-                              "\n\t\t\t\t\t\t\t\t" +
-                                _vm._s(permission.type.name) +
-                                "\n\t\t\t\t\t\t\t"
-                            )
-                          ])
-                        ],
-                        1
-                      )
+                      _c("span", [
+                        _vm._v("See all " + _vm._s(permission.type.name))
+                      ])
                     ],
                     1
                   )
@@ -69002,6 +69415,7 @@ var render = function() {
       _c(
         "v-toolbar",
         {
+          staticClass: "top-bar",
           attrs: {
             "clipped-left": _vm.$vuetify.breakpoint.lgAndUp,
             color: "primary",
@@ -69042,14 +69456,16 @@ var render = function() {
               "search-input": _vm.search,
               items: _vm.results,
               "item-text": "type.name",
-              "item-value": "quickLink"
+              "item-value": "type"
             },
             on: {
               "update:searchInput": function($event) {
                 _vm.search = $event
               },
               input: function($event) {
-                _vm.$router.push("/" + _vm.quickLink.type.slug)
+                _vm.quickLink
+                  ? _vm.$router.push("/" + _vm.quickLink.slug)
+                  : null
               }
             },
             model: {
@@ -69063,9 +69479,24 @@ var render = function() {
           _vm._v(" "),
           _c("v-spacer"),
           _vm._v(" "),
-          _c("h2", { staticClass: "subheading" }, [
-            _vm._v("\n\t\t\t\t" + _vm._s(_vm.user.name) + "\n\t\t\t")
-          ]),
+          _c(
+            "v-tooltip",
+            { attrs: { left: "" } },
+            [
+              _c(
+                "v-btn",
+                {
+                  staticClass: "subheading",
+                  attrs: { slot: "activator", flat: "" },
+                  slot: "activator"
+                },
+                [_vm._v("\n\t\t\t\t\t" + _vm._s(_vm.user.name) + "\n\t\t\t\t")]
+              ),
+              _vm._v(" "),
+              _c("span", [_vm._v("Profile")])
+            ],
+            1
+          ),
           _vm._v(" "),
           _c(
             "v-tooltip",
@@ -69845,7 +70276,7 @@ var render = function() {
         _vm._l(_vm.icons, function(category) {
           return _c(
             "v-flex",
-            { key: category.key, attrs: { md3: "", sm12: "" } },
+            { key: category.key, attrs: { sm3: "" } },
             [
               _c(
                 "v-menu",

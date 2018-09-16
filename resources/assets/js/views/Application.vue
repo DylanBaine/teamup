@@ -6,7 +6,7 @@
 			fixed
 			app>
 			<v-list style="padding: 0;">
-				<v-toolbar dark color="primary darken-1">
+				<v-toolbar dark color="primary darken-1" style="width: 100%;">
 					<v-spacer></v-spacer>
 					<v-btn icon to="/">
 						<v-icon>home</v-icon>
@@ -21,23 +21,27 @@
 				</v-toolbar>
 			</v-list>
 			<v-list dense>
-				<template v-for="permission in $user.permissions('read')">
-					<v-list-tile
-						:to="`/${permission.type.slug}`"
-						:key="permission.key">
-						<v-list-tile-action>
-							<v-icon size="15px">{{permission.type.icon}}</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>
-								{{ permission.type.name }}
-							</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
+				<template v-for="(permission, key) in $user.permissions('read')">
+					<v-tooltip :color="((key+1) % 2) == 0 ? 'primary' : 'accent'" right :key="key">
+						<v-list-tile
+							slot="activator"
+							:to="`/${permission.type.slug}`">
+							<v-list-tile-action>
+								<v-icon size="15px">{{permission.type.icon}}</v-icon>
+							</v-list-tile-action>
+							<v-list-tile-content>
+								<v-list-tile-title>
+									{{ permission.type.name }}
+								</v-list-tile-title>
+							</v-list-tile-content>
+						</v-list-tile>
+						<span>See all {{permission.type.name}}</span>
+					</v-tooltip>
 				</template>
 			</v-list>
 		</v-navigation-drawer>
 		<v-toolbar
+			class="top-bar"
 			:clipped-left="$vuetify.breakpoint.lgAndUp"
 			color="primary"
 			dark
@@ -52,16 +56,19 @@
 				flat solo-inverted v-model="quickLink"
 				prepend-icon="search" label="Search modules"
 				:search-input.sync="search" class="hidden-sm-and-down"
-				:items="results" @input="$router.push('/'+quickLink.type.slug)"
-				item-text="type.name" item-value="quickLink"
+				:items="results" @input="quickLink ? $router.push('/'+quickLink.slug) : null"
+				item-text="type.name" item-value="type"
 			></v-autocomplete>
 			<v-spacer></v-spacer>
 			<!-- <v-btn icon @click="dark = !dark">
 				<v-icon>highlight</v-icon>
 			</v-btn> -->
-			<h2 class="subheading">
-				{{user.name}}
-			</h2>
+			<v-tooltip left>
+				<v-btn slot="activator" flat class="subheading">
+					{{user.name}}
+				</v-btn>
+				<span>Profile</span>
+			</v-tooltip>
 			<v-tooltip left>
 				<v-btn slot="activator" icon @click="$user.logout()">
 					<v-icon>exit_to_app</v-icon>

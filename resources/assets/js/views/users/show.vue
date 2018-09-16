@@ -59,7 +59,7 @@
                         <v-card-title>
                             <h3>Permissions</h3>
                             <v-tooltip right>
-                                <v-btn slot="activator" color="primary" icon v-if="$authUser.can('assign', 'permissions')" @click="addingPermissions = true">
+                                <v-btn slot="activator" color="accent" icon v-if="$root.$user.can('assign', 'permissions')" @click="addingPermissions = true">
                                     <v-icon>add</v-icon>
                                 </v-btn>
                                 <span>Add a new permission</span>
@@ -68,7 +68,7 @@
                         <v-card-text style="max-height: 585px; overflow: auto;">
                             <v-container fluid grid-list-md>
                                 <v-layout row wrap>
-                                    <v-flex md2>
+                                    <v-flex lg2 md3 sm4 sx6>
                                         <h4>
                                             Create
                                         </h4>
@@ -79,14 +79,14 @@
                                                         {{permission.type.name}}
                                                     </v-list-tile-content>
                                                     <v-list-tile-action>
-                                                        <v-btn flat icon color="error" @click="deletePermission(permission.id)">
+                                                        <v-btn v-if="$root.$user.can('delete', 'permissions')" flat icon color="error" @click="deletePermission(permission.id)">
                                                             <v-icon size="20px">delete_forever</v-icon>
                                                         </v-btn>
                                                     </v-list-tile-action>
                                             </v-list-tile>
                                         </v-list>                        
                                     </v-flex>
-                                    <v-flex md2>
+                                    <v-flex lg2 md3 sm4 sx6>
                                         <h4>
                                             Read
                                         </h4>
@@ -97,14 +97,14 @@
                                                         {{permission.type.name}}
                                                     </v-list-tile-content>
                                                     <v-list-tile-action>
-                                                        <v-btn flat icon color="error" @click="deletePermission(permission.id)">
+                                                        <v-btn v-if="$root.$user.can('delete', 'permissions')" flat icon color="error" @click="deletePermission(permission.id)">
                                                             <v-icon size="20px">delete_forever</v-icon>
                                                         </v-btn>
                                                     </v-list-tile-action>
                                             </v-list-tile>
                                         </v-list>                        
                                     </v-flex>
-                                    <v-flex md2>
+                                    <v-flex lg2 md3 sm4 sx6>
                                         <h4>
                                             Update
                                         </h4>
@@ -115,14 +115,14 @@
                                                         {{permission.type.name}}
                                                     </v-list-tile-content>
                                                     <v-list-tile-action>
-                                                        <v-btn flat icon color="error" @click="deletePermission(permission.id)">
+                                                        <v-btn v-if="$root.$user.can('delete', 'permissions')" flat icon color="error" @click="deletePermission(permission.id)">
                                                             <v-icon size="20px">delete_forever</v-icon>
                                                         </v-btn>
                                                     </v-list-tile-action>
                                             </v-list-tile>
                                         </v-list>                        
                                     </v-flex>
-                                    <v-flex md2>
+                                    <v-flex lg2 md3 sm4 sx6>
                                         <h4>
                                             Delete
                                         </h4>
@@ -133,14 +133,14 @@
                                                         {{permission.type.name}}
                                                     </v-list-tile-content>
                                                     <v-list-tile-action>
-                                                        <v-btn flat icon color="error" @click="deletePermission(permission.id)">
+                                                        <v-btn v-if="$root.$user.can('delete', 'permissions')" flat icon color="error" @click="deletePermission(permission.id)">
                                                             <v-icon size="20px">delete_forever</v-icon>
                                                         </v-btn>
                                                     </v-list-tile-action>
                                             </v-list-tile>
                                         </v-list>                        
                                     </v-flex>
-                                    <v-flex md2>
+                                    <v-flex lg2 md3 sm4 sx6>
                                         <h4>
                                             Manage
                                         </h4>
@@ -151,14 +151,14 @@
                                                     {{permission.type.name}}
                                                 </v-list-tile-content>
                                                 <v-list-tile-action>
-                                                    <v-btn flat icon color="error" @click="deletePermission(permission.id)">
+                                                    <v-btn v-if="$root.$user.can('delete', 'permissions')" flat icon color="error" @click="deletePermission(permission.id)">
                                                         <v-icon size="20px">delete_forever</v-icon>
                                                     </v-btn>
                                                 </v-list-tile-action>
                                             </v-list-tile>
                                         </v-list>
                                     </v-flex>
-                                    <v-flex md2>
+                                    <v-flex lg2 md3 sm4 sx6>
                                         <h4>
                                             Assign
                                         </h4>
@@ -169,7 +169,7 @@
                                                         {{permission.type.name}}
                                                     </v-list-tile-content>
                                                     <v-list-tile-action>
-                                                        <v-btn flat icon color="error" @click="deletePermission(permission.id)">
+                                                        <v-btn v-if="$root.$user.can('delete', 'permissions')" flat icon color="error" @click="deletePermission(permission.id)">
                                                             <v-icon size="20px">delete_forever</v-icon>
                                                         </v-btn>
                                                     </v-list-tile-action>

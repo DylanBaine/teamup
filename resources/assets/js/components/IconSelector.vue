@@ -5,7 +5,7 @@
         <label v-if="selected" class="padded">Selected: <i>{{selected}}</i></label>
     </v-card-title>
     <v-layout row wrap id="icon-input" fluid>
-        <v-flex md3 sm12 v-for="category in icons" :key="category.key">
+        <v-flex sm3 v-for="category in icons" :key="category.key">
             <v-menu style="width: 100%;" oofset-y>
                 <v-btn slot="activator" block flat>
                       <div class="capitalize">{{category.name}}</div>

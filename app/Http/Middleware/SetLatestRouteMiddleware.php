@@ -18,6 +18,10 @@ class SetLatestRouteMiddleware
         if(user() && !user('password_confirmed') && request()->ajax()){
             abort(402, 'Set your new password to start working.');
         }
+/*         if(user()){
+            user()->last_route = '/'.explode('/', $request->fullPath())[0];
+            user()->save();
+        } */
         return $next($request);
     }
 }

@@ -19,12 +19,14 @@ const app = new Vue({
     url: window.url,
     page: null,
     route: null,
-    loading: false
+    loading: false,
+    mounted: false
   },
   watch: {
     $route() {
       document.documentElement.scrollTop = 0;
       this.getHashRoute();
+      this.mounted = false;
     },
     $user() {
       return new User(this, "user");
@@ -50,12 +52,16 @@ const app = new Vue({
     getHashRoute() {
       var route = window.location.hash.split("#")[1];
       this.route = route;
-      axios.post(`${this.url}/set_last_page`, {
-        route: route
-      });
+      axios
+        .post(`${this.url}/set_last_page`, {
+          route: route
+        })
+        .then(res => {
+          this.user = res.data;
+        }); /* 
       this.$user.find(this.user.id).then(() => {
         this.user = this.user.user;
-      });
+      }); */
     },
     getPage() {
       var route = window.location.hash.split("#")[1];

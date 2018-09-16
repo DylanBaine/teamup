@@ -103,22 +103,23 @@ class UserCreation
 
     private function createTypes()
     {
-        $this->makeType('Permission Modes', 'Permission', '');
+        /* $this->makeType('Permission Modes', 'Permission', '');
         $this->makeType('Permission Types', 'Permission', '');
+        $this->makeType('Posts', 'Permission', 'format_align_left'); */
         $this->makeType('Post Types', 'Permission', 'format_align_left');
         $this->makeType('Permissions', 'Permission', 'supervised_user_circle');
-        $this->makeType('Posts', 'Permission', 'format_align_left');
-        $this->makeType('Tasks', 'Permission', 'rowing');
         $this->makeType('Task Types', 'Permission', 'rowing');
+        $this->makeType('Tasks', 'Permission', 'rowing');
         $this->makeType('Groups', 'Permission', 'group');
+        $this->makeType('Users', 'Permission', 'person');
+        $this->makeType('Reports', 'Permission', 'bar_chart');
+
         $this->makeType('Documentation', 'Post', 'chrome_reader_mode');
         $this->makeType('Announcements', 'Post', 'chrome_reader_mode');
         $this->makeType('Sprint', 'Task', 'directions_run');
         $this->makeType('Task', 'Task', 'rowing');
         $this->makeType('Team', 'Task', 'group');
         $this->makeType('Project', 'Task', 'timeline');
-        $this->makeType('Users', 'Permission', 'person');
-        $this->makeType('Reports', 'Permission', 'bar_chart');
     }
 
     private function makeType($name, $model, $icon)

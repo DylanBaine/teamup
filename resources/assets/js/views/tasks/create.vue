@@ -2,13 +2,19 @@
     <v-dialog v-model="showing" persistent>
         <v-card>
           <v-toolbar dark color="primary">
-            <h2 class="title" v-if="parent">
+            <h2 class="title" v-if="!editing && parent">
               Creating a child of {{parent.name}}
             </h2>
+            <h2 class="title" v-else-if="editing">
+              Editing {{task.name}}
+            </h2>
+            <h2 class="title" v-else>
+              Creating a new Task
+            </h2>
             <v-spacer></v-spacer>
-              <v-btn icon :to="$route.params.task ? `/tasks/${$route.params.task}/manage` : '/tasks/'">
-                  <v-icon>close</v-icon>
-              </v-btn>
+            <v-btn icon :to="$route.params.task ? `/tasks/${$route.params.task}/manage` : '/tasks/'">
+                <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar>
           <v-form @submit.prevent="post()">
             <v-container fluid grid-list-xl>
@@ -36,25 +42,25 @@
                             item-value="id">
                           </v-select>
                         </v-flex>
-                        <v-flex md4 v-if="setType != 'Team'">
-                          <v-autocomplete
-                            :label="taskUserLabel"
-                            :items="users"
-                            item-value="id"
-                            item-text="name"
-                            v-model="task.user_id"
-                            hint="Start typing to find a user.">
-                          </v-autocomplete>
-                        </v-flex>
-                        <v-flex md4 v-else>
-                          <v-autocomplete
-                            label="Group"
-                            :items="groups"
-                            item-value="id"
-                            item-text="name"
-                            v-model="task.user_id"
-                            hint="Start typing to find a group.">
-                          </v-autocomplete>
+                        <v-flex md4 v-if="$root.$user.can('assign', 'tasks') || $root.$user.can('manage', 'tasks')">
+                            <v-autocomplete
+                              v-if="setType != 'Team'"
+                              :label="taskUserLabel"
+                              :items="users"
+                              item-value="id"
+                              item-text="name"
+                              v-model="task.user_id"
+                              hint="Start typing to find a user.">
+                            </v-autocomplete>
+                            <v-autocomplete
+                              v-else
+                              label="Group"
+                              :items="groups"
+                              item-value="id"
+                              item-text="name"
+                              v-model="task.user_id"
+                              hint="Start typing to find a group.">
+                            </v-autocomplete>
                         </v-flex>
                       </v-layout>
                       <v-layout row wrap justify-center>
@@ -94,7 +100,7 @@
                           <v-flex md4 style="display: flex; justify-content: center;">
                             <div>
                               <h3>Date:</h3>
-                              <v-date-picker v-model="date" multiple color="primary white--text"></v-date-picker>
+                              <v-date-picker v-model="date" multiple :min="parent ? parent.start_date : null" :max="parent ? parent.end_date : null" color="primary white--text"></v-date-picker>
                             </div>
                           </v-flex>
                           <v-flex md4 style="display: flex; justify-content: center;">
@@ -164,6 +170,7 @@ export default {
       step: 1,
       showing: false,
       date: [],
+      allowedDates: [],
       task: {
         icon: null,
         parent_id: this.$route.params.task ? this.$route.params.task : null,
@@ -270,20 +277,25 @@ export default {
       }
     },
     init() {
-      this.$root.getPage().then(() => {
-        var p = this.$root.page;
-        this.types = p.types;
-        this.users = p.users;
-        this.groups = p.groups;
-        if (this.editing) {
-          this.task = p.task;
-          this.date = [p.task.start_date, p.task.end_date];
-        }
-        if (this.$route.params.task) {
-          this.parent = p.parent;
-        }
-        this.showing = true;
-      });
+      if (!this.$root.mounted) {
+        this.$root.getPage().then(() => {
+          var p = this.$root.page;
+          this.parent = this.task.parent;
+          this.types = p.types;
+          this.users = p.users;
+          this.groups = p.groups;
+          if (this.editing) {
+            this.task = p.task;
+            this.date = [p.task.start_date, p.task.end_date];
+            this.parent = p.parent;
+          }
+          if (this.$route.params.task) {
+            this.parent = p.parent;
+          }
+          this.showing = true;
+        });
+      }
+      this.$root.mounted = true;
     },
     post() {
       if (this.editing) {

@@ -1,18 +1,37 @@
 <template>
   <div class="container fluid">
       <router-view></router-view>
-      <v-container fluid grid-list-lg v-if="task">
+      <v-container class="mb-4" fluid grid-list-lg v-if="task">
           <header>
-              <h1>{{task.name}} ({{task.type.name}})</h1>
-                <h3 class="subheading">
-                  ID: {{task.id}}
-                </h3>
-                <h3 v-if="task.user" class="subheading">
-                  User: <router-link :to="`/users/${task.user.id}`">{{task.user.name}}</router-link>
-                </h3>
-                <router-link to="/tasks">Tasks</router-link>
-                <task-breadcrumb :icon-size="14" :item="task.parent" :original="task"></task-breadcrumb>
-              <p v-html="task.description"></p>
+            <v-layout align-center row wrap>
+              <v-flex md3>
+                <h1>{{task.name}} ({{task.type.name}})</h1>
+                  <h3 class="subheading">
+                    ID: {{task.id}}
+                  </h3>
+                  <ul>
+                    <li>
+                      Start: {{task.start_date_string}}
+                    </li>
+                    <li>
+                      End: {{task.end_date_string}}
+                    </li>
+                  </ul>
+                  <h3 v-if="task.user" class="subheading">
+                    User: <router-link :to="`/users/${task.user.id}`">{{task.user.name}}</router-link>
+                  </h3>
+              </v-flex>
+              <v-flex md8 style="position: relative">
+                <h2 class="title">
+                  Description:
+                  <v-btn v-if="task.description.length > 300" small @click="fullDescription = true" flat>
+                    <v-icon>fullscreen</v-icon> Fullscreen
+                  </v-btn>
+                </h2>
+                <p class="mt-2" style="max-height: 100px; overflow: auto;" v-html="task.description"></p>
+              </v-flex>
+            </v-layout>
+            <router-link to="/tasks">Tasks</router-link> <task-breadcrumb :icon-size="14" :item="task.parent" :original="task"></task-breadcrumb>
           </header>
           <v-container fluid v-if="task.type.name == 'Sprint'" grid-list-lg>
             <v-layout row wrap>
@@ -74,7 +93,53 @@
           </v-layout>
           <basic-task-report v-if="task.type.name == 'Task'" :report="task.report"></basic-task-report>
           <project-report v-else-if="task.type.name == 'Project'" :report="task.report"></project-report>
-          <div class="fixed bottom right">
+          <v-dialog v-model="fullDescription" fullscreen>
+            <v-card>
+              <v-card-title>
+                <h2 class="title">Description:</h2>
+                <v-spacer></v-spacer>
+                <v-btn @click="fullDescription = false" flat icon>
+                  <v-icon>close</v-icon>
+                </v-btn>
+              </v-card-title>
+              <v-card-text v-html="task.description"></v-card-text>
+            </v-card>
+          </v-dialog>
+          <div v-if="!$root.$user.can('manage', 'tasks')" class="fixed bottom right">
+              <v-btn
+                  fab
+                  color="warning"
+                  dark
+                  v-if="$root.$user.can('delete', 'tasks')"
+                  @click="remove($route.params.task)">
+                  <v-icon>delete_forever</v-icon>
+              </v-btn>
+              <v-btn
+                  fab
+                  color="success"
+                  dark
+                  v-if="$root.$user.can('update', 'tasks')"
+                  :to="`/tasks/${$route.params.task}/edit`">
+                  <v-icon>create</v-icon>
+              </v-btn>
+              <v-btn
+                  v-if="$root.$user.can('create', 'Notifications')"
+                  fab
+                  color="info"
+                  dark
+                  @click="$refs.settings.init(task.id)">
+                  <v-icon>settings</v-icon>
+              </v-btn>
+              <v-btn
+                  fab
+                  color="accent"
+                  dark
+                  v-if="task.type.name != 'Task' && $root.$user.can('create', 'tasks')"
+                  :to="`/tasks/${$route.params.task}/add`">
+                  <v-icon>add</v-icon>
+              </v-btn>
+          </div>
+          <div v-else class="fixed bottom right">
               <v-btn
                   fab
                   color="warning"
@@ -97,13 +162,13 @@
                   <v-icon>settings</v-icon>
               </v-btn>
               <v-btn
-                  v-if="task.type.name != 'Task'"
                   fab
                   color="accent"
                   dark
+                  v-if="task.type.name != 'Task'"
                   :to="`/tasks/${$route.params.task}/add`">
                   <v-icon>add</v-icon>
-              </v-btn>
+              </v-btn>            
           </div>
           <task-settings ref="settings"></task-settings>
       </v-container>
@@ -117,6 +182,7 @@ import Report from "../../app/models/Report";
 export default {
   data() {
     return {
+      fullDescription: false,
       task: null,
       types: [],
       tasks: [],
