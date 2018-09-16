@@ -7,6 +7,7 @@ const app = new Vue({
   data: {
     user: window.__set_user__,
     users: window.set_users,
+    company: window.set_company,
     middleware: {},
     userLinks: [],
     icons: require("./app/library/Icons.json"),
@@ -33,8 +34,8 @@ const app = new Vue({
     }
   },
   computed: {
-    company() {
-      if (this.user) return this.user.company;
+    $user() {
+      return new User(this, "user");
     }
   },
   created() {},
@@ -51,6 +52,9 @@ const app = new Vue({
       this.route = route;
       axios.post(`${this.url}/set_last_page`, {
         route: route
+      });
+      this.$user.find(this.user.id).then(() => {
+        this.user = this.user.user;
       });
     },
     getPage() {

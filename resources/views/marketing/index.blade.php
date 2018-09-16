@@ -9,7 +9,7 @@
             column align-center
             justify-center>
             {{-- <img src="https://placeimg.com/640/480/any" alt="Vuetify.js" height="200"> --}}
-            <h1 class="mb-2 display-1 text-xs-center">TeamUp</h1>
+            <h1 class="mb-2 display-1 text-xs-center">Timmatic</h1>
             <div class="subheading mb-3 text-xs-center">Project Management For Tomorrow</div>
             <v-btn
               class="primary"

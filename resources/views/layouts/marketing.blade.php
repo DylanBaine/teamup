@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>TeamUp</title>
+    <title>Timmatic</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
@@ -37,7 +37,7 @@
             </v-snackbar>
             @endif
             <v-toolbar class="white" dark color="primary">
-                <v-btn flat class="btn__fill-height" large href="{{url('/')}}">TeamUp</v-btn>
+                <v-btn flat class="btn__fill-height" large href="{{url('/')}}">Timmatic</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn flat class="btn__fill-height" href="{{url('/pricing')}}">Pricing</v-btn>
                 @if(!user())

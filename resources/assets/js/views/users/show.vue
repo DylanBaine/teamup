@@ -4,9 +4,14 @@
         transition="dialog-transition">
         <v-card>
             <v-toolbar color="primary">
-                <h2 class="title">
-                    {{user.name}}
-                </h2>
+                <div>
+                    <h2 class="title">
+                        {{user.name}}
+                    </h2>
+                    <h3 class="subheading">
+                        <v-icon class="mr-2" small>email</v-icon><a class="white--text" :href="'mailto:'+user.email">{{user.email}}</a>
+                    </h3>
+                </div>
                 <v-spacer></v-spacer>
                 <v-tabs centered color="primary" slot="extension" v-model="tab">
                     <v-tab href="#tasks">

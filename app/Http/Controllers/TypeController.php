@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Type;
-use App\TEAMUP\Repositories\TypesRepository as Repo;
+use App\Timmatic\Repositories\TypesRepository as Repo;
 use Illuminate\Http\Request;
 
 class TypeController extends Controller

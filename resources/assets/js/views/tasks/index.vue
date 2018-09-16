@@ -134,7 +134,7 @@ export default {
   methods: {
     init() {
       this.$tasks.get();
-      this.$types.get();
+      if (this.$root.$user.can("create", "tasks")) this.$types.get();
     },
     addType() {
       this.$types.create(this.newType);

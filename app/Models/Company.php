@@ -16,7 +16,7 @@ class Company extends Model
 
     public function superUser()
     {
-        return $this->belongsTo(User::class, 'super_user_id', 'plan_id');
+        return $this->belongsTo(User::class, 'super_user_id');
     }
 
     public function tasks()

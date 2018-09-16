@@ -5,8 +5,10 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Auth;
 
-class UserCreated extends Notification
+class UserCreated extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -15,6 +17,7 @@ class UserCreated extends Notification
      *
      * @return void
      */
+    public $user, $company, $token;
     public function __construct($user, $token, $company)
     {
         $this->user = $user;
@@ -42,8 +45,9 @@ class UserCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line("Hey there, $this->user!")
-            ->line(user('name') . ' added you to ' . company('name') . ' on TeamUp.')
+            ->subject('Welcom to Timmatic!')
+            ->greeting("Hey there, $this->user!")
+            ->line('You were added to Timmatic!')
             ->action('Login now!', url('/set-password?token='.$this->token))
             ->line('Thank you for using our application!');
     }

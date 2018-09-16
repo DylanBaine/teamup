@@ -6,9 +6,11 @@ use App\Models\Setting;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
-class TaskUpdated extends Notification
+use App\Notifications\Markup\Tasks\TaskUpdatedMarkup;
+use Illuminate\Contracts\Queue\ShouldQueue;
+class TaskUpdated extends Notification implements ShouldQueue
 {
+
     use Queueable;
 
     /**
@@ -16,10 +18,12 @@ class TaskUpdated extends Notification
      *
      * @return void
      */
-    public function __construct($task, $parent)
+    public $parent, $task, $type;
+    public function __construct($task, $parent = null, $type)
     {
         $this->parent = $parent;
         $this->task = $task;
+        $this->type = $type;
     }
 
     /**
@@ -41,13 +45,7 @@ class TaskUpdated extends Notification
      */
     public function toMail($notifiable)
     {
-        $task = $this->task;
-        $parent = $this->parent;
-        $column = Setting::find($task->column_id);
-        return (new MailMessage)
-            ->greeting('There were changes to "' . $parent->name . '"')
-            ->line('"' . $task->name . '" was updated to ' . $column->value . '.')
-            ->action('See changes', url('/app#/tasks/' . $parent->id . '/manage'));
+        return (new TaskUpdatedMarkup($this->task))->markup($this->type);
     }
 
     /**

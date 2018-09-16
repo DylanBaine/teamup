@@ -16,29 +16,32 @@ Route::get('/app', function () {
         $user->company = App\Models\Company::find($user->company_id);
     }
     $users_collection = company()->users()->get();
-    return view('layouts.app', compact('user', 'users_collection'));
+    $company = company()->load('superUser');
+    return view('layouts.app', compact('user', 'users_collection', 'company'));
 })->middleware('auth');
-// Handle all search methods
 Route::get('/search', 'SearchController');
 // Overwrite laravel auth routes for cusotom api login and logout
 include 'authRoutes.php';
 // Include api routes for users module
 include 'userRoutes.php';
-// Include api routes for posts module
-include 'postRoutes.php';
-// Include api routes for types module
-include 'typeRoutes.php';
-// Include api routes for files module
-include 'fileRoutes.php';
-// Include api routes for groups module
-include 'groupRoutes.php';
-// include api routes for tasks module
-include 'taskRoutes.php';
-// include api routes for settings
-include 'settingRoutes.php';
-// include api routes for permission modes
-include 'permissionRoutes.php';
-// include api routes for sites
-include 'siteRoutes.php';
-
-Route::resource('reports', 'ReportController');
+Route::middleware('permissions')->group(function(){
+    // Include api routes for posts module
+    include 'postRoutes.php';
+    // Include api routes for types module
+    include 'typeRoutes.php';
+    // Include api routes for files module
+    include 'fileRoutes.php';
+    // Include api routes for groups module
+    include 'groupRoutes.php';
+    // include api routes for tasks module
+    include 'taskRoutes.php';
+    // include api routes for settings
+    include 'settingRoutes.php';
+    // include api routes for permission modes
+    include 'permissionRoutes.php';
+    // include api routes for sites
+    include 'siteRoutes.php';
+    
+    Route::resource('reports', 'ReportController');
+});
+// Handle all search methods

@@ -1,5 +1,5 @@
 <?php
-namespace App\TEAMUP\Responses;
+namespace App\Timmatic\Responses;
 
 use App\Models\Setting;
 use App\Models\Task;
@@ -9,9 +9,12 @@ use Illuminate\Contracts\Support\Responsable;
 use Notification;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Timmatic\BLL\TaskLogic;
 
 class UpdateTaskResponse implements Responsable
 {
+
+    use TaskLogic;
 
     public function toResponse($request)
     {
@@ -26,10 +29,24 @@ class UpdateTaskResponse implements Responsable
         $t->icon = $request->icon;
         $t->save();
         $type = $t->type->name;
-        if($type == 'Sprint'){
+        if($request->user_id){
+            $this->subscribeUserToTask($t);
+        }
+        if($request->progressChange){
             $this->updateProgress($t);
+        }else{
+            $this->notifyOfEdit($t);
+        }
+        if($type == 'Sprint'){
             $t->createDefaultSettings();
         }
+    }
+
+    protected function notifyOfEdit($task){
+        $users = User::whereHas('subscriptions', function ($sub) use ($task) {
+            $sub->where('subscribable_id', $task->id)->where('subscribable_type', 'App\Models\Task');
+        })->get();
+        Notification::send($users, new TaskUpdated($task, null, 'dataUpdated'));
     }
 
     protected function updateProgress($task)
@@ -47,11 +64,11 @@ class UpdateTaskResponse implements Responsable
         $users = User::whereHas('subscriptions', function ($sub) use ($parent) {
             $sub->where('subscribable_id', $parent->id)->where('subscribable_type', 'App\Models\Task');
         })->get();
-        Notification::send($users, new TaskUpdated($task, $parent));
-        $this->logChange($task);
+        Notification::send($users, new TaskUpdated($task, $parent, 'progressUpdated'));
+        $this->logProgressChange($task);
     }
 
-    protected function logChange($task){
+    protected function logProgressChange($task){
         $previous = $task->changes()->orderBy('created_at', 'desc')->first();
         if($previous){
             ProgressChange::create([

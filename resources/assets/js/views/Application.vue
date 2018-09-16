@@ -59,6 +59,9 @@
 			<!-- <v-btn icon @click="dark = !dark">
 				<v-icon>highlight</v-icon>
 			</v-btn> -->
+			<h2 class="subheading">
+				{{user.name}}
+			</h2>
 			<v-tooltip left>
 				<v-btn slot="activator" icon @click="$user.logout()">
 					<v-icon>exit_to_app</v-icon>

@@ -1,5 +1,5 @@
 <?php
-namespace App\TEAMUP\Repositories;
+namespace App\Timmatic\Repositories;
 
 use App\Models\Type;
 

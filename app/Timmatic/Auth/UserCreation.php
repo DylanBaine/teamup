@@ -1,5 +1,5 @@
 <?php
-namespace App\TEAMUP\Auth;
+namespace App\Timmatic\Auth;
 
 use App\Models\Company;
 use App\Models\User;
@@ -10,7 +10,7 @@ class UserCreation
 {
 
     private $create = [
-        'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
+        'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions',
         'Documentation', 'Announcements', 'Permission Types', 'Reports'
     ];
     private $read = [
@@ -18,11 +18,11 @@ class UserCreation
         'Documentation', 'Announcements', 'Reports'
     ];
     private $update = [
-        'Post Types', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
+        'Post Types', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions',
         'Documentation', 'Announcements', 'Permission Types', 'Reports'
     ];
     private $delete = [
-        'Post Types', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions', 'Permission Modes',
+        'Post Types', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions',
         'Documentation', 'Announcements', 'Permission Types', 'Reports'
     ];
     private $manage = [

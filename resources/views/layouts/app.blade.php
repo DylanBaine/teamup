@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>TeamUp</title>
+    <title>Timmatic</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
@@ -14,6 +14,7 @@
         window.url = "{{ url('') }}";
         window.__set_user__ = {!!json_encode($user) !!};
         window.set_users = {!!json_encode($users_collection)!!}
+        window.set_company = {!!json_encode($company)!!}
         const token = "{{csrf_token()}}";
     </script>
 </head>

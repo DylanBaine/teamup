@@ -36,12 +36,14 @@ class Task extends Model
     }
 
     public function runReport(){
-        $file_name = "App\Reports\\".$this->report;
-        $args = [
-            'id' => $this->id
-        ];
-        $class_instance = new $file_name($args);
-        return $class_instance->getData();
+        if($this->report){
+            $file_name = "App\Reports\\".$this->report;
+            $args = [
+                'id' => $this->id
+            ];
+            $class_instance = new $file_name($args);
+            return $class_instance->getData();
+        }
     }
 
     public function linkReport(){

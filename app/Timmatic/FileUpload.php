@@ -1,5 +1,5 @@
 <?php
-namespace App\TEAMUP;
+namespace App\Timmatic;
 
 use Illuminate\Http\Request;
 

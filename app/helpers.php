@@ -18,7 +18,7 @@ function user($prop = null)
 
 function repository($class)
 {
-    return "TEAMUP\Repositories\$class";
+    return "Timmatic\Repositories\$class";
 }
 
 function carbon_format($string){

@@ -21,17 +21,23 @@ class PermissionsMiddleware
         if (!Auth::check()) {
             return abort(401, "Pleas log back in to continue working...");
         }
-        $user = Auth::user()->load('permissions');
+        $user = Auth::user();
         if ($basePath === 'search') {
             return $this->handleSearchController($request, $next);
         } else {
             foreach ($user->permissions as $permission) {
-                if ($permission->mode->name == 'read' && $permission->type->slug == $basePath) {
+                $permissionSlug = $permission->type->slug;
+                if ($permission->mode->name == 'read' && $permissionSlug == $basePath 
+                    // if the user can read permissions, they can read types and permission modes
+                    || $basePath == 'types' && $permissionSlug == 'permissions'
+                    || $basePath == 'permission-modes' && $permissionSlug == 'permissions'
+                    // if the user can manage tasks, they can manipulate settings
+                    || $basePath == 'settings' && $permissionSlug == 'tasks' && $permission->mode->name == 'manage') {
                     return $next($request);
                 }
             }
         }
-        return $this->abortMessage();
+        return $this->abortMessage($basePath);
     }
 
     private function handleSearchController($request, $next)
@@ -46,8 +52,8 @@ class PermissionsMiddleware
         return $this->abortMessage();
 
     }
-    private function abortMessage()
+    private function abortMessage($path)
     {
-        return abort(403, 'Im sorry... You don\'t have permission to access this page...');
+        return abort(403, 'Im sorry... You don\'t have permission to access ' . $path . '...');
     }
 }

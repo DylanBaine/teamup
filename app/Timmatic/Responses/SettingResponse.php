@@ -1,7 +1,7 @@
 <?php
-namespace App\TEAMUP\Responses;
+namespace App\Timmatic\Responses;
 
-use App\TEAMUP\BLL\TaskLogic;
+use App\Timmatic\BLL\TaskLogic;
 use Exception;
 use Illuminate\Contracts\Support\Responsable;
 

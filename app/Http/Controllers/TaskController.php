@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\TEAMUP\Responses\UpdateTaskResponse;
+use App\Timmatic\Responses\UpdateTaskResponse;
 use Illuminate\Http\Request;
 use App\Models\ProgressChange;
+use App\Timmatic\BLL\TaskLogic;
 
 class TaskController extends Controller
 {
+
+    use TaskLogic;
 
     public $company;
     public function __construct()
@@ -77,6 +80,9 @@ class TaskController extends Controller
         $t->end_date = $request->end_date ? carbon_format($request->end_date) : null;
         $t->save();
         $t->linkReport();
+        if($request->user_id){
+            $this->subscribeUserToTask($t);
+        }
         if ($t->type->name === 'Sprint') {
             $t->createDefaultSettings();
         }

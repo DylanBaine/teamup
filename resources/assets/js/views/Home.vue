@@ -2,10 +2,21 @@
   <v-layout>
     <router-view></router-view>
     <v-container fluid grid-list-md>
+      <v-container fluid grid-list-md>
+        <v-layout row wrap>
+          <v-flex md6>
+            <ul>
+              <li>
+                Company Site Manager: <router-link :to="`/users/${$root.company.super_user.id}`">{{$root.company.super_user.name}}</router-link>
+              </li>
+            </ul>
+          </v-flex>
+        </v-layout>
+      </v-container>
         <v-container fluid grid-list-lg>
           <header>
             <h2 class="title">
-              Your Tasks
+              {{ user.tasks ? 'Your' : 'No'}} Tasks
             </h2>
           </header>
           <v-layout row wrap>
@@ -43,7 +54,9 @@ import User from "../app/models/User";
 export default {
   data() {
     return {
-      user: "",
+      user: {
+        tasks: []
+      },
       selected: ""
     };
   },
@@ -70,14 +83,16 @@ export default {
       this.$user.find(this.$root.user.id);
     },
     formatTasks() {
-      this.user.columns.forEach(column => {
-        column.children = [];
-        this.user.tasks.forEach(task => {
-          if (task.column.value == column.value) {
-            column.children.push(task);
-          }
+      if (this.user.columns && this.user.tasks) {
+        this.user.columns.forEach(column => {
+          column.children = [];
+          this.user.tasks.forEach(task => {
+            if (task.column && task.column.value == column.value) {
+              column.children.push(task);
+            }
+          });
         });
-      });
+      }
     }
   }
 };

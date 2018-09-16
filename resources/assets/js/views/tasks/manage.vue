@@ -16,7 +16,10 @@
           </header>
           <v-container fluid v-if="task.type.name == 'Sprint'" grid-list-lg>
             <v-layout row wrap>
-                <draggable v-for="column in task.columns" :key="column.position"  :items="column.children" :options="{group:'tasks', element: '.drag-me'}" :id="`${column.id}`" class="task-row flex md3 mt-2" @end="add" @start="start">
+                <draggable 
+                  v-for="column in task.columns" :key="column.position"  
+                  :items="column.children" :options="{group:'tasks', element: '.drag-me'}" 
+                  :id="`${column.id}`" class="task-row flex md3 mt-2" @end="add" @start="start">
                 <v-card>
                     <v-card-title>
                     <h2>{{column.value}}</h2>
@@ -176,6 +179,7 @@ export default {
         return task.id == target;
       })[0];
       task.column_id = newParent;
+      task.progressChange = true;
       this.$task.update(task.id, task, "quick");
     },
     start(e) {}
