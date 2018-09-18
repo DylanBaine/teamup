@@ -15,7 +15,7 @@ class UserCreation
     ];
     private $read = [
         'Post Types', 'Tasks', 'Users', 'Permissions',
-        'Documentation', 'Announcements', 'Reports', 'Groups', 'Clients'
+        'Documentation', 'Announcements', 'Reports', 'Groups', 'Clients', 'Posts'
     ];
     private $update = [
         'Post Types', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions',

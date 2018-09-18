@@ -36,9 +36,9 @@
             </v-layout>
             <router-link to="/tasks">Tasks</router-link> <task-breadcrumb :icon-size="14" :item="task.parent" :original="task"></task-breadcrumb>
           </header>
-          <v-tooltip top color="info" v-if="task.type.name == 'Sprint'" >
-            <div slot="activator" class="padded" style="width: 100%; min-height: 500px; overflow: auto; overflow-y: hidden;" @scroll="scroll">
-              <div :style="rowsContainerStyle">
+          <v-tooltip :disabled="!shouldShowScrollTip()" top color="info" v-if="task.type.name == 'Sprint'" >
+            <div ref="columnScroller" slot="activator" class="padded" style="width: 100%; min-height: 500px; overflow: auto; overflow-y: hidden;" @scroll="scroll">
+              <div ref="columnContainer" :style="rowsContainerStyle">
                 <v-layout row>
                     <draggable 
                       v-for="column in task.columns" :key="column.position"  
@@ -241,6 +241,15 @@ export default {
     init() {
       this.loaded = true;
       this.$task.find(this.$route.params.task);
+    },
+    shouldShowScrollTip() {
+      if (this.$refs.columnContainer && this.$refs.columnScroller) {
+        return (
+          this.$refs.columnContainer.offsetWidth >
+          this.$refs.columnScroller.offsetWidth
+        );
+      }
+      return false;
     },
     scroll(e) {
       console.log(e);

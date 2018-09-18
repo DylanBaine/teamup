@@ -41816,6 +41816,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.loaded = true;
       this.$task.find(this.$route.params.task);
     },
+    shouldShowScrollTip: function shouldShowScrollTip() {
+      if (this.$refs.columnContainer && this.$refs.columnScroller) {
+        return this.$refs.columnContainer.offsetWidth > this.$refs.columnScroller.offsetWidth;
+      }
+      return false;
+    },
     scroll: function scroll(e) {
       console.log(e);
     },
@@ -42064,177 +42070,199 @@ var render = function() {
               ),
               _vm._v(" "),
               _vm.task.type.name == "Sprint"
-                ? _c("v-tooltip", { attrs: { top: "", color: "info" } }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "padded",
-                        staticStyle: {
-                          width: "100%",
-                          "min-height": "500px",
-                          overflow: "auto",
-                          "overflow-y": "hidden"
+                ? _c(
+                    "v-tooltip",
+                    {
+                      attrs: {
+                        disabled: !_vm.shouldShowScrollTip(),
+                        top: "",
+                        color: "info"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          ref: "columnScroller",
+                          staticClass: "padded",
+                          staticStyle: {
+                            width: "100%",
+                            "min-height": "500px",
+                            overflow: "auto",
+                            "overflow-y": "hidden"
+                          },
+                          attrs: { slot: "activator" },
+                          on: { scroll: _vm.scroll },
+                          slot: "activator"
                         },
-                        attrs: { slot: "activator" },
-                        on: { scroll: _vm.scroll },
-                        slot: "activator"
-                      },
-                      [
-                        _c(
-                          "div",
-                          { style: _vm.rowsContainerStyle },
-                          [
-                            _c(
-                              "v-layout",
-                              { attrs: { row: "" } },
-                              _vm._l(_vm.task.columns, function(column) {
-                                return _c(
-                                  "draggable",
-                                  {
-                                    key: column.position,
-                                    staticClass: "mb-2 mt-2",
-                                    staticStyle: {
-                                      width: "300px",
-                                      "margin-right": "20px"
-                                    },
-                                    attrs: {
-                                      items: column.children,
-                                      options: {
-                                        group: "tasks",
-                                        element: ".drag-me"
+                        [
+                          _c(
+                            "div",
+                            {
+                              ref: "columnContainer",
+                              style: _vm.rowsContainerStyle
+                            },
+                            [
+                              _c(
+                                "v-layout",
+                                { attrs: { row: "" } },
+                                _vm._l(_vm.task.columns, function(column) {
+                                  return _c(
+                                    "draggable",
+                                    {
+                                      key: column.position,
+                                      staticClass: "mb-2 mt-2",
+                                      staticStyle: {
+                                        width: "300px",
+                                        "margin-right": "20px"
                                       },
-                                      id: "" + column.id
-                                    },
-                                    on: { end: _vm.add, start: _vm.start }
-                                  },
-                                  [
-                                    _c(
-                                      "v-card",
-                                      [
-                                        _c("v-card-title", [
-                                          _c("h2", [
-                                            _vm._v(_vm._s(column.value))
-                                          ])
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _vm._l(column.children, function(child) {
-                                      return _c(
-                                        "v-card",
-                                        {
-                                          key: child.key,
-                                          staticClass:
-                                            "primary darken-1 mt-3 drag-me p-5 white--text",
-                                          attrs: {
-                                            to:
-                                              "/tasks/" + child.id + "/manage",
-                                            id: "" + child.id
-                                          }
+                                      attrs: {
+                                        items: column.children,
+                                        options: {
+                                          group: "tasks",
+                                          element: ".drag-me"
                                         },
+                                        id: "" + column.id
+                                      },
+                                      on: { end: _vm.add, start: _vm.start }
+                                    },
+                                    [
+                                      _c(
+                                        "v-card",
                                         [
                                           _c("v-card-title", [
-                                            _c("div", [
-                                              _c(
-                                                "h2",
-                                                { staticClass: "title" },
-                                                [
-                                                  _c(
-                                                    "v-icon",
-                                                    {
-                                                      attrs: { color: "white" }
-                                                    },
-                                                    [_vm._v(_vm._s(child.icon))]
-                                                  ),
-                                                  _vm._v(
-                                                    " " + _vm._s(child.name)
-                                                  )
-                                                ],
-                                                1
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "h3",
-                                                { staticClass: "subheader" },
-                                                [
-                                                  _vm._v(
-                                                    _vm._s(child.type.name)
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              child.user
-                                                ? _c("p", [
-                                                    _vm._v(_vm._s(child.user))
-                                                  ])
-                                                : _vm._e()
+                                            _c("h2", [
+                                              _vm._v(_vm._s(column.value))
                                             ])
-                                          ]),
-                                          _vm._v(" "),
-                                          child.type.name !== "Task"
-                                            ? _c("v-card-text", [
-                                                _vm._v(
-                                                  "\n                      " +
-                                                    _vm._s(
-                                                      child.percent_finished
-                                                    ) +
-                                                    "% finished.\n                      "
-                                                ),
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "grey darken-1",
-                                                    staticStyle: {
-                                                      padding: "0",
-                                                      width: "100%",
-                                                      height: "20px",
-                                                      "border-radius": "50px"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("div", {
-                                                      staticClass:
-                                                        "grey darken-2",
-                                                      style:
-                                                        "width:" +
-                                                        child.percent_finished +
-                                                        "%; height: 100%; border-radius: 50px;"
-                                                    })
-                                                  ]
-                                                )
-                                              ])
-                                            : _c("v-card-text", [
-                                                _c("p", {
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      child.description
-                                                    )
-                                                  }
-                                                })
-                                              ])
+                                          ])
                                         ],
                                         1
-                                      )
-                                    })
-                                  ],
-                                  2
-                                )
-                              })
-                            )
-                          ],
-                          1
+                                      ),
+                                      _vm._v(" "),
+                                      _vm._l(column.children, function(child) {
+                                        return _c(
+                                          "v-card",
+                                          {
+                                            key: child.key,
+                                            staticClass:
+                                              "primary darken-1 mt-3 drag-me p-5 white--text",
+                                            attrs: {
+                                              to:
+                                                "/tasks/" +
+                                                child.id +
+                                                "/manage",
+                                              id: "" + child.id
+                                            }
+                                          },
+                                          [
+                                            _c("v-card-title", [
+                                              _c("div", [
+                                                _c(
+                                                  "h2",
+                                                  { staticClass: "title" },
+                                                  [
+                                                    _c(
+                                                      "v-icon",
+                                                      {
+                                                        attrs: {
+                                                          color: "white"
+                                                        }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(child.icon)
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(
+                                                      " " + _vm._s(child.name)
+                                                    )
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "h3",
+                                                  { staticClass: "subheader" },
+                                                  [
+                                                    _vm._v(
+                                                      _vm._s(child.type.name)
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                child.user
+                                                  ? _c("p", [
+                                                      _vm._v(_vm._s(child.user))
+                                                    ])
+                                                  : _vm._e()
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            child.type.name !== "Task"
+                                              ? _c("v-card-text", [
+                                                  _vm._v(
+                                                    "\n                      " +
+                                                      _vm._s(
+                                                        child.percent_finished
+                                                      ) +
+                                                      "% finished.\n                      "
+                                                  ),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "grey darken-1",
+                                                      staticStyle: {
+                                                        padding: "0",
+                                                        width: "100%",
+                                                        height: "20px",
+                                                        "border-radius": "50px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c("div", {
+                                                        staticClass:
+                                                          "grey darken-2",
+                                                        style:
+                                                          "width:" +
+                                                          child.percent_finished +
+                                                          "%; height: 100%; border-radius: 50px;"
+                                                      })
+                                                    ]
+                                                  )
+                                                ])
+                                              : _c("v-card-text", [
+                                                  _c("p", {
+                                                    domProps: {
+                                                      innerHTML: _vm._s(
+                                                        child.description
+                                                      )
+                                                    }
+                                                  })
+                                                ])
+                                          ],
+                                          1
+                                        )
+                                      })
+                                    ],
+                                    2
+                                  )
+                                })
+                              )
+                            ],
+                            1
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "padded" }, [
+                        _vm._v(
+                          "\n            [SHIFT + Scroll] To scroll left and right.\n          "
                         )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "padded" }, [
-                      _vm._v(
-                        "\n            [SHIFT + Scroll] To scroll left and right.\n          "
-                      )
-                    ])
-                  ])
+                      ])
+                    ]
+                  )
                 : _c(
                     "v-layout",
                     { attrs: { row: "", wrap: "" } },
@@ -74626,7 +74654,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       theme: this.$vuetify.them,
       options: {
-        colors: ["#014841", "#11756c", "#26a69a", "#7cc3bd", "#b6e2de"],
         backgroundColor: {
           fill: "transparent"
         },

@@ -26,7 +26,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return company()->posts()->where('site_id', null)->get();
+        return company()->posts()->get();
     }
 
     /**

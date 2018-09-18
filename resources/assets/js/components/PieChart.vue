@@ -15,7 +15,6 @@ export default {
     return {
       theme: this.$vuetify.them,
       options: {
-        colors: ["#014841", "#11756c", "#26a69a", "#7cc3bd", "#b6e2de"],
         backgroundColor: {
           fill: "transparent"
         },

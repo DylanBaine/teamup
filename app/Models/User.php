@@ -73,6 +73,12 @@ class User extends Authenticatable
             'position' => 3,
             'settable_type' => 'App\Models\User',
         ]);
+        Permission::create([
+            'user_id' => $this->id,
+            'permission_mode_id' => company()->permissionModes()->where('name', 'read')->first()->id,
+            'company_id' => company('id'),
+            'type_id' => company()->types()->where('slug', 'posts')->first()->id
+        ]);
     }
 
     public function columns()
