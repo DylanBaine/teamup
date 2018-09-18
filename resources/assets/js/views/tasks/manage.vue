@@ -10,15 +10,18 @@
                     ID: {{task.id}}
                   </h3>
                   <ul>
-                    <li>
+                    <li v-if="task.start_date_string">
                       Start: {{task.start_date_string}}
                     </li>
-                    <li>
+                    <li v-if="task.end_date_string">
                       End: {{task.end_date_string}}
                     </li>
                   </ul>
                   <h3 v-if="task.user" class="subheading">
-                    User: <router-link :to="`/users/${task.user.id}`">{{task.user.name}}</router-link>
+                    {{task.type.name == 'Task' ? 'Assigned To' : 'Manager'}}: <router-link :to="`/users/${task.user.id}`">{{task.user.name}}</router-link>
+                  </h3>
+                  <h3 v-if="task.group" class="subheading">
+                    Group <router-link :to="`/groups/${task.group.id}`">{{task.group.name}}</router-link>
                   </h3>
               </v-flex>
               <v-flex md8 style="position: relative">
@@ -33,38 +36,45 @@
             </v-layout>
             <router-link to="/tasks">Tasks</router-link> <task-breadcrumb :icon-size="14" :item="task.parent" :original="task"></task-breadcrumb>
           </header>
-          <v-container fluid v-if="task.type.name == 'Sprint'" grid-list-lg>
-            <v-layout row wrap>
-                <draggable 
-                  v-for="column in task.columns" :key="column.position"  
-                  :items="column.children" :options="{group:'tasks', element: '.drag-me'}" 
-                  :id="`${column.id}`" class="task-row flex md3 mt-2" @end="add" @start="start">
-                <v-card>
-                    <v-card-title>
-                    <h2>{{column.value}}</h2>
-                    </v-card-title>
-                </v-card>
-                <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
-                    <v-card-title>
-                      <div>
-                        <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
-                        <h3 class="subheader">{{child.type.name}}</h3>
-                        <p v-if="child.user">{{child.user}}</p>
-                      </div>
-                    </v-card-title>
-                    <v-card-text v-if="child.type.name !== 'Task'">
-                    {{child.percent_finished}}% finished.
-                    <div class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
-                    <div class="grey darken-2" :style="`width:${child.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
-                    </div>
-                    </v-card-text>
-                    <v-card-text v-else>
-                      <p v-html="child.description"></p>
-                    </v-card-text>
-                </v-card>
-                </draggable>
-            </v-layout>
-          </v-container>
+          <v-tooltip top color="info" v-if="task.type.name == 'Sprint'" >
+            <div slot="activator" class="padded" style="width: 100%; min-height: 500px; overflow: auto; overflow-y: hidden;" @scroll="scroll">
+              <div :style="rowsContainerStyle">
+                <v-layout row>
+                    <draggable 
+                      v-for="column in task.columns" :key="column.position"  
+                      :items="column.children" :options="{group:'tasks', element: '.drag-me'}" 
+                      :id="`${column.id}`" style="width: 300px; margin-right: 20px;" class="mb-2 mt-2" @end="add" @start="start">
+                    <v-card>
+                        <v-card-title>
+                        <h2>{{column.value}}</h2>
+                        </v-card-title>
+                    </v-card>
+                    <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
+                        <v-card-title>
+                          <div>
+                            <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
+                            <h3 class="subheader">{{child.type.name}}</h3>
+                            <p v-if="child.user">{{child.user}}</p>
+                          </div>
+                        </v-card-title>
+                        <v-card-text v-if="child.type.name !== 'Task'">
+                        {{child.percent_finished}}% finished.
+                        <div class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
+                        <div class="grey darken-2" :style="`width:${child.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
+                        </div>
+                        </v-card-text>
+                        <v-card-text v-else>
+                          <p v-html="child.description"></p>
+                        </v-card-text>
+                    </v-card>
+                    </draggable>
+                </v-layout>
+              </div>
+            </div>
+            <span class="padded">
+              [SHIFT + Scroll] To scroll left and right.
+            </span>
+          </v-tooltip>
           <v-layout row wrap v-else>
               <v-flex md6 v-for="task in task.children" :key="task.key">
               <v-card ripple :to="`/tasks/${task.id}/manage`">
@@ -80,8 +90,7 @@
                   </div>
                   </v-card-title>
                   <v-card-text>
-                  <p>
-                      {{task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description}}
+                  <p v-html="task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description">
                   </p>
                   <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
                       <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
@@ -93,7 +102,7 @@
           </v-layout>
           <basic-task-report v-if="task.type.name == 'Task'" :report="task.report"></basic-task-report>
           <project-report v-else-if="task.type.name == 'Project'" :report="task.report"></project-report>
-          <v-dialog v-model="fullDescription" fullscreen>
+          <v-dialog v-model="fullDescription" fullscreen persistent>
             <v-card>
               <v-card-title>
                 <h2 class="title">Description:</h2>
@@ -170,8 +179,8 @@
                   <v-icon>add</v-icon>
               </v-btn>            
           </div>
-          <task-settings ref="settings"></task-settings>
       </v-container>
+      <task-settings ref="settings"></task-settings>
   </div>
 </template>
 
@@ -189,10 +198,14 @@ export default {
       fam: false,
       loaded: false,
       report: null,
-      subWeeks: 1
+      subWeeks: 1,
+      modal: false
     };
   },
   watch: {
+    modal() {
+      if (!this.modal) this.init();
+    },
     $route() {
       this.fam = false;
       this.init();
@@ -204,6 +217,9 @@ export default {
     }
   },
   computed: {
+    rowsContainerStyle() {
+      return `width: ${this.task.columns.length * 320}px; position: relative`;
+    },
     $task() {
       return new Task(this, "task");
     },
@@ -225,6 +241,9 @@ export default {
     init() {
       this.loaded = true;
       this.$task.find(this.$route.params.task);
+    },
+    scroll(e) {
+      console.log(e);
     },
     remove(id) {
       this.$task.delete(id).then(res => {

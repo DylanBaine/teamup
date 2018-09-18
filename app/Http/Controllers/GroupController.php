@@ -15,23 +15,23 @@ class GroupController extends Controller
 
     public function __construct()
     {
-        $this->groups = Group::all()->load('users');
-        //$this->assertDb = new AssertIsSet('groups');
-        $this->users = User::all();
     }
 
     public function addUser(Request $request, $user)
     {
         $group = Group::find($request->group);
         $user = User::find($user);
+        abort_if(
+            DB::table('group_user')->where('user_id', $user->id)->where('group_id', $group->id)->exists(), 
+            422, 
+            $user->name.' is already assigned to '.$group->name.'.'
+        );
         $group->users()->save($user);
-        return redirect()->back();
     }
 
     public function removeUser($group, $user)
     {
         DB::table('group_user')->where('user_id', $user)->where('group_id', $group)->delete();
-        return redirect()->back();
     }
     /**
      * Display a listing of the resource.
@@ -55,8 +55,6 @@ class GroupController extends Controller
             'company_id' => company('id'),
             'name' => $request->name,
         ]);
-        //return $this->assertDb->has('id', $group->id);
-        return redirect()->back();
     }
 
     /**
@@ -67,7 +65,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        return company()->groups()->find($id)->load('users');
+        return company()->groups()->find($id)->load('users', 'tasks');
     }
 
     /**

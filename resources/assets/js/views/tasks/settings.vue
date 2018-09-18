@@ -1,19 +1,17 @@
 <template>
-    <v-dialog v-model="showing" :width="700">
+    <v-dialog v-model="showing" :width="900" persistent>
         <v-card>
             <v-toolbar color="primary" dark>
-<!--                 <v-btn
-                    flat icon
-                    :to="`/tasks/${$route.params.task}/manage`"
-                    color="white">
-                    <v-icon>chevron_left</v-icon>
-                </v-btn> -->
                 <h2 class="title">{{task.name}} Settings</h2>
+                <v-spacer></v-spacer>
+                <v-btn flat icon color="white" @click="showing = false; $parent.init()">
+                    <v-icon>close</v-icon>
+                </v-btn>
             </v-toolbar>
             <v-card-text>
                 <v-container fluid grid-list-lg>
                     <v-layout row wrap>
-                        <!-- <v-flex md4>
+                        <v-flex md6>
                             <div ref="scrollMe" class="scroll-me" v-if="task.columns && task.columns.length">
                                 <header>
                                     <h2>
@@ -25,10 +23,11 @@
                                         <div :id="column.id" v-for="column in task.columns" :key="column.position">
                                             <v-list-tile>
                                                 <v-list-tile-content>
-                                                    <input type="text" class="padded ghost" @keydown.enter="$setting.update(column.id, column)" v-model="column.value">
+                                                    <input v-if="column.value != 'Finished'" type="text" class="padded ghost" @keydown.enter="$setting.update(column.id, column)" v-model="column.value">
+                                                    <span class="ml-2" v-else>{{column.value}}</span>
                                                 </v-list-tile-content>
                                                 <v-list-tile-action>
-                                                    <v-btn @click="removeColumn(column.id)" icon flat small color="grey">
+                                                    <v-btn v-if="column.value != 'Finished'" @click="removeColumn(column.id)" icon flat small color="grey">
                                                         <v-icon>delete_forever</v-icon>
                                                     </v-btn>
                                                 </v-list-tile-action>
@@ -54,7 +53,7 @@
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </div>
-                        </v-flex> -->
+                        </v-flex>
                         <v-flex class="relative">
                             <div class="scroll-me" v-if="task.subscribers">
                                 <header>
@@ -182,9 +181,7 @@ export default {
     },
     removeColumn(column) {
       this.$setting.removeColumn(column).then(() => {
-        if (!this.$root.errors) {
-          this.$task.find(this.$route.params.task);
-        }
+        this.$task.find(this.$route.params.task);
       });
     },
     addSub() {

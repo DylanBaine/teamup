@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Notifications\Markup\Tasks\TaskUpdatedMarkup;
 use Illuminate\Contracts\Queue\ShouldQueue;
-class TaskUpdated extends Notification implements ShouldQueue
+class TaskUpdated extends Notification /* implements ShouldQueue */
 {
 
     use Queueable;
@@ -18,12 +18,13 @@ class TaskUpdated extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public $parent, $task, $type;
-    public function __construct($task, $parent = null, $type)
+    public $parent, $task, $type, $by;
+    public function __construct($task, $parent = null, $type, $by)
     {
         $this->parent = $parent;
         $this->task = $task;
         $this->type = $type;
+        $this->by = $by;
     }
 
     /**
@@ -45,7 +46,7 @@ class TaskUpdated extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new TaskUpdatedMarkup($this->task))->markup($this->type);
+        return (new TaskUpdatedMarkup($this->task, $this->by))->markup($this->type);
     }
 
     /**

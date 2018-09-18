@@ -4,7 +4,7 @@
         <v-icon :color="iconColor" v-if="item" :size="iconSize">{{icon ? icon : 'chevron_right'}}</v-icon>
         <router-link v-if="item" :to="`/tasks/${item.id}/manage`">{{item.name}}</router-link>
         <v-icon :color="iconColor" :size="iconSize" v-if="original">{{icon ? icon : 'chevron_right'}}</v-icon>
-        <span v-if="original">{{original.name}}</span>
+        <span v-if="original" style="font-weight: bold;">{{original.name}}</span>
     </span>
 </template>
 

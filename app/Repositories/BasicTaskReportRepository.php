@@ -7,7 +7,9 @@ class BasicTaskReportRepository extends Repository{
 
 
     public function daysInCurrentColumn(){
-        return $this->daysInColumn($this->getSpecifiedModel()->column->value);
+        if($this->getSpecifiedModel()->column){
+            return $this->daysInColumn($this->getSpecifiedModel()->column->value);
+        }
     }
 
     public function secondsInColumn($columnName){
@@ -19,7 +21,7 @@ class BasicTaskReportRepository extends Repository{
             $collection[] = ($change->duration_in_seconds);
         }
         $sum = array_sum($collection);
-        if($columnName == $this->getSpecifiedModel()->column->value){
+        if($this->getSpecifiedModel()->column && $columnName == $this->getSpecifiedModel()->column->value){
             $sum+=$changes->orderBy('id', 'desc')->first()->created_at->diffInSeconds(Carbon::now());
         }
         return $sum;

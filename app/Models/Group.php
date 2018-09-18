@@ -13,6 +13,10 @@ class Group extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function tasks(){
+        return $this->hasMany(Task::class)->with('parent', 'type');
+    }
+
     public function availableToUser($user)
     {
         return $this->users->find($user->id) == null;

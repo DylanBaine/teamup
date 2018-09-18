@@ -25,7 +25,10 @@ class Model {
     this.instance.$root.$refs.app.$refs.loader.run(message);
   }
   alert(message, type) {
-    if (message == "Pleas log back in to continue working...") {
+    if (
+      message == "Pleas log back in to continue working..." ||
+      message == "Unauthenticated"
+    ) {
       return (window.location.href = url);
     }
     if (message == "Set your new password to start working.") {

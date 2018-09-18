@@ -2,7 +2,7 @@
     <v-container fluid grid-list-lg>
         <v-layout row wrap>
             <v-flex md6>
-            <v-card v-if="report.changes">
+            <v-card v-if="report.changes.length">
                 <v-card-title>
                     <h2 class="title">
                         Log
@@ -20,7 +20,7 @@
             </v-card>
             </v-flex>
             <v-flex md6>
-            <v-card>
+            <v-card v-if="hasChart">
                 <v-card-title>
                     <div>
                         <h2 class="title">
@@ -49,6 +49,11 @@ export default {
   data() {
     return {};
   },
-  props: ["report"]
+  props: ["report"],
+  computed: {
+    hasChart() {
+      return this.report.percent.length > 1;
+    }
+  }
 };
 </script>

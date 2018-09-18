@@ -40,7 +40,7 @@ class TaskController extends Controller
             'users' => company()->users,
             'groups' => company()->groups,
             'types' => company()->types()->where('model', 'Task')->get(),
-            'task' => Task::find($id)
+            'task' => Task::find($id)->load('user', 'group')
         ]);
     }
 
@@ -77,6 +77,7 @@ class TaskController extends Controller
         $t->parent_id = $request->parent_id;
         $t->type_id = $request->type_id;
         $t->user_id = $request->user_id;
+        $t->group_id = $request->group_id;
         $t->icon = $request->icon;
         $t->percent_finished = 0;
         $t->column_id = $parent && $parent->columns()->count() ?
@@ -112,7 +113,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type', 'changes');
+        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type', 'changes', 'group');
         $task->report = $task->runReport();
         return $task;
     }

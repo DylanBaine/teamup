@@ -39,6 +39,8 @@
                             :items="types"
                             item-avatar="icon"
                             item-text="name"
+                            persistent-hint
+                            hint="A sprint task type will generate progress columns."
                             item-value="id">
                           </v-select>
                         </v-flex>
@@ -58,7 +60,7 @@
                               :items="groups"
                               item-value="id"
                               item-text="name"
-                              v-model="task.user_id"
+                              v-model="task.group_id"
                               hint="Start typing to find a group.">
                             </v-autocomplete>
                         </v-flex>
@@ -84,10 +86,10 @@
                             ></icon-selector>
                           </v-flex>
                           <v-flex md6>
-                            <v-textarea
+                            <page-builder
                               label="Description"
                               v-model="task.description"
-                            ></v-textarea>
+                            ></page-builder>
                           </v-flex>
                         </v-layout>
                       </div>
@@ -123,7 +125,7 @@
                               <h4>Type: {{setType}}</h4>
                             </v-flex>
                             <v-flex md3 class="padded">
-                              <h4>Assigned To: {{setAssignedTo}}</h4>
+                              <h4>Assigned To: {{setAssignedTo}} {{task.group_id ? task.group.name : ''}}</h4>
                             </v-flex>
                           </v-layout>
                           <v-layout v-if="setType != 'Team'" row wrap class="mt-4">
@@ -177,7 +179,9 @@ export default {
         user_id: null,
         type_id: null,
         name: null,
-        description: null
+        description: null,
+        group: null,
+        user: null
       },
       editing: this.$route.meta.editing,
       parent: null,
@@ -313,6 +317,7 @@ export default {
         user_id: t.user_id,
         type_id: t.type_id,
         icon: t.icon,
+        group_id: t.group_id,
         parent_id: t.parent_id
       };
       this.$task.update(this.task.id, data).then(() => {

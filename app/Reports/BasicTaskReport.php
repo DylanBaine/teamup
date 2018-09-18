@@ -24,12 +24,18 @@ class BasicTaskReport extends Report {
     }
 
     private function percents(){
-        return [
-            ['Column', 'Percent'],
+        $columns = collect([
+            ['Column', 'Percent']
+        ]);
+        foreach($this->repository->getSpecifiedModel()->parent->columns as $column){
+            $columns->push([$column->value, $this->repository->percentOfTimeIn($column->value)]);
+        }
+        return $columns; 
+/*         [
             ['In Progress' , $this->repository->percentOfTimeIn('In Progress')],
             ['Back Log' , $this->repository->percentOfTimeIn('Back Log')],
             ['Finished' , $this->repository->percentOfTimeIn('Finished')],
-        ];
+        ]; */
     }
 
     private function days(){

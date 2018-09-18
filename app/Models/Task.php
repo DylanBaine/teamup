@@ -102,9 +102,9 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function groups()
+    public function group()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Group::class);
     }
 
     public function permissions()

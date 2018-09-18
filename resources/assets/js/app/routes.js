@@ -53,11 +53,9 @@ const routes = [
   {
     path: "/groups",
     component: Groups,
-    children: [
-      { path: "create", component: CreateGroup },
-      { path: ":group", component: ShowGroup }
-    ]
+    children: [{ path: "create", component: CreateGroup }]
   },
+  { path: "/groups/:group", component: ShowGroup },
   {
     path: "/tasks",
     component: Tasks,

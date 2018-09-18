@@ -16,7 +16,7 @@
                         :label="'Post Title'"
                         v-model="post.name"
                     ></v-text-field>
-                    <page-builder label="Content" v-model="post.content" v-if="showing"></page-builder>
+                    <page-builder label="Content" v-model="post.content" v-if="showing" height="600"></page-builder>
                     <v-card-actions class="mt-2">
                         <v-spacer></v-spacer>
                         <v-btn :to="`/${$route.params.type}`" color="error" flat>

@@ -14,7 +14,7 @@
                 </div>
                 <v-spacer></v-spacer>
                 <v-tabs centered color="primary" slot="extension" v-model="tab">
-                    <v-tab href="#tasks">
+                    <v-tab v-if="user.tasks.length" href="#tasks">
                         Tasks
                     </v-tab>
                     <v-tab href="#permissions">
@@ -26,7 +26,7 @@
                 </v-btn>
             </v-toolbar>
             <v-tabs-items v-model="tab" style="height: 70vh; overflow: auto">
-                <v-tab-item id="tasks">
+                <v-tab-item v-if="user.tasks.length" id="tasks">
                     <v-card flat v-if="user.tasks.length">
                       <v-card-title>
                             <h3>Tasks</h3>
@@ -306,9 +306,6 @@ export default {
         this.types = p.types;
         this.showing = true;
       });
-      /*       this.$user.find(this.$route.params.user);
-      this.$modes.get();
-      this.$types.get(); */
     },
     assignUser() {
       this.assign.user = this.user.id;

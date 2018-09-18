@@ -26,6 +26,7 @@ class UpdateTaskResponse implements Responsable
         $t->column_id = $request->column_id ? $request->column_id : $t->column_id;
         $t->type_id = $request->type_id;
         $t->user_id = $request->user_id;
+        $t->group_id = $request->group_id;
         $t->icon = $request->icon;
         $t->save();
         $type = $t->type->name;
@@ -44,9 +45,9 @@ class UpdateTaskResponse implements Responsable
 
     protected function notifyOfEdit($task){
         $users = User::whereHas('subscriptions', function ($sub) use ($task) {
-            $sub->where('subscribable_id', $task->id)->where('subscribable_type', 'App\Models\Task');
+            $sub->where('subscribable_id', $task->id)->orWhere('subscribable_id', $task->parent_id)->where('subscribable_type', 'App\Models\Task');
         })->get();
-        Notification::send($users, new TaskUpdated($task, null, 'dataUpdated'));
+        Notification::send($users, new TaskUpdated($task, null, 'dataUpdated', user()));
     }
 
     protected function updateProgress($task)
@@ -61,10 +62,10 @@ class UpdateTaskResponse implements Responsable
         $percent = ($finishedTaskCount / $childrentCount) * 100;
         $parent->percent_finished = $percent;
         $parent->save();
-        $users = User::whereHas('subscriptions', function ($sub) use ($parent) {
-            $sub->where('subscribable_id', $parent->id)->where('subscribable_type', 'App\Models\Task');
+        $users = User::whereHas('subscriptions', function ($sub) use ($parent, $task) {
+            $sub->where('subscribable_id', $parent->id)->where('subscribable_type', 'App\Models\Task')->orWhere('subscribable_id', $task->id);
         })->get();
-        Notification::send($users, new TaskUpdated($task, $parent, 'progressUpdated'));
+        Notification::send($users, new TaskUpdated($task, $parent, 'progressUpdated', user()));
         $this->logProgressChange($task);
     }
 

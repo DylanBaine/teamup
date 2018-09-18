@@ -6,8 +6,9 @@
                 {{label}}
             </h2>
         </v-card-title>
-        <v-card-text>
-            <mce @input="change" v-model="value" :init="init"></mce>
+        <v-card-text class="white black--text">
+            <!-- <mce @input="change" v-model="value" :init="init"></mce> -->
+            <editor @input="change" v-model="value" :options="editorOption"></editor>
         </v-card-text>
     </v-card>
 </div>
@@ -15,11 +16,34 @@
 
 <script>
 import Editor from "@tinymce/tinymce-vue";
+// require styles
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
+
+import { quillEditor } from "vue-quill-editor";
 export default {
   data() {
     return {
-      newValue: "",
-      init: {
+      editorOption: {
+        modules: {
+          toolbar: [
+            [{ size: ["small", false, "large"] }],
+            ["bold", "italic"],
+            [{ align: ["center", "right", false] }],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link"]
+          ],
+          history: {
+            delay: 1000,
+            maxStack: 50,
+            userOnly: false
+          }
+        }
+      },
+      newValue: ""
+      /*       init: {
+        height: this.height,
         content_css: ["/css/app.css"],
         content_style:
           "body{padding: 20px;} .container{border: dotted 1px blue;} .row{border: dotted 1px grey;}.md4, .x6{border: dotted 1px red;} .jumbotron{border: dotted 1px lightblue;}",
@@ -83,14 +107,15 @@ export default {
               '<form method="post" action="/contact">@csrf<div><label for="email">Email</label><input type="text" id="email" name="email" class="custom"></div><div><label for="message">Message</label><textarea class="custom" name="message" id="message" rows="20"></textarea></div><button class="btn block" type="submit">Send</button></form>'
           }
         ]
-      }
+      } */
     };
   },
   components: {
-    mce: Editor
+    mce: Editor,
+    editor: quillEditor
   },
   computed: {},
-  props: ["value", "label"],
+  props: ["value", "label", "height"],
   mounted() {},
   methods: {
     change() {

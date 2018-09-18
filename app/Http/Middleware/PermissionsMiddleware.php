@@ -27,12 +27,18 @@ class PermissionsMiddleware
         } else {
             foreach ($user->permissions as $permission) {
                 $permissionSlug = $permission->type->slug;
-                if ($permission->mode->name == 'read' && $permissionSlug == $basePath 
-                    // if the user can read permissions, they can read types and permission modes
-                    || $basePath == 'types' && $permissionSlug == 'permissions'
-                    || $basePath == 'permission-modes' && $permissionSlug == 'permissions'
-                    // if the user can manage tasks, they can manipulate settings
-                    || $basePath == 'settings' && $permissionSlug == 'tasks' && $permission->mode->name == 'manage') {
+                if($request->method() == 'GET'){
+                    if ($permission->mode->name == 'read' && $permissionSlug == $basePath 
+                        // if the user can read permissions, they can read types and permission modes
+                        || $basePath == 'types' && $permissionSlug == 'permissions'
+                        || $basePath == 'permission-modes' && $permissionSlug == 'permissions'
+                        // if the user can manage tasks, they can manipulate settings
+                        || $basePath == 'settings' && $permissionSlug == 'tasks' && $permission->mode->name == 'manage'
+                        || $permission->mode->name == 'manage' && $permissionSlug == $basePath
+                        ) {
+                        return $next($request);
+                    }
+                }else{
                     return $next($request);
                 }
             }

@@ -1,5 +1,10 @@
 <?php
 //dd(bcrypt('secret'));
+Route::get('app-redirect', function(){
+    $ref = request()->query('ref');
+    $to = request()->query('to');
+    return redirect(url('app#/'.$to));
+});
 // Set users last page with every request
 Route::post('set_last_page', function(){
     user()->last_route = request('route');

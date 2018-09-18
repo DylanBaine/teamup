@@ -16,7 +16,7 @@ trait TaskLogic
         $users = User::whereHas('subscriptions', function ($sub) use ($task) {
             $sub->where('subscribable_id', $task->id)->where('subscribable_type', 'App\Models\Task');
         })->get();
-        Notification::send($users, new TaskUpdated($task, null, $methodString));
+        Notification::send($users, new TaskUpdated($task, null, $methodString, user()));
     }
 
     function addColumn()
@@ -31,17 +31,16 @@ trait TaskLogic
             'settable_id' => $taskId,
             'settable_type' => 'App\Models\Task'
         ]);
-        
             $this->taskNotification($taskId, 'addColumn');
     }
 
     function removeColumn($id)
     {
         $setting = Setting::where('id', $id)->first();
-        $setting->delete();
         $taskId = Task::whereHas('settings', function($setting) use ($id){
             $setting->where('id', $id);
         })->first()->id;
+        $setting->delete();
         $this->taskNotification($taskId, 'removeColumn');
 
     }
@@ -51,7 +50,7 @@ trait TaskLogic
         $sub = Subscription::where('id', $setting)->first();
         $users = User::where('id', $sub->user_id)->get();
         $task = Task::find($sub->subscribable_id);
-        Notification::send($users, new TaskUpdated($task, null, 'unsubscribedFromTask'));
+        Notification::send($users, new TaskUpdated($task, null, 'unsubscribedFromTask', user()));
         $sub->delete();
     }
 
@@ -68,7 +67,7 @@ trait TaskLogic
         $sub = Subscription::where($data);
         if(!$sub->exists()){
             Subscription::create($data);
-            Notification::send($users, new TaskUpdated($task, null, 'subscribedToTask'));
+            Notification::send($users, new TaskUpdated($task, null, 'subscribedToTask', user()));
         }
     }
 

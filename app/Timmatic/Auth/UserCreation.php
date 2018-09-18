@@ -11,22 +11,22 @@ class UserCreation
 
     private $create = [
         'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions',
-        'Documentation', 'Announcements', 'Permission Types', 'Reports'
+        'Documentation', 'Announcements', 'Reports'
     ];
     private $read = [
         'Post Types', 'Tasks', 'Users', 'Permissions',
-        'Documentation', 'Announcements', 'Reports'
+        'Documentation', 'Announcements', 'Reports', 'Groups', 'Clients'
     ];
     private $update = [
         'Post Types', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions',
-        'Documentation', 'Announcements', 'Permission Types', 'Reports'
+        'Documentation', 'Announcements', 'Reports'
     ];
     private $delete = [
         'Post Types', 'Post Types', 'Tasks', 'Task Types', 'Users', 'Permissions',
-        'Documentation', 'Announcements', 'Permission Types', 'Reports'
+        'Documentation', 'Announcements', 'Reports'
     ];
     private $manage = [
-        'Tasks', 'Users', 'Permissions'
+        'Tasks', 'Users', 'Permissions', 'Groups', 'Clients', 'Posts'
     ];
     private $assign = [
         'Tasks', 'Permissions'
@@ -113,6 +113,8 @@ class UserCreation
         $this->makeType('Groups', 'Permission', 'group');
         $this->makeType('Users', 'Permission', 'person');
         $this->makeType('Reports', 'Permission', 'bar_chart');
+        $this->makeType('Clients', 'Permission', 'assignment_ind');
+        $this->makeType('Posts', 'Permission', 'chrome_reader_mode');
 
         $this->makeType('Documentation', 'Post', 'chrome_reader_mode');
         $this->makeType('Announcements', 'Post', 'chrome_reader_mode');

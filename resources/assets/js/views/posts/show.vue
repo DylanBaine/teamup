@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="showing" persistent>
+    <v-dialog v-model="showing" persistent fullscreen>
         <v-card scrollable>
             <v-toolbar dark color="primary">
                 <h2 class="title">

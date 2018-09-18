@@ -13,7 +13,7 @@ class AddSuperUserToCompanyTable extends Migration
      */
     public function up()
     {
-        Schema::table('companys', function (Blueprint $table) {
+        Schema::table('companies', function (Blueprint $table) {
             $table->integer('super_user_id');
             $table->integer('plan_id');
         });
@@ -26,7 +26,7 @@ class AddSuperUserToCompanyTable extends Migration
      */
     public function down()
     {
-        Schema::table('companys', function (Blueprint $table) {
+        Schema::table('companies', function (Blueprint $table) {
             //
         });
     }
