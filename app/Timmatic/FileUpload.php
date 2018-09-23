@@ -37,6 +37,10 @@ class FileUpload
         $this->fileSlug = date('m-d-y-h-i-s') . '-' . $this->hashName . '.' . $this->file->getClientOriginalExtension();
     }
 
+    public function getFileTypeName(){
+        return (new FileExtensionTranslator($this->getFileMimeType(), $this->file->getClientOriginalExtension()))->getTypeName();
+    }
+
     public function getFileMimeType()
     {
         return str_plural(ucwords(explode('/', $this->file->getMimeType())[0]));

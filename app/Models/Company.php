@@ -33,9 +33,10 @@ class Company extends Model
         return $this->hasMany(Permission::class);
     }
 
-    public function permissionModes()
+    public function permissionModes($name = null)
     {
-        return $this->hasMany(PermissionMode::class);
+        $relation = $this->hasMany(PermissionMode::class);
+        return $name == null ? $relation : $relation->where('name', $name)->first();
     }
 
     public function sites()
@@ -48,8 +49,11 @@ class Company extends Model
         return $this->hasMany(File::class);
     }
 
-    public function types()
+    public function types($slug = null)
     {
+        if($slug != null){
+            return $this->hasMany(Type::class)->where('slug', $slug)->first();
+        }
         return $this->hasMany(Type::class);
     }
 

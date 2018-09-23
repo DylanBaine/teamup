@@ -7,6 +7,7 @@ use App\Timmatic\FileUpload;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\File;
 
 class FileController extends Controller
 {
@@ -23,12 +24,26 @@ class FileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    { /*
-    $fileTypes = Type::where('model', 'File')->with(['files' => function ($files) {
-    $files->where('user_id', Auth::user()->id);
-    }])->get();
-    return view('files.index', compact('fileTypes')); */
-        return company()->files()->get();
+    {
+        $s = request()->query('search');
+        if($s){
+            return company()->files()->where('name', 'like', "%$s%")->orWhereHas('type', function($type) use($s){
+                $type->where('name', 'like', "%$s%");
+            })->get();
+        }
+        return response()->json([
+            'files' => company()->types()->where('model', 'File')->with('files')->get(),
+            'types' => company()->types()->where('model', 'File')->get()
+        ]);
+    }
+
+    public function getType($slug){
+        return response()->json([
+            'files' => company()->files()->with('type')->whereHas('type', function($type) use ($slug){
+                $type->where('slug', $slug);
+            })->get(),
+            'types' => company()->types()->where('model', 'File')->get()
+        ]);
     }
 
     /**
@@ -49,8 +64,8 @@ class FileController extends Controller
         ]);
         Type::firstOrCreate([
             'company_id' => company('id'),
-            'name' => $uploader->getFileMimeType(),
-            'slug' => str_slug($uploader->getFileMimeType()),
+            'name' => $uploader->getFileTypeName(),
+            'slug' => str_slug($uploader->getFileTypeName()),
             'icon' => 'attach_file',
             'model' => 'File',
         ])->files()->save($file);
@@ -94,9 +109,13 @@ class FileController extends Controller
      */
     public function destroy($id)
     {
-        $file = $this->files->find($id);
+        $file = File::find($id);
+        $type = $file->type;
         Storage::disk('public')->delete('files/' . $file->hash_name);
         $file->delete();
-        return redirect()->back();
+        if($type->files()->count() < 1){
+            $type->delete();
+        }
+    
     }
 }

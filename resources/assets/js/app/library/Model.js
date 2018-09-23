@@ -137,13 +137,10 @@ class Model {
    * Add a new record to the database
    * @param {object} data the data to be saved for the object
    */
-  create(data) {
-    var config = {
-      headers: { "Content-Type": "multipart/FormData" }
-    };
+  create(data, config = null) {
     this.showLoader("Saving...");
     return axios
-      .post(this.postUrl, data)
+      .post(this.postUrl, data, config)
       .then(res => {
         this.successfullyAdded();
         this.showLoader();
@@ -208,7 +205,11 @@ class Model {
         this.successfullyDeleted();
         this.get();
         if (this.callback) {
-          this.instance[this.callback]();
+          if (typeof this.callback == "string") {
+            this.instance[this.callback]();
+          } else {
+            this.callback();
+          }
         }
         this.setToDelete = null;
       })

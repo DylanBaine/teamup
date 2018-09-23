@@ -35,6 +35,10 @@ class PermissionsMiddleware
                         // if the user can manage tasks, they can manipulate settings
                         || $basePath == 'settings' && $permissionSlug == 'tasks' && $permission->mode->name == 'manage'
                         || $permission->mode->name == 'manage' && $permissionSlug == $basePath
+                        // if the user can read post types they can read posts
+                        || $permission->mode->name == 'read' && $basePath == 'posts' && $permissionSlug == 'post-types'
+                        // if the user can read files they can read file types
+                        || $permission->mode->name == 'read' && $basePath == 'file-type' && $permissionSlug == 'files'
                         ) {
                         return $next($request);
                     }

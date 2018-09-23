@@ -79,7 +79,7 @@
 		<v-content>
 			<v-container fluid fill-height>
 				<v-layout>
-					<router-view :key="randomKey"></router-view>
+						<router-view :key="randomKey"></router-view>
 				</v-layout>
 			</v-container>
 		</v-content>

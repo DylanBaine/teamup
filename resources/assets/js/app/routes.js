@@ -25,7 +25,7 @@ import PostTypes from "../views/posts/index.vue";
 import Permissions from "../views/permissions/index.vue";
 import CreatePermissions from "../views/permissions/create.vue";
 
-// Site Views
+// Site Views ======== deep in backlog
 import Sites from "../views/sites/index.vue";
 import CreateSite from "../views/sites/create.vue";
 import ShowSite from "../views/sites/show.vue";
@@ -36,6 +36,11 @@ import Users from "../views/users/index.vue";
 import ShowUser from "../views/users/show.vue";
 import CreateUser from "../views/users/create.vue";
 import ManageUser from "../views/users/manage.vue";
+
+// File Views
+import Files from "../views/files/index.vue";
+import ShowFile from "../views/files/show.vue";
+import CreateFile from "../views/files/create.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -86,6 +91,38 @@ const routes = [
     path: "/users/:user",
     component: ShowUser,
     meta: { controller: true }
+  },
+  {
+    path: "/file-type/:type",
+    component: Files,
+    meta: {
+      controller: true,
+      viewingType: true
+    },
+    children: [
+      {
+        path: "create",
+        component: CreateFile
+      }
+    ]
+  },
+  {
+    path: "/files",
+    component: Files,
+    meta: {
+      controller: true
+    },
+    children: [
+      {
+        path: "/files/create",
+        component: CreateFile
+      },
+      {
+        path: ":file",
+        component: ShowFile,
+        meta: { controller: true }
+      }
+    ]
   },
   {
     path: "/:type",

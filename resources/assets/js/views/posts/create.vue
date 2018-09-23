@@ -1,7 +1,7 @@
 <template>
     <v-dialog fullscreen hide-overlay v-model="showing" persistent>
         <v-card v-if="post">
-            <v-form @submit.prevent="save()">
+            <v-form ref="form" @submit.prevent="save()" :valid="valid">
                 <v-toolbar dark color="primary" v-if="!$route.meta.forSite">
                     <h2 class="title" v-if="type">
                         Create new {{type.name}}.
@@ -15,6 +15,8 @@
                     <v-text-field
                         :label="'Post Title'"
                         v-model="post.name"
+                        required
+                        :rules="[post.name.length > 0 && post.name.length < 100]"
                     ></v-text-field>
                     <page-builder label="Content" v-model="post.content" v-if="showing" height="600"></page-builder>
                     <v-card-actions class="mt-2">
@@ -40,6 +42,7 @@ export default {
     return {
       showing: false,
       type: null,
+      valid: false,
       post: {
         name: "",
         content: "",
@@ -77,20 +80,25 @@ export default {
       this.showing = true;
     },
     save() {
-      if (this.$route.meta.editing) {
-        this.$post.update(this.post.id, this.post);
-      } else {
-        this.$post.create(this.post).then(() => {
-          this.reset();
-        });
+      if (this.$refs.form.validate()) {
+        if (this.$route.meta.editing) {
+          this.$post.update(this.post.id, this.post).then(() => {
+            this.reset(this.post.id);
+          });
+        } else {
+          this.$post.create(this.post).then(() => {
+            this.reset();
+          });
+        }
       }
     },
-    reset() {
-      this.post = {
+    reset(type = "") {
+      this.$router.push("/" + this.$route.params.type + "/" + type);
+      /* this.post = {
         name: "",
         content: "",
         type_id: this.type.id
-      };
+      }; */
     }
   }
 };

@@ -7,12 +7,14 @@
                 </h2>
                 <v-spacer></v-spacer>
                 <v-btn
+                    v-if="$root.$user.can('delete', $route.params.type) || $root.$user.can('manage', $route.params.type)"
                     icon
                     @click="remove(post.id)"
                     color="warning">
                     <v-icon>delete_forever</v-icon>
                 </v-btn>
                 <v-btn
+                    v-if="$root.$user.can('update', $route.params.type) || $root.$user.can('manage', $route.params.type)"
                     icon
                     :to="`/${$route.params.type}/${post.id}/edit`"
                     color="success">
@@ -51,9 +53,10 @@ export default {
       this.$post.find(this.$route.params.post);
     },
     remove(post) {
-      this.$post.delete(post).then(() => {
-        this.$router.push("/" + this.$route.params.type);
-      });
+      this.$post.delete(post, this.goBack);
+    },
+    goBack() {
+      this.$router.push("/" + this.$route.params.type);
     }
   }
 };
