@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Contact;
+use App\Models\Type;
+use App\Models\Client;
 
 class ContactController extends Controller
 {
@@ -23,7 +26,6 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -34,7 +36,13 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $type = Type::where('model', 'Contact')->first();
+        $contact = Client::find($request->client_id)->first()->contacts()->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'custom_fields' => $request->custom_fields,
+            'type_id' => $type->id
+        ]);
     }
 
     /**

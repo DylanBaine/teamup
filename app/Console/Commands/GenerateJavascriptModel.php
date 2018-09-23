@@ -43,7 +43,7 @@ class GenerateJavascriptModel extends Command
     }
 
     private function modelBoilerPlate($class){
-        $modelSlug = str_slug($class);
+        $modelSlug = str_plural(str_slug($class));
         return
 "import Model from '../library/Model';
 class $class extends Model {

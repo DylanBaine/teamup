@@ -19,7 +19,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        return company()->permissions()->get();
+        return company()->permissions;
     }
 
     /**

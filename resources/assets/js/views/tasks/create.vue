@@ -133,7 +133,7 @@
                               <h4>Start: {{task.start_date}}</h4>
                             </v-flex>
                             <v-flex class="padded" md3>
-                              <h4>End: {{task.start_date}}</h4>
+                              <h4>End: {{task.end_date}}</h4>
                             </v-flex>
                           </v-layout>
                         </v-card-text>
@@ -293,9 +293,9 @@ export default {
             this.date = [p.task.start_date, p.task.end_date];
             this.parent = p.parent;
           }
-          if (this.$route.params.task) {
+          /* if (this.$route.params.task) {
             this.parent = p.parent;
-          }
+          } */
           this.showing = true;
         });
       }
@@ -318,7 +318,9 @@ export default {
         type_id: t.type_id,
         icon: t.icon,
         group_id: t.group_id,
-        parent_id: t.parent_id
+        parent_id: t.parent_id,
+        start_date: t.start_date,
+        end_date: t.end_date
       };
       this.$task.update(this.task.id, data).then(() => {
         this.$router.push(this.afterPostRedirect);

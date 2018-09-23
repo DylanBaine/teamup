@@ -30,9 +30,13 @@ Route::get('/search', 'SearchController');
 include 'authRoutes.php';
 // Include api routes for users module
 include 'userRoutes.php';
+    // Include contact rotues
+    include 'contactRoutes.php';
 Route::middleware('permissions')->group(function(){
     // Include api routes for posts module
     include 'postRoutes.php';
+    // Include Client Rotes
+    include 'clientRoutes.php';
     // Include api routes for types module
     include 'typeRoutes.php';
     // Include api routes for files module
