@@ -40,18 +40,13 @@ class TaskController extends Controller
             'users' => company()->users,
             'groups' => company()->groups,
             'types' => company()->types()->where('model', 'Task')->get(),
-            'task' => Task::find($id)->load('user', 'group')
+            'task' => Task::find($id)->load('user', 'group'),
+            'parent' => Task::find($id)->parent
         ]);
     }
 
     public function add($parentId){
         $parent = Task::find($parentId);
-        $dates = [];
-        if($parent->start_date){
-            for($date = $parent->start_date; $date->lte($parent->end_date); $date->addDay()) {
-                $dates[] = $date->format('Y-m-d');
-            }
-        }
         return response()->json([
             'users' => company()->users,
             'groups' => company()->groups,

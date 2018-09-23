@@ -29,12 +29,13 @@ class PermissionsMiddleware
                 $permissionSlug = $permission->type->slug;
                 if($request->method() == 'GET'){
                     if ($permission->mode->name == 'read' && $permissionSlug == $basePath 
+                        // if the user can manage, they can read
+                        || $permission->mode->name == 'manage' && $permissionSlug == $basePath
                         // if the user can read permissions, they can read types and permission modes
                         || $basePath == 'types' && $permissionSlug == 'permissions'
                         || $basePath == 'permission-modes' && $permissionSlug == 'permissions'
                         // if the user can manage tasks, they can manipulate settings
                         || $basePath == 'settings' && $permissionSlug == 'tasks' && $permission->mode->name == 'manage'
-                        || $permission->mode->name == 'manage' && $permissionSlug == $basePath
                         // if the user can read post types they can read posts
                         || $permission->mode->name == 'read' && $basePath == 'posts' && $permissionSlug == 'post-types'
                         // if the user can read files they can read file types

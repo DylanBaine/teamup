@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Client;
+use App\Models\Type;
 
 class ClientController extends Controller
 {
@@ -13,7 +15,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        //
+        return company()->clients()->with('contacts')->get();
     }
 
     /**
@@ -34,7 +36,24 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $client = new Client;
+        $client->company_id = company('id');
+        $client->name = $request->name;
+        $client->save();
+        $contact = $client->contacts();
+        $type = Type::firstOrCreate([
+            'company_id' => company('id'),
+            'name' => 'Company Contact',
+            'icon' => 'perm_contact_calendar',
+            'slug' => 'company-contact',
+            'model' => 'Contact'
+        ]);
+        $contact->create([
+            'name' => $request->contact_name,
+            'email' => $request->contact_email,
+            'custom_fields' => $request->custom_fields,
+            'type_id' => $type->id
+        ]);
     }
 
     /**
@@ -45,7 +64,7 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        //
+        return Client::find($id)->load('contacts');
     }
 
     /**

@@ -28,6 +28,8 @@ class UpdateTaskResponse implements Responsable
         $t->user_id = $request->user_id;
         $t->group_id = $request->group_id;
         $t->icon = $request->icon;
+        $t->end_date = $request->end_date;
+        $t->start_date = $request->start_date;
         $t->save();
         $type = $t->type->name;
         if($request->user_id){

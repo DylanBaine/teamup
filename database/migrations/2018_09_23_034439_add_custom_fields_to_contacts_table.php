@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateContactablesTable extends Migration
+class AddCustomFieldsToContactsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateContactablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('contactables', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('contact_id');
-            $table->integer('contactables_id');
-            $table->string('contactables_type');
-            $table->timestamps();
+        Schema::table('contacts', function (Blueprint $table) {
+            $table->longText('custom_fields')->after('email');
         });
     }
 
@@ -29,7 +25,7 @@ class CreateContactablesTable extends Migration
      */
     public function down()
     {
-        Schema::table('contactables', function (Blueprint $table) {
+        Schema::table('contacts', function (Blueprint $table) {
             //
         });
     }

@@ -42,6 +42,11 @@ import Files from "../views/files/index.vue";
 import ShowFile from "../views/files/show.vue";
 import CreateFile from "../views/files/create.vue";
 
+// Client Views
+import Client from "../views/clients/index.vue";
+import CreateClient from "../views/clients/create.vue";
+import ShowClient from "../views/clients/show.vue";
+
 const routes = [
   { path: "/", component: Home },
   { path: "/posts", component: ManagePosts },
@@ -123,6 +128,20 @@ const routes = [
         meta: { controller: true }
       }
     ]
+  },
+  {
+    path: "/clients",
+    component: Client,
+    children: [
+      {
+        path: "create",
+        component: CreateClient
+      }
+    ]
+  },
+  {
+    path: "/clients/:client",
+    component: ShowClient
   },
   {
     path: "/:type",
