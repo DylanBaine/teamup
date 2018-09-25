@@ -10,37 +10,45 @@ class ProjectReport extends Report {
          * @param Model $model the model that the repository is responsable for
          * @param Array $arg array of arguments used in the request
          */
-        $this->repository = new ProjectReportRepository(new Task, $arg);
+        $this->repository = new ProjectReportRepository(Task::class, $arg);
     }
 
     public function format(){
         return [
-            'sprints' => $this->repository->collectAllChildrenOfTaskByType('sprint')->count(),
-            'task_breakdown' => $this->getPercentOfTasksThatAreFinished()
+                'label' => 'Column Breakdown',
+                'layouts' => [
+                    [
+                        'name' => 'Bar Chart',
+                        'chart' => 'ColumnChart'
+                    ],[
+                        'name' => 'Pie Chart',
+                        'chart' => 'PieChart'
+                    ]
+                ],
+                'data' => $this->breakTaskIntoColumns()
         ];
     }
 
-    public function getPercentOfTasksThatAreFinished(){
+    public function breakTaskIntoColumns(){
         $finished = collect([]);
         $in_progress = collect([]);
         $back_log = collect([]);
         $children = $this->repository->recursivGetChildrenOfTaskByType($this->repository->getSpecifiedModel(),'task');
+        $columns = [];
+        $results = [
+            ['Status', 'Task Count']
+        ];
         foreach($children as $child){
-            $colName = $child->column->value;
-            if($colName == 'Finished'){
-                $finished->push($child);
-            }elseif($colName == 'In Progress'){
-                $in_progress->push($child);
-            }else{
-                $back_log->push($child);
+            if($child->column){
+                $columns[] = $child->column->value;
             }
         }
-        return [
-            ['Status', 'Percent Finished'],
-            ['In Progress', $in_progress->count()],
-            ['Back log', $back_log->count()],
-            ['Finished', $finished->count()]
-        ];
+        foreach(array_unique($columns) as $column){
+            $results[] = [
+                $column, $children->where('column.value', $column)->count()
+            ];
+        }
+        return $results;
     }
 
 }        

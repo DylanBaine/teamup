@@ -66,7 +66,16 @@
                         </v-flex>
                       </v-layout>
                       <v-layout row wrap justify-center>
-                        <v-flex md8>
+                        <v-flex md4 v-if="setType == 'Project'">
+                          <v-autocomplete
+                            label="Client"
+                            v-model="task.client_id"
+                            :items="clients"
+                            item-text="name"
+                            item-value="id"
+                          ></v-autocomplete>
+                        </v-flex>
+                        <v-flex :md8="setType != 'Project'" :md4="setType == 'Project'">
                           <v-text-field
                             label="Name"
                             v-model="task.name"
@@ -183,6 +192,7 @@ export default {
         group: null,
         user: null
       },
+      clients: [],
       editing: this.$route.meta.editing,
       parent: null,
       types: [],
@@ -288,6 +298,7 @@ export default {
           this.types = p.types;
           this.users = p.users;
           this.groups = p.groups;
+          this.clients = p.clients;
           if (this.editing) {
             this.task = p.task;
             this.date = [p.task.start_date, p.task.end_date];
@@ -320,7 +331,8 @@ export default {
         group_id: t.group_id,
         parent_id: t.parent_id,
         start_date: t.start_date,
-        end_date: t.end_date
+        end_date: t.end_date,
+        client_id: t.client_id
       };
       this.$task.update(this.task.id, data).then(() => {
         this.$router.push(this.afterPostRedirect);

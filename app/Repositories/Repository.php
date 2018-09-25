@@ -3,7 +3,7 @@ namespace App\Repositories;
 use Illuminate\Database\Eloquent\Model;
 class Repository {
 
-    public function __construct(Model $model, $arg){
+    public function __construct($model, $arg){
         $this->model = $model;
         $this->arg = $arg;
     }

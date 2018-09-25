@@ -29,4 +29,10 @@ class ProjectReportRepository extends Repository{
             return $final;
     }
 
+    public function getTasksInColumn($columnName){
+        return $this->getSpecifiedModel()->children()->whereHas('column', function($column) use ($columnName){
+            $column->where('value', $columnName);
+        })->get();
+    }
+
 }  

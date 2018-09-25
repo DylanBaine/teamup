@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Auth;
 use Closure;
+use Illuminate\Auth\AuthenticationException;
 
 class PermissionsMiddleware
 {
@@ -65,6 +66,6 @@ class PermissionsMiddleware
     }
     private function abortMessage($path)
     {
-        return abort(403, 'Im sorry... You don\'t have permission to access ' . $path . '...');
+        throw new AuthenticationException('Im sorry... You don\'t have permission to access ' . $path . '...');
     }
 }

@@ -76,7 +76,13 @@ class ContactController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $type = Type::where('model', 'Contact')->first();
+        Contact::find($id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'custom_fields' => $request->custom_fields,
+            'type_id' => $type->id
+        ]);
     }
 
     /**
@@ -87,6 +93,7 @@ class ContactController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $contact = Contact::find($id);
+        $contact->delete();
     }
 }

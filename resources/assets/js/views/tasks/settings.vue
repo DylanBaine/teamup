@@ -79,7 +79,6 @@
                                     <v-autocomplete
                                         label="Add users to notify when something changes with this task."
                                         v-model="newSub"
-                                        :search-input.sync="search"
                                         :items="users"
                                         item-text="name"
                                         item-value="id"
@@ -112,7 +111,7 @@ export default {
     return {
       search: null,
       task: "",
-      users: [],
+      users: this.$root.users,
       types: [],
       showing: false,
       newType: {

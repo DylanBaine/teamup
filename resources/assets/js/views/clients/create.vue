@@ -26,10 +26,17 @@
                                 <v-flex md4 v-for="(field, key) in client.customFields" :key="key">
                                     <v-layout>
                                         <v-text-field
+                                            v-if="editField == key"
+                                            label="Edit Field"
+                                            v-model="field.name"
+                                        ></v-text-field>
+                                        <v-text-field
+                                            v-else
                                             :label="field.name"
                                             v-model="field.value"
                                         ></v-text-field>
-                                        <v-icon @click="editField(field)">edit</v-icon>
+                                        <v-icon v-if="editField == null" @click="editField = key">edit</v-icon>
+                                        <v-icon v-else @click="editField = null">save</v-icon>
                                         <v-icon @click="removeField(field)">delete_forever</v-icon>
                                     </v-layout>
                                 </v-flex>
@@ -56,6 +63,7 @@ import Client from "../../app/models/Client";
 export default {
   data() {
     return {
+      editField: null,
       showing: false,
       newField: {
         name: null
@@ -81,13 +89,6 @@ export default {
     init() {
       this.$root.getPage().then(() => {});
       this.showing = true;
-    },
-    editField(original) {
-      this.client.customFields.splice(
-        this.client.customFields.indexOf(original),
-        1
-      );
-      this.newField = original;
     },
     removeField(field) {
       this.client.customFields.splice(

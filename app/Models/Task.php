@@ -97,6 +97,10 @@ class Task extends Model
         return $this->hasMany(ProgressChange::class)->with('column')->orderBy('created_at', 'desc');
     }
 
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -124,7 +128,7 @@ class Task extends Model
 
     public function children()
     {
-        return $this->hasMany(Task::class, 'parent_id', 'id')->with('type');
+        return $this->hasMany(Task::class, 'parent_id', 'id')->with('type', 'client');
     }
 
     public function settings($name = null)

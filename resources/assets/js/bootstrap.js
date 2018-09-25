@@ -59,6 +59,8 @@ Vue.component("register", require("./views/auth/Register.vue"));
 Vue.component("prompt", require("./components/Prompt.vue"));
 
 Vue.component("pie-chart", require("./components/PieChart.vue"));
+Vue.component("bar-chart", require("./components/BarChart.vue"));
+Vue.component("generic-chart", require("./components/GenericChart.vue"));
 
 Vue.component("basic-task-report", require("./components/BasicTaskReport.vue"));
 Vue.component("project-report", require("./components/ProjectReport.vue"));

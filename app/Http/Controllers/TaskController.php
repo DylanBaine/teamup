@@ -24,12 +24,13 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return company()->tasks()->where('parent_id', null)->with('children', 'type')->get();
+        return company()->tasks()->where('parent_id', null)->with('children', 'type', 'client')->get();
     }
 
     public function create(){
         return response()->json([
             'users' => company()->users,
+            'clients' => company()->clients,
             'groups' => company()->groups,
             'types' => company()->types()->where('model', 'Task')->get()
         ]);
@@ -41,7 +42,8 @@ class TaskController extends Controller
             'groups' => company()->groups,
             'types' => company()->types()->where('model', 'Task')->get(),
             'task' => Task::find($id)->load('user', 'group'),
-            'parent' => Task::find($id)->parent
+            'parent' => Task::find($id)->parent,
+            'clients' => company()->clients,
         ]);
     }
 
@@ -52,7 +54,7 @@ class TaskController extends Controller
             'groups' => company()->groups,
             'types' => company()->types()->where('model', 'Task')->get(),
             'parent' => $parent,
-            'allowed_dates' => $dates
+            'clients' => company()->clients,
         ]);        
     }
 
@@ -75,6 +77,7 @@ class TaskController extends Controller
         $t->group_id = $request->group_id;
         $t->icon = $request->icon;
         $t->percent_finished = 0;
+        $t->client_id = $request->client_id;
         $t->column_id = $parent && $parent->columns()->count() ?
         $parent->columns()->first()->id :
         null;
@@ -108,7 +111,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type', 'changes', 'group');
+        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type', 'changes', 'group', 'client');
         $task->report = $task->runReport();
         return $task;
     }

@@ -27,9 +27,9 @@ class Model {
   alert(message, type) {
     if (
       message == "Pleas log back in to continue working..." ||
-      message == "Unauthenticated"
+      message == "Unauthenticated."
     ) {
-      return (window.location.href = url);
+      return (window.location.href = url + "/login");
     }
     if (message == "Set your new password to start working.") {
       return (window.location.href = url + "/set-password");

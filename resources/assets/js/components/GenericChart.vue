@@ -2,7 +2,7 @@
     <div>
         <GChart
             v-if="data"
-            type="PieChart"
+            :type="type"
             :data="data"
             :options="options"
         />
@@ -18,10 +18,9 @@ export default {
         backgroundColor: {
           fill: "transparent"
         },
-        legend: {
-          textStyle: {
-            color: "white"
-          }
+        chartArea: {
+          height: "94%",
+          width: this.width
         }
       }
     };
@@ -29,7 +28,7 @@ export default {
   mounted() {
     console.log(this.$vuetify.theme);
   },
-  props: ["data"]
+  props: ["data", "type", "width"]
 };
 </script>
 

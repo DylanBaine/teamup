@@ -56,7 +56,7 @@ trait TaskLogic
 
     function subscribeUserToTask($task = null)
     {
-        $taskId = request('subscribable_id') && ! $task ? request('subscribable_id') : $task->id;
+        $taskId = request('subscribable_id') && ! $task[0] ? request('subscribable_id') : $task->id;
         $users = User::where('id', request('user_id'))->get();
         $task = Task::find($taskId);
         $data = [

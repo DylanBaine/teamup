@@ -2,7 +2,7 @@
     <div>
         <GChart
             v-if="data"
-            type="PieChart"
+            type="ColumnChart"
             :data="data"
             :options="options"
         />
@@ -13,17 +13,7 @@
 export default {
   data() {
     return {
-      theme: this.$vuetify.theme,
-      options: {
-        backgroundColor: {
-          fill: "transparent"
-        },
-        legend: {
-          textStyle: {
-            color: "white"
-          }
-        }
-      }
+      theme: this.$vuetify.theme
     };
   },
   mounted() {

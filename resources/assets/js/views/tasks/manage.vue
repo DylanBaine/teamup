@@ -3,7 +3,7 @@
       <router-view></router-view>
       <v-container class="mb-4" fluid grid-list-lg v-if="task">
           <header>
-            <v-layout align-center row wrap>
+            <v-layout row wrap>
               <v-flex md3>
                 <h1>{{task.name}} ({{task.type.name}})</h1>
                   <h3 class="subheading">
@@ -23,8 +23,11 @@
                   <h3 v-if="task.group" class="subheading">
                     Group <router-link :to="`/groups/${task.group.id}`">{{task.group.name}}</router-link>
                   </h3>
+                  <h3 v-if="task.client">
+                    Client <router-link :to="`/clients/${task.client.id}`">{{task.client.name}}</router-link>
+                  </h3>
               </v-flex>
-              <v-flex md8 style="position: relative">
+              <v-flex md6 style="position: relative">
                 <h2 class="title">
                   Description:
                   <v-btn v-if="task.description.length > 300" small @click="fullDescription = true" flat>
@@ -32,6 +35,13 @@
                   </v-btn>
                 </h2>
                 <p class="mt-2" style="max-height: 100px; overflow: auto;" v-html="task.description"></p>
+              </v-flex>
+              <v-flex>
+                <header>
+                  <h2 class="title">
+                    Files
+                  </h2>
+                </header>
               </v-flex>
             </v-layout>
             <router-link to="/tasks">Tasks</router-link> <task-breadcrumb :icon-size="14" :item="task.parent" :original="task"></task-breadcrumb>
@@ -81,8 +91,8 @@
                   <v-card-title :class="task.parent_id == 0 ? 'blue lighten-2' : 'grey lighten-2'">
                   <div>
                       <h2 class="title black--text">
-                      {{task.name}} ({{task.type_id ? task.type.name : 'No type yet...'}})
-                      <v-icon color="black">{{task.icon}}</v-icon>
+                        {{task.name}} ({{task.type_id ? task.type.name : 'No type yet...'}})
+                        <v-icon color="black">{{task.icon}}</v-icon>
                       </h2>
                       <h3 class="subheading mt-1 black--text" v-if="task.parent_id == 0">
                       Previously a child task.
@@ -90,6 +100,9 @@
                   </div>
                   </v-card-title>
                   <v-card-text>
+                    <h3 v-if="task.client" class="mb-2">
+                      Client: {{task.client.name}}
+                    </h3>
                   <p v-html="task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description">
                   </p>
                   <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>

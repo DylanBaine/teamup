@@ -24,3 +24,11 @@ function repository($class)
 function carbon_format($string){
     return \Carbon\Carbon::createFromFormat('Y-m-d', $string)->toDateTimeString();
 }
+
+function plain_object($items){
+    $obj = new stdClass;
+    foreach($items as $key => $value){
+        $obj->$key = $value;
+    }
+    return $obj;
+}
