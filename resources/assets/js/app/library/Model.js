@@ -12,6 +12,7 @@ class Model {
     this.store = store.store;
     this.model = this.constructor.name;
     this.setToDelete = null;
+    this.url = url;
   }
 
   _set_(data) {
@@ -51,7 +52,7 @@ class Model {
 
   successfullyDeleted() {
     this.instance.$root.$refs.app.$refs.alert.run(
-      this.model+" was successfully deleted...",
+      this.model + " was successfully deleted...",
       "info"
     );
   }
@@ -60,16 +61,16 @@ class Model {
     this.instance.$root.$refs.app.$refs.prompt.run(this, content, buttons);
   }
 
-  /**
-   * Search the model in the database
-   * @param {string} variable the property the result is to be stored in
-   * @param {string} param parameter we are searching for
-   * @param {sting|integer} value value of the parameter
-   */
   where(param, value, first = null) {
     this.showLoader("Loading...");
+    if (this.modelName != null) {
+      this.model = this.modelName;
+    }
+    console.log(this.model);
     return axios
-      .get(`${url}/search/?model=${this.model}&param=${param}&value=${value}`)
+      .get(
+        `${this.url}/search/?model=${this.model}&param=${param}&value=${value}`
+      )
       .then(res => {
         this.showLoader();
         if (first == null) {
@@ -83,20 +84,6 @@ class Model {
         this.showError(err.response.data.message);
       });
   }
-
-  /**
-   * Find the first record that matches the parameter give.
-   * @param {sting} param the parameter in the database we are searching for.
-   * @param {value} value the value the parameter should match
-   */
-  /*     find(param, value) {
-            this.showLoader(`Loading...`);
-            return axios.get(`${url}/search/?model=${this.model}&param=${param}&value=${value}`)
-                .then(res => {
-                    this.showLoader();
-                    this._set_(res.data[0]);
-                });
-        } */
 
   find(id) {
     this.showLoader(`Loading...`);

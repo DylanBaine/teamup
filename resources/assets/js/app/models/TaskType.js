@@ -9,6 +9,7 @@ class TaskType extends Model {
       },
       { instance, store }
     );
+    this.modelName = "Type";
   }
 }
 export default TaskType;

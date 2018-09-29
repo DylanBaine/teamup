@@ -45,9 +45,9 @@
 </template>
 
 <script>
-import PermissionMode from "../../app/Models/PermissionMode";
-import Type from "../../app/Models/PermissionType";
-import Permission from "../../app/Models/Permission";
+import PermissionMode from "../../app/models/PermissionMode";
+import PermissionType from "../../app/models/PermissionType";
+import Permission from "../../app/models/Permission";
 import User from "../../app/models/User";
 export default {
   data() {

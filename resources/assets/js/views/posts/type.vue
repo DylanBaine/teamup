@@ -50,7 +50,10 @@ export default {
   },
   methods: {
     init() {
-      this.$type.where("slug", this.$route.params.type, "first");
+      this.$root.getPage().then(() => {
+        let p = this.$root.page;
+        this.type = p;
+      });
     }
   }
 };

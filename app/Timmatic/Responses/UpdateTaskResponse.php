@@ -36,13 +36,13 @@ class UpdateTaskResponse implements Responsable
         if($request->user_id){
             $this->subscribeUserToTask($t);
         }
+        if($type == 'Sprint'){
+            $t->createDefaultSettings();
+        }
         if($request->progressChange){
             $this->updateProgress($t);
         }else{
             $this->notifyOfEdit($t);
-        }
-        if($type == 'Sprint'){
-            $t->createDefaultSettings();
         }
     }
 
@@ -68,8 +68,8 @@ class UpdateTaskResponse implements Responsable
         $users = User::whereHas('subscriptions', function ($sub) use ($parent, $task) {
             $sub->where('subscribable_id', $parent->id)->where('subscribable_type', 'App\Models\Task')->orWhere('subscribable_id', $task->id);
         })->get();
-        Notification::send($users, new TaskUpdated($task, $parent, 'progressUpdated', user()));
         $this->logProgressChange($task);
+        Notification::send($users, new TaskUpdated($task, $parent, 'progressUpdated', user()));
     }
 
     protected function logProgressChange($task){

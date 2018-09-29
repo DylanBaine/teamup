@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import Permission from "../app/Models/Permission";
+import Permission from "../app/models/Permission";
 export default {
   data() {
     return {

@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import TaskType from "../../app/Models/TaskType";
+import TaskType from "../../app/models/TaskType";
 import Task from "../../app/models/Task";
 import User from "../../app/models/User";
 import Group from "../../app/models/Group";

@@ -52,10 +52,10 @@
 </template>
 
 <script>
-import User from "../../app/Models/User";
-import PermissionMode from "../../app/Models/PermissionMode";
-import Type from "../../app/Models/PermissionType";
-import Permission from "../../app/Models/Permission";
+import User from "../../app/models/User";
+import PermissionMode from "../../app/models/PermissionMode";
+import PermissionType from "../../app/models/PermissionType";
+import Permission from "../../app/models/Permission";
 export default {
   data() {
     return {
