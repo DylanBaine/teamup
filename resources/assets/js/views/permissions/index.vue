@@ -99,7 +99,7 @@ export default {
       return new User(this.$root, "user");
     },
     $types() {
-      return new Type(this, "types");
+      return new PermissionType(this, "types");
     },
     $permissions() {
       return new Permission(this, "permissions");

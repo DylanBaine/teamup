@@ -33,8 +33,6 @@ include 'userRoutes.php';
     // Include contact rotues
     include 'contactRoutes.php';
 Route::middleware('permissions')->group(function(){
-    // Include api routes for posts module
-    include 'postRoutes.php';
     // Include Client Rotes
     include 'clientRoutes.php';
     // Include api routes for types module
@@ -51,7 +49,8 @@ Route::middleware('permissions')->group(function(){
     include 'permissionRoutes.php';
     // include api routes for sites
     include 'siteRoutes.php';
-    
+    // Include api routes for posts module
+    include 'postRoutes.php';
     Route::resource('reports', 'ReportController');
 });
 // Handle all search methods
