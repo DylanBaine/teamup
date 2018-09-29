@@ -76,6 +76,7 @@ export default {
         if (this.$route.meta.editing) {
           this.post = p.post;
         }
+        this.post.type_id = this.type.id;
         this.showing = true;
       });
     },
