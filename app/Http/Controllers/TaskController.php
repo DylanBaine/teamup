@@ -86,9 +86,6 @@ class TaskController extends Controller
         $t->end_date = $request->end_date ? carbon_format($request->end_date) : null;
         $t->save();
         $t->linkReport();
-        if($request->user_id){
-            $this->subscribeUserToTask($t);
-        }
         if ($t->type->name === 'Sprint') {
             $t->createDefaultSettings();
         }
@@ -99,6 +96,9 @@ class TaskController extends Controller
                 'user_id' => user('id'),
                 'duration_in_seconds' => 0
                 ]);
+        }
+        if($request->user_id){
+            $this->subscribeUserToTask($t);
         }
         return response()->json(['success' => true]);
     }

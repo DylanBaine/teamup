@@ -3,7 +3,7 @@
         <h2 class="text-xs center tite">
             {{report.label}}
         </h2>
-        <v-tabs>
+        <v-tabs v-if="report.data.length > 1">
             <v-tab v-for="(layout, key) in report.layouts" :key="key">
                 {{layout.name}}
             </v-tab>
@@ -18,6 +18,11 @@
                 </v-card>
             </v-tab-item>
         </v-tabs>
+        <v-card v-else>
+            <v-card-text>
+                <h1 class="text-xs-center">No Data Available.</h1>
+            </v-card-text>
+        </v-card>
     </div>
 </template>
 

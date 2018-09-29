@@ -299,25 +299,23 @@ export default {
       }
     },
     init() {
-      if (!this.$root.mounted) {
-        this.$root.getPage().then(() => {
-          var p = this.$root.page;
-          this.parent = this.task.parent;
-          this.types = p.types;
-          this.users = p.users;
-          this.groups = p.groups;
-          this.clients = p.clients;
-          if (this.editing) {
-            this.task = p.task;
-            this.date = [p.task.start_date, p.task.end_date];
-            this.parent = p.parent;
-          }
-          /* if (this.$route.params.task) {
+      this.$root.getPage().then(() => {
+        var p = this.$root.page;
+        console.log(p);
+        this.parent = p.parent;
+        this.types = p.types;
+        this.users = p.users;
+        this.groups = p.groups;
+        this.clients = p.clients;
+        if (this.editing) {
+          this.task = p.task;
+          this.date = [p.task.start_date, p.task.end_date];
+        }
+        /* if (this.$route.params.task) {
             this.parent = p.parent;
           } */
-          this.showing = true;
-        });
-      }
+        this.showing = true;
+      });
       this.$root.mounted = true;
     },
     post() {

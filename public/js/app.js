@@ -40916,25 +40916,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this6 = this;
 
-      if (!this.$root.mounted) {
-        this.$root.getPage().then(function () {
-          var p = _this6.$root.page;
-          _this6.parent = _this6.task.parent;
-          _this6.types = p.types;
-          _this6.users = p.users;
-          _this6.groups = p.groups;
-          _this6.clients = p.clients;
-          if (_this6.editing) {
-            _this6.task = p.task;
-            _this6.date = [p.task.start_date, p.task.end_date];
-            _this6.parent = p.parent;
-          }
-          /* if (this.$route.params.task) {
+      this.$root.getPage().then(function () {
+        var p = _this6.$root.page;
+        console.log(p);
+        _this6.parent = p.parent;
+        _this6.types = p.types;
+        _this6.users = p.users;
+        _this6.groups = p.groups;
+        _this6.clients = p.clients;
+        if (_this6.editing) {
+          _this6.task = p.task;
+          _this6.date = [p.task.start_date, p.task.end_date];
+        }
+        /* if (this.$route.params.task) {
             this.parent = p.parent;
           } */
-          _this6.showing = true;
-        });
-      }
+        _this6.showing = true;
+      });
       this.$root.mounted = true;
     },
     post: function post() {
@@ -44465,6 +44463,7 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("v-card-text", {
+            staticClass: "post-content",
             domProps: { innerHTML: _vm._s(_vm.post.content) }
           })
         ],
@@ -93110,6 +93109,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -93139,45 +93143,57 @@ var render = function() {
         _vm._v("\n        " + _vm._s(_vm.report.label) + "\n    ")
       ]),
       _vm._v(" "),
-      _c(
-        "v-tabs",
-        [
-          _vm._l(_vm.report.layouts, function(layout, key) {
-            return _c("v-tab", { key: key }, [
-              _vm._v("\n            " + _vm._s(layout.name) + "\n        ")
-            ])
-          }),
-          _vm._v(" "),
-          _vm._l(_vm.report.layouts, function(layout, key) {
-            return _c(
-              "v-tab-item",
-              { key: key },
-              [
-                _c(
-                  "v-card",
-                  {
-                    staticClass: "text-xs-center white",
-                    staticStyle: { padding: "50px" }
-                  },
+      _vm.report.data.length > 1
+        ? _c(
+            "v-tabs",
+            [
+              _vm._l(_vm.report.layouts, function(layout, key) {
+                return _c("v-tab", { key: key }, [
+                  _vm._v("\n            " + _vm._s(layout.name) + "\n        ")
+                ])
+              }),
+              _vm._v(" "),
+              _vm._l(_vm.report.layouts, function(layout, key) {
+                return _c(
+                  "v-tab-item",
+                  { key: key },
                   [
-                    _c("generic-chart", {
-                      staticStyle: { margin: "auto" },
-                      attrs: {
-                        type: layout.chart,
-                        data: _vm.report.data,
-                        width: "80%"
-                      }
-                    })
+                    _c(
+                      "v-card",
+                      {
+                        staticClass: "text-xs-center white",
+                        staticStyle: { padding: "50px" }
+                      },
+                      [
+                        _c("generic-chart", {
+                          staticStyle: { margin: "auto" },
+                          attrs: {
+                            type: layout.chart,
+                            data: _vm.report.data,
+                            width: "80%"
+                          }
+                        })
+                      ],
+                      1
+                    )
                   ],
                   1
                 )
-              ],
-              1
-            )
-          })
-        ],
-        2
-      )
+              })
+            ],
+            2
+          )
+        : _c(
+            "v-card",
+            [
+              _c("v-card-text", [
+                _c("h1", { staticClass: "text-xs-center" }, [
+                  _vm._v("No Data Available.")
+                ])
+              ])
+            ],
+            1
+          )
     ],
     1
   )

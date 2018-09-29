@@ -24,7 +24,7 @@
                     <v-icon>close</v-icon>
                 </v-btn>
             </v-toolbar>
-            <v-card-text v-html="post.content">
+            <v-card-text class="post-content" v-html="post.content">
             </v-card-text>
         </v-card>
     </v-dialog>

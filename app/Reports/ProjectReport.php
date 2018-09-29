@@ -30,9 +30,6 @@ class ProjectReport extends Report {
     }
 
     public function breakTaskIntoColumns(){
-        $finished = collect([]);
-        $in_progress = collect([]);
-        $back_log = collect([]);
         $children = $this->repository->recursivGetChildrenOfTaskByType($this->repository->getSpecifiedModel(),'task');
         $columns = [];
         $results = [
