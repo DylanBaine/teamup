@@ -39,6 +39,11 @@ export default {
       users: []
     };
   },
+  watch: {
+    $route() {
+      this.init();
+    }
+  },
   computed: {
     $users() {
       return new User(this, "users");

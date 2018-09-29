@@ -40,12 +40,12 @@
       </h1>
     </v-layout>
     <div class="fixed bottom right">
-        <v-btn v-if="$user.can('manage', 'tasks')"
+<!--         <v-btn v-if="$user.can('manage', 'tasks')"
             fab
             color="info"
             dark @click="settings = true">
             <v-icon>settings</v-icon>
-        </v-btn>
+        </v-btn> -->
         <v-btn v-if="$user.can('create', 'tasks')"
             fab
             color="accent"

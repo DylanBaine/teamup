@@ -61,6 +61,7 @@
                               item-value="id"
                               item-text="name"
                               v-model="task.group_id"
+                              @input="task.name = setGroup"
                               hint="Start typing to find a group.">
                             </v-autocomplete>
                         </v-flex>
@@ -133,7 +134,7 @@
                             <v-flex md3 class="padded">
                               <h4>Type: {{setType}}</h4>
                             </v-flex>
-                            <v-flex md3 class="padded">
+                            <v-flex md3 class="padded" v-if="task.group">
                               <h4>Assigned To: {{setAssignedTo}} {{task.group_id ? task.group.name : ''}}</h4>
                             </v-flex>
                           </v-layout>
@@ -186,6 +187,7 @@ export default {
         icon: null,
         parent_id: this.$route.params.task ? this.$route.params.task : null,
         user_id: null,
+        group_id: null,
         type_id: null,
         name: null,
         description: null,
@@ -239,6 +241,12 @@ export default {
         });
         return $return;
       }
+    },
+    setGroup() {
+      var group = this.groups.filter(group => {
+        return group.id == this.task.group_id;
+      })[0];
+      return group ? group.name : null;
     },
     setType() {
       var $return;

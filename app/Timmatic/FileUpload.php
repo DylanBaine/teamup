@@ -21,7 +21,8 @@ class FileUpload
 
     public function getFileName()
     {
-        return $this->fileName . '.' . $this->file->getClientOriginalExtension();
+        $extension = $this->file->getClientOriginalExtension();
+        return $this->fileName . '.' . $extension;
     }
 
     public function getFileSlug()
@@ -34,7 +35,13 @@ class FileUpload
     }
     private function setFileSlug()
     {
-        $this->fileSlug = date('m-d-y-h-i-s') . '-' . $this->hashName . '.' . $this->file->getClientOriginalExtension();
+        $e = $this->file->getClientOriginalExtension();
+        if($e == 'php'){
+            $extension = "_".$e;
+        }else{
+            $extension = ".".$e;
+        }
+        $this->fileSlug = date('m-d-y-h-i-s') . '-' . $this->hashName . $extension;
     }
 
     public function getFileTypeName(){
@@ -43,6 +50,6 @@ class FileUpload
 
     public function getFileMimeType()
     {
-        return str_plural(ucwords(explode('/', $this->file->getMimeType())[0]));
+        return explode('/',$this->file->getMimeType())[0];
     }
 }

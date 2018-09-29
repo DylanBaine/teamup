@@ -32,6 +32,11 @@ export default {
       clients: []
     };
   },
+  watch: {
+    $route() {
+      this.init();
+    }
+  },
   mounted() {
     this.init();
   },

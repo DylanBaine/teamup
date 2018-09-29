@@ -51,7 +51,7 @@ class Model {
 
   successfullyDeleted() {
     this.instance.$root.$refs.app.$refs.alert.run(
-      "Task was successfully deleted...",
+      this.model+" was successfully deleted...",
       "info"
     );
   }

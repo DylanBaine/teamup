@@ -32,7 +32,7 @@
             <v-layout row wrap v-if="$route.meta.viewingType">
                 <v-flex md3 v-for="file in files" :key="file.id">
                     <v-card>
-                        <v-img aspect-ratio="1.2" v-if="file.type.name == 'Image'" :src="file.slug"></v-img>
+                        <v-img aspect-ratio="1.2" v-if="file.type && file.type.name == 'Image'" :src="file.slug"></v-img>
                         <v-card-text>
                             <h2 class="title">
                                 {{file.name}}
@@ -67,7 +67,7 @@
                     </v-flex>
                     <v-flex md3 v-for="file in type.files" :key="file.id">
                         <v-card>   
-                            <v-img aspect-ratio="1.2" v-if="file.type.name == 'Image'" :src="file.slug"></v-img>
+                            <v-img aspect-ratio="1.2" v-if="file.type && file.type.name == 'Image'" :src="file.slug"></v-img>
                             <v-card-text>
                                 <h2 class="title">
                                     {{file.name}}
@@ -102,7 +102,7 @@
             <v-layout row wrap>
                 <v-flex md3 v-for="file in searchResults" :key="file.id">
                     <v-card>
-                        <v-img aspect-ratio="1.2" v-if="file.type.name == 'Image'" :src="file.slug"></v-img>
+                        <v-img aspect-ratio="1.2" v-if="file.type && file.type.name == 'Image'" :src="file.slug"></v-img>
                         <v-card-text>
                             <h2 class="title">
                                 {{file.name}}
@@ -148,6 +148,9 @@ export default {
     };
   },
   watch: {
+    $route() {
+      this.init();
+    },
     search() {
       if (this.search == null || this.search == "") {
         this.hasSearched = false;

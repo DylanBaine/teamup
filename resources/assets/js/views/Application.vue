@@ -79,7 +79,7 @@
 		<v-content>
 			<v-container fluid fill-height>
 				<v-layout>
-						<router-view :key="randomKey"></router-view>
+						<router-view ref="router"></router-view>
 				</v-layout>
 			</v-container>
 		</v-content>
@@ -118,6 +118,7 @@ export default {
   watch: {
     $route() {
       this.randomKey = Math.random();
+      this.$refs.router.$mount();
     },
     search(data) {
       this.getSearch(data);

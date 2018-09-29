@@ -92,11 +92,13 @@ export default {
     }
   },
   mounted() {
-    this.init();
+    if (!this.$root.mounted) this.init();
+    console.log("Init");
   },
   methods: {
     init() {
       this.$root.getPage().then(() => {
+        this.$root.mounted = true;
         let p = this.$root.page;
         this.file = p;
         this.showing = true;

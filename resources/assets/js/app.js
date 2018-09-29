@@ -69,6 +69,7 @@ const app = new Vue({
       return axios.get(route).then(res => {
         this.page = res.data;
         this.loading = false;
+        this.mounted = true;
       });
     }
   }

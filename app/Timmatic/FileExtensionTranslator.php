@@ -18,7 +18,7 @@ class FileExtensionTranslator {
 
     private function setTypeNameFromExtension($extension){
         switch($this->mimeType){
-            case 'Images' :
+            case 'image' :
                 $fn = 'Image';
                 break;
             default :
