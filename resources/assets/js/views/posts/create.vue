@@ -18,7 +18,7 @@
                         required
                         :rules="[post.name.length > 0 && post.name.length < 100]"
                     ></v-text-field>
-                    <page-builder label="Content" v-model="post.content" v-if="showing" height="600"></page-builder>
+                    <page-builder label="Content" v-model="post.content" height="600"></page-builder>
                     <v-card-actions class="mt-2">
                         <v-spacer></v-spacer>
                         <v-btn :to="`/${$route.params.type}`" color="error" flat>
@@ -70,14 +70,14 @@ export default {
   },
   methods: {
     init() {
-      if (this.$route.meta.editing) {
-        this.$post.find(this.$route.params.post);
-      }
-      this.$type.where("slug", this.$route.params.type, "first").then(() => {
-        this.post.type_id = this.type.id;
-        this.post.type_name = this.type.name;
+      this.$root.getPage().then(() => {
+        let p = this.$root.page;
+        this.type = p.type;
+        if (this.$route.meta.editing) {
+          this.post = p.post;
+        }
+        this.showing = true;
       });
-      this.showing = true;
     },
     save() {
       if (this.$refs.form.validate()) {

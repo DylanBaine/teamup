@@ -29,6 +29,13 @@ class PostController extends Controller
         return company()->posts()->get();
     }
 
+    public function create($type){
+        return response()->json([
+            'type' => Type::where('slug', $type)->first(),
+        ]);        
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -80,6 +87,13 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         Post::find($id)->update($request->all());
+    }
+    
+    public function edit($type, $id){
+        return response()->json([
+            'type' => Type::where('slug', $type)->first(),
+            'post' => Post::find($id)
+        ]);      
     }
 
     /**

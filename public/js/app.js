@@ -44573,14 +44573,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this = this;
 
-      if (this.$route.meta.editing) {
-        this.$post.find(this.$route.params.post);
-      }
-      this.$type.where("slug", this.$route.params.type, "first").then(function () {
-        _this.post.type_id = _this.type.id;
-        _this.post.type_name = _this.type.name;
+      this.$root.getPage().then(function () {
+        var p = _this.$root.page;
+        _this.type = p.type;
+        if (_this.$route.meta.editing) {
+          _this.post = p.post;
+        }
+        _this.showing = true;
       });
-      this.showing = true;
     },
     save: function save() {
       var _this2 = this;
@@ -44702,18 +44702,16 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
-                      _vm.showing
-                        ? _c("page-builder", {
-                            attrs: { label: "Content", height: "600" },
-                            model: {
-                              value: _vm.post.content,
-                              callback: function($$v) {
-                                _vm.$set(_vm.post, "content", $$v)
-                              },
-                              expression: "post.content"
-                            }
-                          })
-                        : _vm._e(),
+                      _c("page-builder", {
+                        attrs: { label: "Content", height: "600" },
+                        model: {
+                          value: _vm.post.content,
+                          callback: function($$v) {
+                            _vm.$set(_vm.post, "content", $$v)
+                          },
+                          expression: "post.content"
+                        }
+                      }),
                       _vm._v(" "),
                       _c(
                         "v-card-actions",
