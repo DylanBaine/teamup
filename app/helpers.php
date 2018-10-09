@@ -8,6 +8,18 @@ function company($prop = null)
     return $company;
 }
 
+function manifest($string){
+    \Log::info("$string\r\n");
+}
+
+function permission_mode($name){
+    return company()->permissionModes()->where('name', $name)->first();
+}
+
+function type($name){
+    return company()->types()->where('name', $name)->first();
+}
+
 function user($prop = null)
 {
     if ($prop != null) {
@@ -18,7 +30,7 @@ function user($prop = null)
 
 function repository($class)
 {
-    return "Timmatic\Repositories\$class";
+    return "timatik\Repositories\$class";
 }
 
 function carbon_format($string){

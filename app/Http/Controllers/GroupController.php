@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\User;
-//use App\Timmatic\AssertIsSet;
+//use App\timatik\AssertIsSet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

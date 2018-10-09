@@ -23,7 +23,9 @@
                                         <div :id="column.id" v-for="column in task.columns" :key="column.position">
                                             <v-list-tile>
                                                 <v-list-tile-content>
-                                                    <input v-if="column.value != 'Finished'" type="text" class="padded ghost" @keydown.enter="$setting.update(column.id, column)" v-model="column.value">
+                                                    <input v-if="column.value != 'Finished'" type="text" class="padded ghost"
+                                                        @keydown.enter="$setting.update(column.id, column)"
+                                                        @change="$setting.update(column.id, column)" v-model="column.value">
                                                     <span class="ml-2" v-else>{{column.value}}</span>
                                                 </v-list-tile-content>
                                                 <v-list-tile-action>

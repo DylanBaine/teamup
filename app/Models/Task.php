@@ -58,6 +58,8 @@ class Task extends Model
             $r = 'TeamReport';
         }elseif($type == 'Project'){
             $r = 'ProjectReport';
+        }else{
+            $r = 'ReoccurringTaskReport';
         }
         $this->report = $r;
         $this->save();

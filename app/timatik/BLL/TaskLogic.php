@@ -1,5 +1,5 @@
 <?php
-namespace App\Timmatic\BLL;
+namespace App\timatik\BLL;
 
 use App\Models\Setting;
 use App\Models\User;

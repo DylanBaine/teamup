@@ -40758,6 +40758,68 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -40770,8 +40832,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       step: 1,
       showing: false,
-      date: [],
       allowedDates: [],
+      reoccur: {
+        week: null,
+        day: null,
+        time: null,
+        type: null
+      },
       task: {
         icon: null,
         parent_id: this.$route.params.task ? this.$route.params.task : null,
@@ -40785,7 +40852,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       },
       clients: [],
       editing: this.$route.meta.editing,
-      parent: null,
+      parent: {
+        start_date: null,
+        end_date: null
+      },
       types: [],
       users: [],
       groups: [],
@@ -40873,6 +40943,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
+    reoccurOnOptions: function reoccurOnOptions() {
+      var typeArg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+      var type = typeArg == null ? this.reoccur.type : typeArg;
+      switch (type) {
+        case "Daily":
+          return [{ text: "Morning (8 AM)", value: "08:00" }, { text: "After Noon (1 PM)", value: "13:00" }, { text: "Evening (5 PM)", value: "17:00" }];
+        case "Weekly":
+          return ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        case "Monthly":
+          return ["First", "Second", "Third", "Fourth", "Last"];
+      }
+    },
     valid: function valid(items) {
       var _this5 = this;
 
@@ -40943,7 +41026,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         parent_id: t.parent_id,
         start_date: t.start_date,
         end_date: t.end_date,
-        client_id: t.client_id
+        client_id: t.client_id,
+        schedule: JSON.stringify(this.reoccur)
       };
       this.$task.update(this.task.id, data).then(function () {
         _this7.$router.push(_this7.afterPostRedirect);
@@ -40952,6 +41036,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     save: function save() {
       var _this8 = this;
 
+      this.task.schedule = JSON.stringify(this.reoccur);
       this.$task.create(this.task).then(function (res) {
         _this8.reset();
         _this8.$router.push(_this8.afterPostRedirect);
@@ -41326,6 +41411,269 @@ var render = function() {
                                     [
                                       _c(
                                         "v-flex",
+                                        {
+                                          attrs: { md8: "", "offset-md2": "" }
+                                        },
+                                        [
+                                          _vm.setType == "Reoccurring"
+                                            ? _c(
+                                                "v-layout",
+                                                [
+                                                  _c(
+                                                    "v-flex",
+                                                    { attrs: { md4: "" } },
+                                                    [
+                                                      _c("v-select", {
+                                                        attrs: {
+                                                          label:
+                                                            "Reoccurring Type",
+                                                          items: [
+                                                            "Daily",
+                                                            "Weekly",
+                                                            "Monthly"
+                                                          ]
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.reoccur.type,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.reoccur,
+                                                              "type",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "reoccur.type"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _vm.reoccur.type == "Monthly"
+                                                    ? [
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: { md4: "" }
+                                                          },
+                                                          [
+                                                            _c("v-select", {
+                                                              attrs: {
+                                                                label: "Week:",
+                                                                items: _vm.reoccurOnOptions()
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.reoccur
+                                                                    .week,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.reoccur,
+                                                                    "week",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "reoccur.week"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: { md4: "" }
+                                                          },
+                                                          [
+                                                            _c("v-select", {
+                                                              attrs: {
+                                                                label: "Day:",
+                                                                items: _vm.reoccurOnOptions(
+                                                                  "Weekly"
+                                                                )
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.reoccur
+                                                                    .day,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.reoccur,
+                                                                    "day",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "reoccur.day"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: { md4: "" }
+                                                          },
+                                                          [
+                                                            _c("v-select", {
+                                                              attrs: {
+                                                                label: "Time:",
+                                                                items: _vm.reoccurOnOptions(
+                                                                  "Daily"
+                                                                )
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.reoccur
+                                                                    .time,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.reoccur,
+                                                                    "time",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "reoccur.time"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        )
+                                                      ]
+                                                    : _vm._e(),
+                                                  _vm._v(" "),
+                                                  _vm.reoccur.type == "Weekly"
+                                                    ? [
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: { md4: "" }
+                                                          },
+                                                          [
+                                                            _c("v-select", {
+                                                              attrs: {
+                                                                label: "Day:",
+                                                                items: _vm.reoccurOnOptions()
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.reoccur
+                                                                    .day,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.reoccur,
+                                                                    "day",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "reoccur.day"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: { md4: "" }
+                                                          },
+                                                          [
+                                                            _c("v-select", {
+                                                              attrs: {
+                                                                label: "Time:",
+                                                                items: _vm.reoccurOnOptions(
+                                                                  "Daily"
+                                                                )
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.reoccur
+                                                                    .time,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.reoccur,
+                                                                    "time",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "reoccur.time"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        )
+                                                      ]
+                                                    : _vm._e(),
+                                                  _vm._v(" "),
+                                                  _vm.reoccur.type == "Daily"
+                                                    ? [
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: { md4: "" }
+                                                          },
+                                                          [
+                                                            _c("v-select", {
+                                                              attrs: {
+                                                                label: "Time:",
+                                                                items: _vm.reoccurOnOptions(
+                                                                  "Daily"
+                                                                )
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.reoccur
+                                                                    .time,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.reoccur,
+                                                                    "time",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "reoccur.time"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        )
+                                                      ]
+                                                    : _vm._e()
+                                                ],
+                                                2
+                                              )
+                                            : _vm._e()
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-flex",
                                         { attrs: { md6: "" } },
                                         [
                                           _c("icon-selector", {
@@ -41404,29 +41752,39 @@ var render = function() {
                                                 _c(
                                                   "div",
                                                   [
-                                                    _c("h3", [_vm._v("Date:")]),
+                                                    _c("h3", [
+                                                      _vm._v("Start:")
+                                                    ]),
                                                     _vm._v(" "),
                                                     _c("v-date-picker", {
                                                       attrs: {
-                                                        multiple: "",
                                                         min: _vm.parent
                                                           ? _vm.parent
                                                               .start_date
                                                           : null,
-                                                        max: _vm.parent
-                                                          ? _vm.parent.end_date
-                                                          : null,
+                                                        max: _vm.task.end_date
+                                                          ? _vm.task.end_date
+                                                          : _vm.parent
+                                                            ? _vm.parent
+                                                                .end_date
+                                                            : null,
                                                         color:
                                                           "primary white--text"
                                                       },
                                                       model: {
-                                                        value: _vm.date,
+                                                        value:
+                                                          _vm.task.start_date,
                                                         callback: function(
                                                           $$v
                                                         ) {
-                                                          _vm.date = $$v
+                                                          _vm.$set(
+                                                            _vm.task,
+                                                            "start_date",
+                                                            $$v
+                                                          )
                                                         },
-                                                        expression: "date"
+                                                        expression:
+                                                          "task.start_date"
                                                       }
                                                     })
                                                   ],
@@ -41445,23 +41803,44 @@ var render = function() {
                                                 attrs: { md4: "" }
                                               },
                                               [
-                                                _vm.date.length
-                                                  ? _c("div", [
-                                                      _c("span", [
-                                                        _vm._v(
-                                                          "Start: " +
-                                                            _vm._s(
-                                                              _vm.task
+                                                _c(
+                                                  "div",
+                                                  [
+                                                    _c("h3", [_vm._v("End:")]),
+                                                    _vm._v(" "),
+                                                    _c("v-date-picker", {
+                                                      attrs: {
+                                                        min: _vm.task.start_date
+                                                          ? _vm.task.start_date
+                                                          : _vm.parent
+                                                            ? _vm.parent
                                                                 .start_date
-                                                            ) +
-                                                            " End: " +
-                                                            _vm._s(
-                                                              _vm.task.end_date
-                                                            )
-                                                        )
-                                                      ])
-                                                    ])
-                                                  : _vm._e()
+                                                            : null,
+                                                        max: _vm.parent
+                                                          ? _vm.parent.end_date
+                                                          : null,
+                                                        color:
+                                                          "primary white--text"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.task.end_date,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.task,
+                                                            "end_date",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "task.end_date"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
                                               ]
                                             )
                                           ],
@@ -42522,7 +42901,7 @@ var render = function() {
                               "h3",
                               { staticClass: "subheading" },
                               [
-                                _vm._v("\n                  Group "),
+                                _vm._v("\n                  Group: "),
                                 _c(
                                   "router-link",
                                   {
@@ -42540,8 +42919,9 @@ var render = function() {
                         _vm.task.client
                           ? _c(
                               "h3",
+                              { staticClass: "subheading" },
                               [
-                                _vm._v("\n                  Client "),
+                                _vm._v("\n                  Client: "),
                                 _c(
                                   "router-link",
                                   {
@@ -43330,6 +43710,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -43671,6 +44053,14 @@ var render = function() {
                                                             ) {
                                                               return null
                                                             }
+                                                            _vm.$setting.update(
+                                                              column.id,
+                                                              column
+                                                            )
+                                                          },
+                                                          change: function(
+                                                            $event
+                                                          ) {
                                                             _vm.$setting.update(
                                                               column.id,
                                                               column
@@ -51325,6 +51715,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -51398,7 +51793,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
     },
     removeField: function removeField(field) {
-      this.contact.customFields.splice(this.contact.customFields.indexOf(field), 1);
+      this.editingContact.custom_fields.splice(this.editingContact.custom_fields.indexOf(field), 1);
+    },
+    removeFieldFromNewContact: function removeFieldFromNewContact(field) {
+      this.contact.custom_fields.splice(this.contact.custom_fields.indexOf(field), 1);
     },
     addContact: function addContact() {
       var _this2 = this;
@@ -52067,6 +52465,54 @@ var render = function() {
                                                     expression: "field.value"
                                                   }
                                                 })
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-flex",
+                                              [
+                                                _vm.editField == null
+                                                  ? _c(
+                                                      "v-icon",
+                                                      {
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            _vm.editField = key
+                                                          }
+                                                        }
+                                                      },
+                                                      [_vm._v("edit")]
+                                                    )
+                                                  : _c(
+                                                      "v-icon",
+                                                      {
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            _vm.editField = null
+                                                          }
+                                                        }
+                                                      },
+                                                      [_vm._v("save")]
+                                                    ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-icon",
+                                                  {
+                                                    on: {
+                                                      click: function($event) {
+                                                        _vm.removeFieldFromNewContact(
+                                                          field
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [_vm._v("delete_forever")]
+                                                )
                                               ],
                                               1
                                             )

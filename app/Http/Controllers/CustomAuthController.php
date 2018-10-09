@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Timmatic\Auth\UserCreation;
+use App\timatik\Auth\UserCreation;
 use Auth;
 use Illuminate\Http\Request;
 

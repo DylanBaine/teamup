@@ -21,10 +21,10 @@
                     {{task.type.name == 'Task' ? 'Assigned To' : 'Manager'}}: <router-link :to="`/users/${task.user.id}`">{{task.user.name}}</router-link>
                   </h3>
                   <h3 v-if="task.group" class="subheading">
-                    Group <router-link :to="`/groups/${task.group.id}`">{{task.group.name}}</router-link>
+                    Group: <router-link :to="`/groups/${task.group.id}`">{{task.group.name}}</router-link>
                   </h3>
-                  <h3 v-if="task.client">
-                    Client <router-link :to="`/clients/${task.client.id}`">{{task.client.name}}</router-link>
+                  <h3 v-if="task.client" class="subheading">
+                    Client: <router-link :to="`/clients/${task.client.id}`">{{task.client.name}}</router-link>
                   </h3>
               </v-flex>
               <v-flex md6 style="position: relative">

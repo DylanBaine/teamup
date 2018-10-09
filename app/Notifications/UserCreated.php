@@ -45,9 +45,9 @@ class UserCreated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Welcom to Timmatic!')
+            ->subject('Welcom to timatik!')
             ->greeting("Hey there, $this->user!")
-            ->line('You were added to Timmatic!')
+            ->line('You were added to timatik!')
             ->action('Login now!', url('/set-password?token='.$this->token))
             ->line('Thank you for using our application!');
     }

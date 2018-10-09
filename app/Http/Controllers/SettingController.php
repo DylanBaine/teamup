@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Setting;
-use App\Timmatic\Responses\SettingResponse;
+use App\timatik\Responses\SettingResponse;
 use Illuminate\Http\Request;
 
 class SettingController extends Controller

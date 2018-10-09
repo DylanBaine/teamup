@@ -1,5 +1,5 @@
 <?php
-namespace App\Timmatic\Auth;
+namespace App\timatik\Auth;
 
 use App\Models\Company;
 use App\Models\User;
@@ -39,9 +39,19 @@ class UserCreation
 
     public function response()
     {
+        manifest("Creating user...");
         $this->createUser();
+        manifest("Creating users company...");
         $this->createCompany();
+        manifest("Filling the users relations...");
         $this->fillUserRelations();
+        manifest("User '".$this->user->name."' added!");
+        manifest("
+    name:
+        ".$this->user->name."
+    company:
+        ".$this->user->company->name."
+");
         return redirect('/app');
     }
 

@@ -132,6 +132,11 @@
                                             v-model="field.value"
                                         ></v-text-field>
                                     </v-flex>
+                                    <v-flex>
+                                        <v-icon v-if="editField == null" @click="editField = key">edit</v-icon>
+                                        <v-icon v-else @click="editField = null">save</v-icon>
+                                        <v-icon @click="removeFieldFromNewContact(field)">delete_forever</v-icon>
+                                    </v-flex>
                                 </v-layout>
                             </v-flex>
                             <v-flex md4>
@@ -232,8 +237,14 @@ export default {
       };
     },
     removeField(field) {
-      this.contact.customFields.splice(
-        this.contact.customFields.indexOf(field),
+      this.editingContact.custom_fields.splice(
+        this.editingContact.custom_fields.indexOf(field),
+        1
+      );
+    },
+    removeFieldFromNewContact(field) {
+      this.contact.custom_fields.splice(
+        this.contact.custom_fields.indexOf(field),
         1
       );
     },

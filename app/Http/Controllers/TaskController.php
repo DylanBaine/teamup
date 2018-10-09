@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Timmatic\Responses\UpdateTaskResponse;
+use App\timatik\Responses\UpdateTaskResponse;
+use App\timatik\Responses\CreateTaskResponse;
+use App\timatik\Responses\DeleteTaskResponse;
 use Illuminate\Http\Request;
 use App\Models\ProgressChange;
-use App\Timmatic\BLL\TaskLogic;
+use App\timatik\BLL\TaskLogic;
 class TaskController extends Controller
 {
 
@@ -66,39 +68,9 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        $parent = Task::find($request->parent_id);
-        $t = new Task;
-        $t->company_id = company('id');
-        $t->name = $request->name;
-        $t->description = $request->description == null ? 'No Description Given' : $request->description;
-        $t->parent_id = $request->parent_id;
-        $t->type_id = $request->type_id;
-        $t->user_id = $request->user_id;
-        $t->group_id = $request->group_id;
-        $t->icon = $request->icon;
-        $t->percent_finished = 0;
-        $t->client_id = $request->client_id;
-        $t->column_id = $parent && $parent->columns()->count() ?
-        $parent->columns()->first()->id :
-        null;
-        $t->report = 0;
-        $t->start_date = $request->start_date ? carbon_format($request->start_date) : null;
-        $t->end_date = $request->end_date ? carbon_format($request->end_date) : null;
-        $t->save();
-        $t->linkReport();
-        if ($t->type->name === 'Sprint') {
-            $t->createDefaultSettings();
-        }
-        if($t->column){
-            ProgressChange::create([
-                'task_id' => $t->id,
-                'column_id' => $t->column->id,
-                'user_id' => user('id'),
-                'duration_in_seconds' => 0
-                ]);
-        }
+        $task = (new CreateTaskResponse)->toResponse($request);        
         if($request->user_id){
-            $this->subscribeUserToTask($t);
+            $this->subscribeUserToTask($task);
         }
         return response()->json(['success' => true]);
     }
@@ -136,15 +108,6 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $task = Task::find($id);
-        if ($task->parent_id == null || $task->parent_id == 0) {
-            foreach ($task->children()->get() as $child) {
-                $parentName = $task->name;
-                $child->parent_id = null;
-                $child->description .= "<p>(once a child to $parentName)</p>";
-                $child->save();
-            }
-        }
-        $task->delete();
+        (new DeleteTaskResponse)->toResponse($id);
     }
 }

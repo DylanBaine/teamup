@@ -1,5 +1,5 @@
 <?php
-namespace App\Timmatic;
+namespace App\timatik;
 
 class FileExtensionTranslator {
 

@@ -15,7 +15,7 @@ class TaskUpdatedMarkup extends MailMarkup{
     }
 
     public function from(){
-        return str_slug(company()->name).'-task-watcher@timmatic.io';
+        return str_slug(company()->name).'-task-watcher@timatik.io';
     }
 
     protected function progressUpdatedMarkup(){

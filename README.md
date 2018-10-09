@@ -1,4 +1,4 @@
-# Timmatic (in development)
+# timatik (in development)
 
 An app for agile teams!
 

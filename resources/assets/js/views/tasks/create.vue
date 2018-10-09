@@ -89,6 +89,67 @@
                     <div class="padded">
                       <div>
                         <v-layout row wrap align-center>
+                          <v-flex md8 offset-md2>
+                            <v-layout v-if="setType == 'Reoccurring'">
+                              <v-flex md4>
+                                <v-select
+                                  label="Reoccurring Type"
+                                  v-model="reoccur.type"
+                                  :items="[
+                                    'Daily', 'Weekly', 'Monthly'
+                                  ]"
+                                ></v-select>
+                              </v-flex>
+                              <template v-if="reoccur.type == 'Monthly'">
+                                <v-flex md4>
+                                  <v-select
+                                    label="Week:"
+                                    v-model="reoccur.week"
+                                    :items="reoccurOnOptions()"
+                                  ></v-select>
+                                </v-flex>
+                                <v-flex md4>
+                                  <v-select
+                                    label="Day:"
+                                    v-model="reoccur.day"
+                                    :items="reoccurOnOptions('Weekly')"
+                                  ></v-select>
+                                </v-flex>
+                                <v-flex md4>
+                                  <v-select
+                                    label="Time:"
+                                    v-model="reoccur.time"
+                                    :items="reoccurOnOptions('Daily')"
+                                  ></v-select>
+                                </v-flex>
+                              </template>
+                              <template v-if="reoccur.type == 'Weekly'">
+                                <v-flex md4>
+                                  <v-select
+                                    label="Day:"
+                                    v-model="reoccur.day"
+                                    :items="reoccurOnOptions()"
+                                  ></v-select>
+                                </v-flex>
+                                <v-flex md4>
+                                  <v-select
+                                    label="Time:"
+                                    v-model="reoccur.time"
+                                    :items="reoccurOnOptions('Daily')"
+                                  ></v-select>
+                                </v-flex>
+                              </template>
+                              <template v-if="reoccur.type == 'Daily'">
+                                <v-flex md4>
+                                  <v-select
+                                    label="Time:"
+                                    v-model="reoccur.time"
+                                    :items="reoccurOnOptions('Daily')"
+                                  ></v-select>
+                                </v-flex>
+                              </template>
+                            </v-layout>
+                          </v-flex>
                           <v-flex md6>
                             <icon-selector
                               label="Select an icon"
@@ -111,13 +172,14 @@
                         <v-layout row wrap justify-center>
                           <v-flex md4 style="display: flex; justify-content: center;">
                             <div>
-                              <h3>Date:</h3>
-                              <v-date-picker v-model="date" multiple :min="parent ? parent.start_date : null" :max="parent ? parent.end_date : null" color="primary white--text"></v-date-picker>
+                              <h3>Start:</h3>
+                              <v-date-picker v-model="task.start_date" :min="parent ? parent.start_date : null" :max="task.end_date ? task.end_date : parent ? parent.end_date : null" color="primary white--text"></v-date-picker>
                             </div>
                           </v-flex>
                           <v-flex md4 style="display: flex; justify-content: center;">
-                            <div v-if="date.length">
-                              <span>Start: {{task.start_date}} End: {{task.end_date}}</span>
+                            <div>
+                              <h3>End:</h3>
+                              <v-date-picker v-model="task.end_date" :min="task.start_date ? task.start_date : parent ? parent.start_date : null" :max="parent ? parent.end_date : null" color="primary white--text"></v-date-picker>
                             </div>
                           </v-flex>
                         </v-layout>     
@@ -181,8 +243,13 @@ export default {
     return {
       step: 1,
       showing: false,
-      date: [],
       allowedDates: [],
+      reoccur: {
+        week: null,
+        day: null,
+        time: null,
+        type: null
+      },
       task: {
         icon: null,
         parent_id: this.$route.params.task ? this.$route.params.task : null,
@@ -196,7 +263,10 @@ export default {
       },
       clients: [],
       editing: this.$route.meta.editing,
-      parent: null,
+      parent: {
+        start_date: null,
+        end_date: null
+      },
       types: [],
       users: [],
       groups: [],
@@ -274,6 +344,29 @@ export default {
     this.init();
   },
   methods: {
+    reoccurOnOptions(typeArg = null) {
+      let type = typeArg == null ? this.reoccur.type : typeArg;
+      switch (type) {
+        case "Daily":
+          return [
+            { text: "Morning (8 AM)", value: "08:00" },
+            { text: "After Noon (1 PM)", value: "13:00" },
+            { text: "Evening (5 PM)", value: "17:00" }
+          ];
+        case "Weekly":
+          return [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ];
+        case "Monthly":
+          return ["First", "Second", "Third", "Fourth", "Last"];
+      }
+    },
     valid(items) {
       items.forEach(item => {
         if (this.task[item] == null) {
@@ -338,13 +431,15 @@ export default {
         parent_id: t.parent_id,
         start_date: t.start_date,
         end_date: t.end_date,
-        client_id: t.client_id
+        client_id: t.client_id,
+        schedule: JSON.stringify(this.reoccur)
       };
       this.$task.update(this.task.id, data).then(() => {
         this.$router.push(this.afterPostRedirect);
       });
     },
     save() {
+      this.task.schedule = JSON.stringify(this.reoccur);
       this.$task.create(this.task).then(res => {
         this.reset();
         this.$router.push(this.afterPostRedirect);

@@ -1,4 +1,4 @@
-# What to do to Timmatic
+# What to do to timatik
 
 This is where I write out, and keep up with, business rules and designs for future features.
 

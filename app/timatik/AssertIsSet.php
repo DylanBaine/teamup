@@ -1,5 +1,5 @@
 <?
-namespace App\Timmatic;
+namespace App\timatik;
 
 class AssertIsSet {
     public $model;

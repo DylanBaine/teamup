@@ -1,5 +1,5 @@
 <?php
-namespace App\Timmatic\Responses;
+namespace App\timatik\Responses;
 
 use App\Models\Setting;
 use App\Models\Task;
@@ -9,7 +9,8 @@ use Illuminate\Contracts\Support\Responsable;
 use Notification;
 use App\Models\User;
 use Carbon\Carbon;
-use App\Timmatic\BLL\TaskLogic;
+use App\timatik\BLL\TaskLogic;
+use App\Models\ScheduledActivity;
 
 class UpdateTaskResponse implements Responsable
 {
@@ -38,6 +39,9 @@ class UpdateTaskResponse implements Responsable
         }
         if($type == 'Sprint'){
             $t->createDefaultSettings();
+        }
+        if($type == 'Reoccurring'){
+            $this->scheduleReoccurringActivity(json_decode($request->schedule), $t->id);
         }
         if($request->progressChange){
             $this->updateProgress($t);
@@ -84,6 +88,17 @@ class UpdateTaskResponse implements Responsable
                 $previous->duration_in_seconds = $previous->created_at->diffInSeconds(Carbon::now());
                 $previous->save();
             }
+    }
+
+    private function scheduleReoccurringActivity($schedule, $taskId){
+        ScheduledActivity::create([
+            'type' => $schedule->type,
+            'time' => $schedule->time,
+            'day' => $schedule->day,
+            'week' => $schedule->week,
+            'schedulable_type' => 'Task',
+            'schedulable_id' => $taskId
+        ]);
     }
 
 }

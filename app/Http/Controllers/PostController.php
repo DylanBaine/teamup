@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Type;
-use App\Timmatic\Repositories\TypesRepository;
-use App\Timmatic\UpdatePost;
+use App\timatik\Repositories\TypesRepository;
+use App\timatik\UpdatePost;
 use Auth;
 use Illuminate\Http\Request;
 
