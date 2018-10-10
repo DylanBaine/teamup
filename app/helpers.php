@@ -8,7 +8,15 @@ function company($prop = null)
     return $company;
 }
 
+function weekNumberInMonth($year = null, $month =null, $day = null) {
+    $year = $year == null ? (int)date('Y'):$year;
+    $month = $month == null ? (int)date('m'):$month;
+    $day = $day == null ? (int)date('d'):$day;
+    return ceil(($day + date("w",mktime(0,0,0,$month,1,$year)))/7);   
+   }
+
 function manifest($string){
+    echo "$string\n";
     \Log::info("$string\r\n");
 }
 

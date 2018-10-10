@@ -95,6 +95,10 @@ class Task extends Model
         }
     }
 
+    public function schedule(){
+        return $this->hasOne(ScheduledActivity::class, 'schedulable_id')->where('schedulable_type', 'Task');
+    }
+
     public function changes(){
         return $this->hasMany(ProgressChange::class)->with('column')->orderBy('created_at', 'desc');
     }

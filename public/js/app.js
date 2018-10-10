@@ -42974,7 +42974,7 @@ var render = function() {
                           ),
                           _vm._v(" "),
                           _c("p", {
-                            staticClass: "mt-2",
+                            staticClass: "mt-2 task-description",
                             staticStyle: {
                               "max-height": "100px",
                               overflow: "auto"
@@ -43144,14 +43144,14 @@ var render = function() {
                                               ])
                                             ]),
                                             _vm._v(" "),
-                                            child.type.name !== "Task"
+                                            child.type.name == "Sprint"
                                               ? _c("v-card-text", [
                                                   _vm._v(
-                                                    "\n                      " +
+                                                    "\n                        " +
                                                       _vm._s(
                                                         child.percent_finished
                                                       ) +
-                                                      "% finished.\n                      "
+                                                      "% finished.\n                        "
                                                   ),
                                                   _c(
                                                     "div",
@@ -43179,6 +43179,8 @@ var render = function() {
                                                 ])
                                               : _c("v-card-text", [
                                                   _c("p", {
+                                                    staticClass:
+                                                      "task-description",
                                                     domProps: {
                                                       innerHTML: _vm._s(
                                                         child.description
@@ -43289,6 +43291,7 @@ var render = function() {
                                   : _vm._e(),
                                 _vm._v(" "),
                                 _c("p", {
+                                  staticClass: "task-description",
                                   domProps: {
                                     innerHTML: _vm._s(
                                       task.description.length >= 40

@@ -100,6 +100,9 @@ img {
   padding: 5px;
   margin-right: 5px;
 }
+.task-description a {
+  color: white !important;
+}
 @media (max-width: 600px) {
   .header-from-builder {
     min-height: 35vh;

@@ -28,8 +28,10 @@ class DeleteTaskResponse implements Responsable{
         foreach(ProgressChange::where('task_id', $task->id) as $progChange){
             $progChange->delete();
         }
-
-        ScheduledActivity::where('schedulable_type', 'Task')->where('schedulable_id', $task->id)->first()->delete();
+        $schedule = ScheduledActivity::where('schedulable_type', 'Task')->where('schedulable_id', $task->id)->first();
+        if($schedule){
+            $schedule->delete();
+        }
     }
 
 }
