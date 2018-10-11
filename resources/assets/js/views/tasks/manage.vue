@@ -26,6 +26,20 @@
                   <h3 v-if="task.client" class="subheading">
                     Client: <router-link :to="`/clients/${task.client.id}`">{{task.client.name}}</router-link>
                   </h3>
+                  <div v-if="task.schedule != null">
+                    <h3>Reoccurring {{task.schedule.type}}:</h3>
+                    <ul>
+                      <li v-if="task.schedule.week">
+                        On the {{task.schedule.week}} week.
+                      </li>
+                      <li v-if="task.schedule.day">
+                        On {{task.schedule.day}}s.
+                      </li>
+                      <li>
+                        At {{task.schedule.time}}.
+                      </li>
+                    </ul>
+                  </div>
               </v-flex>
               <v-flex md6 style="position: relative">
                 <h2 class="title">
@@ -36,12 +50,48 @@
                 </h2>
                 <p class="mt-2 task-description" style="max-height: 100px; overflow: auto;" v-html="task.description"></p>
               </v-flex>
-              <v-flex>
-                <header>
-                  <h2 class="title">
-                    Files
-                  </h2>
-                </header>
+              <v-flex md3>
+                <v-card>
+                  <v-card-title>
+                    <h2 class="title">
+                      Files
+                    </h2>
+                  </v-card-title>
+                  <v-card-text v-if="task.files.length" style="max-height: 100px; overflow: auto;">
+                      <v-layout v-for="file in task.files" :key="file.id" align-center>
+                        <v-flex md6>
+                          {{file.name}}
+                        </v-flex>
+                        <v-flex md1>
+                          <v-tooltip bottom>
+                            <v-btn slot="activator" color="error" @click="detatchFile(file.id)" icon flat small>
+                              <v-icon>delete_forever</v-icon>
+                            </v-btn>
+                            <span>Remove from task.</span>
+                          </v-tooltip>
+                        </v-flex>
+                        <v-flex offset-md1 md1>
+                          <v-tooltip bottom>
+                            <v-btn slot="activator" @click="$refs.filePreview.embed(file.id)" icon flat small>
+                              <v-icon>remove_red_eye</v-icon>
+                            </v-btn>
+                            <span>View</span>
+                          </v-tooltip>
+                        </v-flex>
+                      </v-layout>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-select label="Add File"
+                      :items="allFiles.collection"
+                      item-text="name"
+                      item-value="id"
+                      v-model="fileAttaching"
+                    ></v-select>
+                    <v-btn class="ml-2" small @click="attachFile" icon color="primary">
+                      <v-icon>add</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
               </v-flex>
             </v-layout>
             <router-link to="/tasks">Tasks</router-link> <task-breadcrumb :icon-size="14" :item="task.parent" :original="task"></task-breadcrumb>
@@ -194,12 +244,14 @@
           </div>
       </v-container>
       <task-settings ref="settings"></task-settings>
+      <file-preview as-modal="true" ref="filePreview"></file-preview>
   </div>
 </template>
 
 <script>
 import Task from "../../app/models/Task";
 import Report from "../../app/models/Report";
+import File from "../../app/models/File";
 
 export default {
   data() {
@@ -212,7 +264,11 @@ export default {
       loaded: false,
       report: null,
       subWeeks: 1,
-      modal: false
+      modal: false,
+      showAllFiles: false,
+      showingFileSelector: false,
+      allFiles: [],
+      fileAttaching: null
     };
   },
   watch: {
@@ -241,6 +297,9 @@ export default {
     },
     $tasks() {
       return new Task(this, "tasks");
+    },
+    $files() {
+      return new File(this, "allFiles");
     }
   },
   mounted() {
@@ -253,7 +312,9 @@ export default {
   methods: {
     init() {
       this.loaded = true;
-      this.$task.find(this.$route.params.task);
+      this.$task.find(this.$route.params.task).then(() => {
+        this.$files.get();
+      });
     },
     shouldShowScrollTip() {
       if (this.$refs.columnContainer && this.$refs.columnScroller) {
@@ -289,7 +350,21 @@ export default {
       task.progressChange = true;
       this.$task.update(task.id, task, "quick");
     },
-    start(e) {}
+    start(e) {},
+    detatchFile(fileId) {
+      axios
+        .get(`${url}/tasks/${this.task.id}/remove-file/${fileId}`)
+        .then(() => {
+          this.init();
+        });
+    },
+    attachFile() {
+      axios
+        .get(`${url}/tasks/${this.task.id}/add-file/${this.fileAttaching}`)
+        .then(() => {
+          this.init();
+        });
+    }
   }
 };
 </script>

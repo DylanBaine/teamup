@@ -60,9 +60,6 @@
 				item-text="type.name" item-value="type"
 			></v-autocomplete>
 			<v-spacer></v-spacer>
-			<!-- <v-btn icon @click="dark = !dark">
-				<v-icon>highlight</v-icon>
-			</v-btn> -->
 			<v-tooltip left>
 				<v-btn slot="activator" flat class="subheading">
 					{{user.name}}

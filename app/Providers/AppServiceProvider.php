@@ -19,14 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        User::observe(new \App\Observers\UserObserver);
-        Post::observe(new \App\Observers\PostObserver);
-        Task::observe(new \App\Observers\TaskObserver);
         Schema::defaultStringLength(191);
-        if (Auth::user()) {
-            $company = Company::find(Auth::user()->company_id);
-        }
-
     }
 
     /**

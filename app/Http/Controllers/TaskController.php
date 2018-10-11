@@ -43,7 +43,7 @@ class TaskController extends Controller
             'users' => company()->users,
             'groups' => company()->groups,
             'types' => company()->types()->where('model', 'Task')->get(),
-            'task' => Task::find($id)->load('user', 'group'),
+            'task' => Task::find($id)->load('user', 'group', 'schedule', 'type'),
             'parent' => Task::find($id)->parent,
             'clients' => company()->clients,
         ]);
@@ -83,9 +83,18 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = company()->tasks()->find($id)->load('columns', 'user', 'subscribers', 'children', 'type', 'changes', 'group', 'client');
+        $task = company()->tasks()->find($id)
+            ->load('columns', 'user', 'subscribers', 'children', 'type', 'changes', 'group', 'client', 'schedule', 'files');
         $task->report = $task->runReport();
         return $task;
+    }
+
+    public function attachFile($task, $file){
+        Task::find($task)->files()->attach($file);
+    }
+
+    public function detachFile($task, $file){
+        Task::find($task)->files()->detach($file);
     }
 
     /**

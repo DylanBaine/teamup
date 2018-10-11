@@ -93,6 +93,7 @@
                             <v-layout v-if="setType == 'Reoccurring'">
                               <v-flex md4>
                                 <v-select
+                                  @input="reoccurOnOptions()"
                                   label="Reoccurring Type"
                                   v-model="reoccur.type"
                                   :items="[
@@ -402,6 +403,9 @@ export default {
         this.clients = p.clients;
         if (this.editing) {
           this.task = p.task;
+          if (p.task.type.name == "Reoccurring") {
+            this.reoccur = p.task.schedule;
+          }
           this.date = [p.task.start_date, p.task.end_date];
         }
         /* if (this.$route.params.task) {
@@ -412,6 +416,13 @@ export default {
       this.$root.mounted = true;
     },
     post() {
+      let type = this.reoccur.type;
+      if (type == "Daily") {
+        this.reoccur.day = null;
+        this.reoccur.week = null;
+      } else if (type == "Weekly") {
+        this.reoccur.week = null;
+      }
       if (this.editing) {
         this.update();
       } else {

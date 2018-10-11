@@ -42,6 +42,8 @@ class UpdateTaskResponse implements Responsable
         }
         if($type == 'Reoccurring'){
             $this->scheduleReoccurringActivity(json_decode($request->schedule), $t->id);
+        }else{
+            ScheduledActivity::where('schedulable_type', 'Task')->where('schedulable_id', $t->id)->delete();
         }
         if($request->progressChange){
             $this->updateProgress($t);
@@ -91,6 +93,7 @@ class UpdateTaskResponse implements Responsable
     }
 
     private function scheduleReoccurringActivity($schedule, $taskId){
+        ScheduledActivity::where('schedulable_type', 'Task')->where('schedulable_id', $taskId)->delete();
         ScheduledActivity::create([
             'type' => $schedule->type,
             'time' => $schedule->time,

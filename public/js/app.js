@@ -13930,6 +13930,8 @@ Vue.component("task-settings", __webpack_require__(26));
 Vue.component("add-post-type", __webpack_require__(27));
 Vue.component("task-breadcrumb", __webpack_require__(233));
 
+Vue.component("file-preview", __webpack_require__(140));
+
 Array.prototype.hasProp = function (needle, haystack) {
   for (var i = 0; i < this.length; i++) {
     var el = this[i];
@@ -40820,6 +40822,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -40995,6 +40998,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this6.clients = p.clients;
         if (_this6.editing) {
           _this6.task = p.task;
+          if (p.task.type.name == "Reoccurring") {
+            _this6.reoccur = p.task.schedule;
+          }
           _this6.date = [p.task.start_date, p.task.end_date];
         }
         /* if (this.$route.params.task) {
@@ -41005,6 +41011,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$root.mounted = true;
     },
     post: function post() {
+      var type = this.reoccur.type;
+      if (type == "Daily") {
+        this.reoccur.day = null;
+        this.reoccur.week = null;
+      } else if (type == "Weekly") {
+        this.reoccur.week = null;
+      }
       if (this.editing) {
         this.update();
       } else {
@@ -41432,6 +41445,13 @@ var render = function() {
                                                             "Weekly",
                                                             "Monthly"
                                                           ]
+                                                        },
+                                                        on: {
+                                                          input: function(
+                                                            $event
+                                                          ) {
+                                                            _vm.reoccurOnOptions()
+                                                          }
                                                         },
                                                         model: {
                                                           value:
@@ -42472,6 +42492,7 @@ module.exports = function listToStyles (parentId, list) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_models_Task__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_models_Report__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_models_File__ = __webpack_require__(28);
 //
 //
 //
@@ -42671,6 +42692,58 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -42686,7 +42759,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       loaded: false,
       report: null,
       subWeeks: 1,
-      modal: false
+      modal: false,
+      showAllFiles: false,
+      showingFileSelector: false,
+      allFiles: [],
+      fileAttaching: null
     };
   },
 
@@ -42716,6 +42793,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     $tasks: function $tasks() {
       return new __WEBPACK_IMPORTED_MODULE_0__app_models_Task__["a" /* default */](this, "tasks");
+    },
+    $files: function $files() {
+      return new __WEBPACK_IMPORTED_MODULE_2__app_models_File__["a" /* default */](this, "allFiles");
     }
   },
   mounted: function mounted() {
@@ -42728,8 +42808,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     init: function init() {
+      var _this = this;
+
       this.loaded = true;
-      this.$task.find(this.$route.params.task);
+      this.$task.find(this.$route.params.task).then(function () {
+        _this.$files.get();
+      });
     },
     shouldShowScrollTip: function shouldShowScrollTip() {
       if (this.$refs.columnContainer && this.$refs.columnScroller) {
@@ -42741,17 +42825,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log(e);
     },
     remove: function remove(id) {
-      var _this = this;
+      var _this2 = this;
 
       this.$task.delete(id).then(function (res) {
-        _this.init();
+        _this2.init();
       });
     },
     columnItems: function columnItems() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.task.columns.forEach(function (column) {
-        column.children = _this2.task.children.filter(function (child) {
+        column.children = _this3.task.children.filter(function (child) {
           return child.column_id == column.id;
         });
       });
@@ -42766,7 +42850,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       task.progressChange = true;
       this.$task.update(task.id, task, "quick");
     },
-    start: function start(e) {}
+    start: function start(e) {},
+    detatchFile: function detatchFile(fileId) {
+      var _this4 = this;
+
+      axios.get(url + "/tasks/" + this.task.id + "/remove-file/" + fileId).then(function () {
+        _this4.init();
+      });
+    },
+    attachFile: function attachFile() {
+      var _this5 = this;
+
+      axios.get(url + "/tasks/" + this.task.id + "/add-file/" + this.fileAttaching).then(function () {
+        _this5.init();
+      });
+    }
   }
 });
 
@@ -42934,6 +43032,48 @@ var render = function() {
                               ],
                               1
                             )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.task.schedule != null
+                          ? _c("div", [
+                              _c("h3", [
+                                _vm._v(
+                                  "Reoccurring " +
+                                    _vm._s(_vm.task.schedule.type) +
+                                    ":"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("ul", [
+                                _vm.task.schedule.week
+                                  ? _c("li", [
+                                      _vm._v(
+                                        "\n                      On the " +
+                                          _vm._s(_vm.task.schedule.week) +
+                                          " week.\n                    "
+                                      )
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.task.schedule.day
+                                  ? _c("li", [
+                                      _vm._v(
+                                        "\n                      On " +
+                                          _vm._s(_vm.task.schedule.day) +
+                                          "s.\n                    "
+                                      )
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c("li", [
+                                  _vm._v(
+                                    "\n                      At " +
+                                      _vm._s(_vm.task.schedule.time) +
+                                      ".\n                    "
+                                  )
+                                ])
+                              ])
+                            ])
                           : _vm._e()
                       ]),
                       _vm._v(" "),
@@ -42986,15 +43126,190 @@ var render = function() {
                         ]
                       ),
                       _vm._v(" "),
-                      _c("v-flex", [
-                        _c("header", [
-                          _c("h2", { staticClass: "title" }, [
-                            _vm._v(
-                              "\n                  Files\n                "
-                            )
-                          ])
-                        ])
-                      ])
+                      _c(
+                        "v-flex",
+                        { attrs: { md3: "" } },
+                        [
+                          _c(
+                            "v-card",
+                            [
+                              _c("v-card-title", [
+                                _c("h2", { staticClass: "title" }, [
+                                  _vm._v(
+                                    "\n                    Files\n                  "
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _vm.task.files.length
+                                ? _c(
+                                    "v-card-text",
+                                    {
+                                      staticStyle: {
+                                        "max-height": "100px",
+                                        overflow: "auto"
+                                      }
+                                    },
+                                    _vm._l(_vm.task.files, function(file) {
+                                      return _c(
+                                        "v-layout",
+                                        {
+                                          key: file.id,
+                                          attrs: { "align-center": "" }
+                                        },
+                                        [
+                                          _c("v-flex", { attrs: { md6: "" } }, [
+                                            _vm._v(
+                                              "\n                        " +
+                                                _vm._s(file.name) +
+                                                "\n                      "
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            { attrs: { md1: "" } },
+                                            [
+                                              _c(
+                                                "v-tooltip",
+                                                { attrs: { bottom: "" } },
+                                                [
+                                                  _c(
+                                                    "v-btn",
+                                                    {
+                                                      attrs: {
+                                                        slot: "activator",
+                                                        color: "error",
+                                                        icon: "",
+                                                        flat: "",
+                                                        small: ""
+                                                      },
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          _vm.detatchFile(
+                                                            file.id
+                                                          )
+                                                        }
+                                                      },
+                                                      slot: "activator"
+                                                    },
+                                                    [
+                                                      _c("v-icon", [
+                                                        _vm._v("delete_forever")
+                                                      ])
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c("span", [
+                                                    _vm._v("Remove from task.")
+                                                  ])
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              attrs: {
+                                                "offset-md1": "",
+                                                md1: ""
+                                              }
+                                            },
+                                            [
+                                              _c(
+                                                "v-tooltip",
+                                                { attrs: { bottom: "" } },
+                                                [
+                                                  _c(
+                                                    "v-btn",
+                                                    {
+                                                      attrs: {
+                                                        slot: "activator",
+                                                        icon: "",
+                                                        flat: "",
+                                                        small: ""
+                                                      },
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          _vm.$refs.filePreview.embed(
+                                                            file.id
+                                                          )
+                                                        }
+                                                      },
+                                                      slot: "activator"
+                                                    },
+                                                    [
+                                                      _c("v-icon", [
+                                                        _vm._v("remove_red_eye")
+                                                      ])
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c("span", [_vm._v("View")])
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    })
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c(
+                                "v-card-actions",
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      label: "Add File",
+                                      items: _vm.allFiles.collection,
+                                      "item-text": "name",
+                                      "item-value": "id"
+                                    },
+                                    model: {
+                                      value: _vm.fileAttaching,
+                                      callback: function($$v) {
+                                        _vm.fileAttaching = $$v
+                                      },
+                                      expression: "fileAttaching"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      staticClass: "ml-2",
+                                      attrs: {
+                                        small: "",
+                                        icon: "",
+                                        color: "primary"
+                                      },
+                                      on: { click: _vm.attachFile }
+                                    },
+                                    [_c("v-icon", [_vm._v("add")])],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
                     ],
                     1
                   ),
@@ -43545,7 +43860,9 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _c("task-settings", { ref: "settings" })
+      _c("task-settings", { ref: "settings" }),
+      _vm._v(" "),
+      _c("file-preview", { ref: "filePreview", attrs: { "as-modal": "true" } })
     ],
     1
   )
@@ -50130,14 +50447,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         type: null
       },
       showing: false,
-      needsFullscreen: false
+      needsFullscreen: false,
+      embedded: false
     };
   },
 
+  props: ["asModal"],
   watch: {
     showing: function showing() {
       if (!this.showing) {
-        this.$router.push("/file-type/" + this.file.type.slug);
+        if (!this.embedded) this.$router.push("/file-type/" + this.file.type.slug);
       }
     }
   },
@@ -50148,7 +50467,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   mounted: function mounted() {
-    if (!this.$root.mounted) this.init();
+    if (!this.$root.mounted && !this.asModal) this.init();
     console.log("Init");
   },
 
@@ -50168,6 +50487,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var type = this.file.type ? this.file.type.name : null;
       if (type == "Word Document" || type == "Excel Sheet") return this.needsFullscreen = true;
       this.needsFullscreen = false;
+    },
+    embed: function embed(fileId) {
+      var _this2 = this;
+
+      this.embedded = true;
+      axios.get(url + "/files/" + fileId).then(function (res) {
+        _this2.file = res.data;
+        _this2.showing = true;
+      });
     }
   }
 });
@@ -74237,9 +74565,6 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_models_User__ = __webpack_require__(1);
-//
-//
-//
 //
 //
 //

@@ -33,7 +33,8 @@ class FileController extends Controller
         }
         return response()->json([
             'files' => company()->types()->where('model', 'File')->with('files')->get(),
-            'types' => company()->types()->where('model', 'File')->get()
+            'types' => company()->types()->where('model', 'File')->get(),
+            'collection' => company()->files
         ]);
     }
 

@@ -95,6 +95,10 @@ class Task extends Model
         }
     }
 
+    public function files(){
+        return $this->belongsToMany(File::class);
+    }
+
     public function schedule(){
         return $this->hasOne(ScheduledActivity::class, 'schedulable_id')->where('schedulable_type', 'Task');
     }

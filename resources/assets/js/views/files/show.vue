@@ -75,13 +75,16 @@ export default {
         type: null
       },
       showing: false,
-      needsFullscreen: false
+      needsFullscreen: false,
+      embedded: false
     };
   },
+  props: ["asModal"],
   watch: {
     showing() {
       if (!this.showing) {
-        this.$router.push("/file-type/" + this.file.type.slug);
+        if (!this.embedded)
+          this.$router.push("/file-type/" + this.file.type.slug);
       }
     }
   },
@@ -92,7 +95,7 @@ export default {
     }
   },
   mounted() {
-    if (!this.$root.mounted) this.init();
+    if (!this.$root.mounted && !this.asModal) this.init();
     console.log("Init");
   },
   methods: {
@@ -110,6 +113,13 @@ export default {
       if (type == "Word Document" || type == "Excel Sheet")
         return (this.needsFullscreen = true);
       this.needsFullscreen = false;
+    },
+    embed(fileId) {
+      this.embedded = true;
+      axios.get(`${url}/files/${fileId}`).then(res => {
+        this.file = res.data;
+        this.showing = true;
+      });
     }
   }
 };
