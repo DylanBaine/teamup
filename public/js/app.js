@@ -13954,6 +13954,13 @@ String.prototype.isHTML = function () {
   return false;
 };
 
+String.prototype.shorten = function () {
+  var chars = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+  var _chars = chars == null ? 400 : chars;
+  return this.substr(0, _chars);
+};
+
 /***/ }),
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -40277,7 +40284,9 @@ var render = function() {
                           : _vm._e(),
                         _vm._v(" "),
                         _c("p", {
-                          domProps: { innerHTML: _vm._s(task.description) }
+                          domProps: {
+                            innerHTML: _vm._s(task.description.shorten())
+                          }
                         }),
                         _vm._v(" "),
                         task.type.name == "Sprint"
@@ -42743,6 +42752,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -42763,7 +42780,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       showAllFiles: false,
       showingFileSelector: false,
       allFiles: [],
-      fileAttaching: null
+      fileAttaching: null,
+      uploadedFile: {
+        name: null,
+        file: null
+      }
     };
   },
 
@@ -42861,8 +42882,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     attachFile: function attachFile() {
       var _this5 = this;
 
-      axios.get(url + "/tasks/" + this.task.id + "/add-file/" + this.fileAttaching).then(function () {
-        _this5.init();
+      var file = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+      if (file != null) {
+        return axios.get(url + "/tasks/" + this.task.id + "/add-file/" + file).then(function () {
+          _this5.init();
+          _this5.fileAttaching = null;
+        });
+      }
+    },
+    uploadFile: function uploadFile(e) {
+      var _this6 = this;
+
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      var config = {
+        headers: { "Content-Type": "multipart/FormData" }
+      };
+      var data = new FormData();
+      var file = document.getElementById("file_input").files[0];
+      var name = file.name.split(".")[0];
+      data.append("file", file);
+      data.append("file_name", name);
+      axios.post(url + "/files", data, config).then(function (res) {
+        _this6.attachFile(res.data);
       });
     }
   }
@@ -43036,7 +43079,7 @@ var render = function() {
                         _vm._v(" "),
                         _vm.task.schedule != null
                           ? _c("div", [
-                              _c("h3", [
+                              _c("h3", { staticClass: "subheading" }, [
                                 _vm._v(
                                   "Reoccurring " +
                                     _vm._s(_vm.task.schedule.type) +
@@ -43081,7 +43124,7 @@ var render = function() {
                         "v-flex",
                         {
                           staticStyle: { position: "relative" },
-                          attrs: { md6: "" }
+                          attrs: { md5: "" }
                         },
                         [
                           _c(
@@ -43116,7 +43159,7 @@ var render = function() {
                           _c("p", {
                             staticClass: "mt-2 task-description",
                             staticStyle: {
-                              "max-height": "100px",
+                              "max-height": "180px",
                               overflow: "auto"
                             },
                             domProps: {
@@ -43128,7 +43171,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-flex",
-                        { attrs: { md3: "" } },
+                        { attrs: { md4: "" } },
                         [
                           _c(
                             "v-card",
@@ -43270,6 +43313,7 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "v-card-actions",
+                                { attrs: { flat: "" } },
                                 [
                                   _c("v-select", {
                                     attrs: {
@@ -43296,14 +43340,53 @@ var render = function() {
                                         icon: "",
                                         color: "primary"
                                       },
-                                      on: { click: _vm.attachFile }
+                                      on: {
+                                        click: function($event) {
+                                          _vm.attachFile(_vm.fileAttaching)
+                                        }
+                                      }
                                     },
                                     [_c("v-icon", [_vm._v("add")])],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      staticClass: "ml-2",
+                                      attrs: {
+                                        small: "",
+                                        icon: "",
+                                        color: "accent"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.$refs.fileInputActivator.click()
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("v-icon", { attrs: { small: "" } }, [
+                                        _vm._v("cloud_upload")
+                                      ])
+                                    ],
                                     1
                                   )
                                 ],
                                 1
-                              )
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticStyle: { display: "none" } }, [
+                                _c("label", {
+                                  ref: "fileInputActivator",
+                                  attrs: { for: "file_input" }
+                                }),
+                                _vm._v(" "),
+                                _c("input", {
+                                  attrs: { type: "file", id: "file_input" },
+                                  on: { input: _vm.uploadFile }
+                                })
+                              ])
                             ],
                             1
                           )
@@ -43324,7 +43407,9 @@ var render = function() {
                       item: _vm.task.parent,
                       original: _vm.task
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _c("v-divider", { staticClass: "mt-3 mb-2" })
                 ],
                 1
               ),
@@ -43498,7 +43583,7 @@ var render = function() {
                                                       "task-description",
                                                     domProps: {
                                                       innerHTML: _vm._s(
-                                                        child.description
+                                                        child.shorten()
                                                       )
                                                     }
                                                   })
@@ -50495,6 +50580,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       axios.get(url + "/files/" + fileId).then(function (res) {
         _this2.file = res.data;
         _this2.showing = true;
+        _this2.setFullscreen();
       });
     }
   }

@@ -93,3 +93,8 @@ String.prototype.isHTML = function() {
 
   return false;
 };
+
+String.prototype.shorten = function(chars = null) {
+  var _chars = chars == null ? 400 : chars;
+  return this.substr(0, _chars);
+};

@@ -119,6 +119,7 @@ export default {
       axios.get(`${url}/files/${fileId}`).then(res => {
         this.file = res.data;
         this.showing = true;
+        this.setFullscreen();
       });
     }
   }

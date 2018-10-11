@@ -8,6 +8,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\File;
+use DB;
 
 class FileController extends Controller
 {
@@ -70,7 +71,7 @@ class FileController extends Controller
             'icon' => 'attach_file',
             'model' => 'File',
         ])->files()->save($file);
-        return $file->slug;
+        return $file->id;
     }
 
     /**
@@ -117,6 +118,6 @@ class FileController extends Controller
         if($type->files()->count() < 1){
             $type->delete();
         }
-    
+        $taskPivots = DB::table('file_task')->where('file_id', $id)->delete();    
     }
 }

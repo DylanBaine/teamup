@@ -25,7 +25,7 @@
             <h3 v-if="task.client">
               Client {{task.client.name}}
             </h3>
-            <p v-html="task.description"></p>
+            <p v-html="task.description.shorten()"></p>
             <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
               <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
                 <div class="primary" :style="`width:${task.percent_finished}%; height: 100%; border-radius: 50px;`"></div>

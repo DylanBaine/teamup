@@ -27,7 +27,7 @@
                     Client: <router-link :to="`/clients/${task.client.id}`">{{task.client.name}}</router-link>
                   </h3>
                   <div v-if="task.schedule != null">
-                    <h3>Reoccurring {{task.schedule.type}}:</h3>
+                    <h3 class="subheading">Reoccurring {{task.schedule.type}}:</h3>
                     <ul>
                       <li v-if="task.schedule.week">
                         On the {{task.schedule.week}} week.
@@ -41,16 +41,16 @@
                     </ul>
                   </div>
               </v-flex>
-              <v-flex md6 style="position: relative">
+              <v-flex md5 style="position: relative">
                 <h2 class="title">
                   Description:
                   <v-btn v-if="task.description.length > 300" small @click="fullDescription = true" flat>
                     <v-icon>fullscreen</v-icon> Fullscreen
                   </v-btn>
                 </h2>
-                <p class="mt-2 task-description" style="max-height: 100px; overflow: auto;" v-html="task.description"></p>
+                <p class="mt-2 task-description" style="max-height: 180px; overflow: auto;" v-html="task.description"></p>
               </v-flex>
-              <v-flex md3>
+              <v-flex md4>
                 <v-card>
                   <v-card-title>
                     <h2 class="title">
@@ -80,21 +80,29 @@
                         </v-flex>
                       </v-layout>
                   </v-card-text>
-                  <v-card-actions>
+                  <v-card-actions flat>
                     <v-select label="Add File"
                       :items="allFiles.collection"
                       item-text="name"
                       item-value="id"
                       v-model="fileAttaching"
                     ></v-select>
-                    <v-btn class="ml-2" small @click="attachFile" icon color="primary">
+                    <v-btn class="ml-2" small @click="attachFile(fileAttaching)" icon color="primary">
                       <v-icon>add</v-icon>
                     </v-btn>
+                    <v-btn class="ml-2" small @click="$refs.fileInputActivator.click()" icon color="accent">
+                      <v-icon small>cloud_upload</v-icon>
+                    </v-btn>
                   </v-card-actions>
+                  <div style="display: none">
+                    <label for="file_input" ref="fileInputActivator"></label>
+                    <input @input="uploadFile" type="file" id="file_input">
+                  </div>
                 </v-card>
               </v-flex>
             </v-layout>
             <router-link to="/tasks">Tasks</router-link> <task-breadcrumb :icon-size="14" :item="task.parent" :original="task"></task-breadcrumb>
+            <v-divider class="mt-3 mb-2"></v-divider>
           </header>
           <v-tooltip :disabled="!shouldShowScrollTip()" top color="info" v-if="task.type.name == 'Sprint'" >
             <div ref="columnScroller" slot="activator" class="padded" style="width: 100%; min-height: 500px; overflow: auto; overflow-y: hidden;" @scroll="scroll">
@@ -124,7 +132,7 @@
                           </div>
                         </v-card-text>
                         <v-card-text v-else>
-                          <p class="task-description" v-html="child.description"></p>
+                          <p class="task-description" v-html="child.shorten()"></p>
                         </v-card-text>
                     </v-card>
                     </draggable>
@@ -268,7 +276,11 @@ export default {
       showAllFiles: false,
       showingFileSelector: false,
       allFiles: [],
-      fileAttaching: null
+      fileAttaching: null,
+      uploadedFile: {
+        name: null,
+        file: null
+      }
     };
   },
   watch: {
@@ -358,12 +370,30 @@ export default {
           this.init();
         });
     },
-    attachFile() {
-      axios
-        .get(`${url}/tasks/${this.task.id}/add-file/${this.fileAttaching}`)
-        .then(() => {
-          this.init();
-        });
+    attachFile(file = null) {
+      if (file != null) {
+        return axios
+          .get(`${url}/tasks/${this.task.id}/add-file/${file}`)
+          .then(() => {
+            this.init();
+            this.fileAttaching = null;
+          });
+      }
+    },
+    uploadFile(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      var config = {
+        headers: { "Content-Type": "multipart/FormData" }
+      };
+      let data = new FormData();
+      let file = document.getElementById("file_input").files[0];
+      let name = file.name.split(".")[0];
+      data.append("file", file);
+      data.append("file_name", name);
+      axios.post(`${url}/files`, data, config).then(res => {
+        this.attachFile(res.data);
+      });
     }
   }
 };
