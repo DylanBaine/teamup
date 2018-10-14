@@ -15,7 +15,7 @@
                                 {{post.name}}
                             </h2>
                         </v-card-title>
-                        <v-card-text v-html="post.content.substr(0, 200)"></v-card-text>
+                        <v-card-text v-html="post.content.shorten()"></v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>

@@ -48,7 +48,7 @@
                     <v-icon>fullscreen</v-icon> Fullscreen
                   </v-btn>
                 </h2>
-                <p class="mt-2 task-description" style="max-height: 180px; overflow: auto;" v-html="task.description"></p>
+                <p class="mt-2 task-description scroll-180px" v-html="task.description"></p>
               </v-flex>
               <v-flex md4>
                 <v-card>
@@ -57,7 +57,7 @@
                       Files
                     </h2>
                   </v-card-title>
-                  <v-card-text v-if="task.files.length" style="max-height: 100px; overflow: auto;">
+                  <v-card-text v-if="task.files.length" class="scroll-100px">
                       <v-layout v-for="file in task.files" :key="file.id" align-center>
                         <v-flex md6>
                           {{file.name}}
@@ -132,7 +132,7 @@
                           </div>
                         </v-card-text>
                         <v-card-text v-else>
-                          <p class="task-description" v-html="child.shorten()"></p>
+                          <p class="task-description" v-html="child.description.shorten()"></p>
                         </v-card-text>
                     </v-card>
                     </draggable>
@@ -368,6 +368,10 @@ export default {
         .get(`${url}/tasks/${this.task.id}/remove-file/${fileId}`)
         .then(() => {
           this.init();
+          this.$root.$refs.app.$refs.alert.run(
+            "File removed from task.",
+            "info"
+          );
         });
     },
     attachFile(file = null) {
@@ -393,6 +397,10 @@ export default {
       data.append("file_name", name);
       axios.post(`${url}/files`, data, config).then(res => {
         this.attachFile(res.data);
+        this.$root.$refs.app.$refs.alert.run(
+          "File added to this task.",
+          "info"
+        );
       });
     }
   }

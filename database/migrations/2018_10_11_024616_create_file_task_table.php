@@ -13,8 +13,10 @@ class CreateFileTaskTable extends Migration
      */
     public function up()
     {
-        Schema::table('file_task', function (Blueprint $table) {
-            //
+        Schema::create('file_task', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('file_id');
+            $table->integer('task_id');
         });
     }
 
@@ -25,10 +27,6 @@ class CreateFileTaskTable extends Migration
      */
     public function down()
     {
-        Schema::create('file_task', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('file_id');
-            $table->integer('task_id');
-        });
+        Schema::dropIfExists('file_task');
     }
 }

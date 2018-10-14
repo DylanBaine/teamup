@@ -42877,6 +42877,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       axios.get(url + "/tasks/" + this.task.id + "/remove-file/" + fileId).then(function () {
         _this4.init();
+        _this4.$root.$refs.app.$refs.alert.run("File removed from task.", "info");
       });
     },
     attachFile: function attachFile() {
@@ -42906,6 +42907,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       data.append("file_name", name);
       axios.post(url + "/files", data, config).then(function (res) {
         _this6.attachFile(res.data);
+        _this6.$root.$refs.app.$refs.alert.run("File added to this task.", "info");
       });
     }
   }
@@ -43157,11 +43159,7 @@ var render = function() {
                           ),
                           _vm._v(" "),
                           _c("p", {
-                            staticClass: "mt-2 task-description",
-                            staticStyle: {
-                              "max-height": "180px",
-                              overflow: "auto"
-                            },
+                            staticClass: "mt-2 task-description scroll-180px",
                             domProps: {
                               innerHTML: _vm._s(_vm.task.description)
                             }
@@ -43187,12 +43185,7 @@ var render = function() {
                               _vm.task.files.length
                                 ? _c(
                                     "v-card-text",
-                                    {
-                                      staticStyle: {
-                                        "max-height": "100px",
-                                        overflow: "auto"
-                                      }
-                                    },
+                                    { staticClass: "scroll-100px" },
                                     _vm._l(_vm.task.files, function(file) {
                                       return _c(
                                         "v-layout",
@@ -43583,7 +43576,7 @@ var render = function() {
                                                       "task-description",
                                                     domProps: {
                                                       innerHTML: _vm._s(
-                                                        child.shorten()
+                                                        child.description.shorten()
                                                       )
                                                     }
                                                   })
@@ -44981,7 +44974,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-card-text", {
                             domProps: {
-                              innerHTML: _vm._s(post.content.substr(0, 200))
+                              innerHTML: _vm._s(post.content.shorten())
                             }
                           })
                         ],
