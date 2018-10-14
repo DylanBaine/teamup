@@ -40832,6 +40832,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -40869,6 +40889,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         end_date: null
       },
       types: [],
+      user_tasks: [],
       users: [],
       groups: [],
       dateRules: [function () {
@@ -41073,6 +41094,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         name: null,
         description: null
       };
+    },
+    getUsersAvailability: function getUsersAvailability() {
+      var _this9 = this;
+
+      axios.get(url + "/tasks/user_availability/" + this.task.user_id).then(function (res) {
+        _this9.user_tasks = res.data;
+      });
     }
   }
 });
@@ -41299,6 +41327,10 @@ var render = function() {
                                                     "item-text": "name",
                                                     hint:
                                                       "Start typing to find a user."
+                                                  },
+                                                  on: {
+                                                    input:
+                                                      _vm.getUsersAvailability
                                                   },
                                                   model: {
                                                     value: _vm.task.user_id,
@@ -41768,6 +41800,80 @@ var render = function() {
                                             }
                                           },
                                           [
+                                            _vm.user_tasks.length
+                                              ? _c(
+                                                  "v-flex",
+                                                  { attrs: { md2: "" } },
+                                                  [
+                                                    _c(
+                                                      "h2",
+                                                      {
+                                                        staticClass:
+                                                          "title text-xs-center"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                          Users other task dates.\n                        "
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c("hr"),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "ul",
+                                                      {
+                                                        staticClass:
+                                                          "scroll-180px"
+                                                      },
+                                                      _vm._l(
+                                                        _vm.user_tasks,
+                                                        function(task) {
+                                                          return _c(
+                                                            "li",
+                                                            {
+                                                              key:
+                                                                task.start_date
+                                                            },
+                                                            [
+                                                              _c("ul", [
+                                                                _c("h4", [
+                                                                  _vm._v(
+                                                                    _vm._s(
+                                                                      task.name
+                                                                    )
+                                                                  )
+                                                                ]),
+                                                                _vm._v(" "),
+                                                                _c("li", [
+                                                                  _vm._v(
+                                                                    "\n                                Start: " +
+                                                                      _vm._s(
+                                                                        task.start_date_string
+                                                                      ) +
+                                                                      "\n                              "
+                                                                  )
+                                                                ]),
+                                                                _vm._v(" "),
+                                                                _c("li", [
+                                                                  _vm._v(
+                                                                    "\n                                End: " +
+                                                                      _vm._s(
+                                                                        task.end_date_string
+                                                                      ) +
+                                                                      "\n                              "
+                                                                  )
+                                                                ])
+                                                              ])
+                                                            ]
+                                                          )
+                                                        }
+                                                      )
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
                                             _c(
                                               "v-flex",
                                               {

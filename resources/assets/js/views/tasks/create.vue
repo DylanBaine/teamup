@@ -52,6 +52,7 @@
                               item-value="id"
                               item-text="name"
                               v-model="task.user_id"
+                              @input="getUsersAvailability"
                               hint="Start typing to find a user.">
                             </v-autocomplete>
                             <v-autocomplete
@@ -171,6 +172,25 @@
                     <div class="padded">
                       <div>
                         <v-layout row wrap justify-center>
+                          <v-flex md2 v-if="user_tasks.length">
+                            <h2 class="title text-xs-center">
+                              Users other task dates.
+                            </h2>
+                            <hr>
+                            <ul class="scroll-180px">
+                              <li v-for="task in user_tasks" :key="task.start_date">
+                                <ul>
+                                  <h4>{{task.name}}</h4>
+                                  <li>
+                                    Start: {{task.start_date_string}}
+                                  </li>
+                                  <li>
+                                    End: {{task.end_date_string}}
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </v-flex>
                           <v-flex md4 style="display: flex; justify-content: center;">
                             <div>
                               <h3>Start:</h3>
@@ -269,6 +289,7 @@ export default {
         end_date: null
       },
       types: [],
+      user_tasks: [],
       users: [],
       groups: [],
       dateRules: [
@@ -465,6 +486,13 @@ export default {
         name: null,
         description: null
       };
+    },
+    getUsersAvailability() {
+      axios
+        .get(url + "/tasks/user_availability/" + this.task.user_id)
+        .then(res => {
+          this.user_tasks = res.data;
+        });
     }
   }
 };
