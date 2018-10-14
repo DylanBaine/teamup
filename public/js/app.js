@@ -42760,6 +42760,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -43481,7 +43486,7 @@ var render = function() {
                                         return _c(
                                           "v-card",
                                           {
-                                            key: child.key,
+                                            key: child.start_date,
                                             staticClass:
                                               "primary darken-1 mt-3 drag-me p-5 white--text",
                                             attrs: {
@@ -43533,7 +43538,25 @@ var render = function() {
                                                   ? _c("p", [
                                                       _vm._v(_vm._s(child.user))
                                                     ])
-                                                  : _vm._e()
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                _c("p", [
+                                                  _vm._v(
+                                                    "\n                            Starts on: " +
+                                                      _vm._s(
+                                                        child.start_date_string
+                                                      ) +
+                                                      "\n                            "
+                                                  ),
+                                                  _c("br"),
+                                                  _vm._v(
+                                                    "\n                            Due on: " +
+                                                      _vm._s(
+                                                        child.end_date_string
+                                                      ) +
+                                                      "\n                          "
+                                                  )
+                                                ])
                                               ])
                                             ]),
                                             _vm._v(" "),
@@ -43635,7 +43658,7 @@ var render = function() {
                                       { staticClass: "title black--text" },
                                       [
                                         _vm._v(
-                                          "\n                      " +
+                                          "\n                        " +
                                             _vm._s(task.name) +
                                             " (" +
                                             _vm._s(
@@ -43643,7 +43666,7 @@ var render = function() {
                                                 ? task.type.name
                                                 : "No type yet..."
                                             ) +
-                                            ")\n                      "
+                                            ")\n                        "
                                         ),
                                         _c(
                                           "v-icon",
@@ -43663,7 +43686,7 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              "\n                    Previously a child task.\n                    "
+                                              "\n                      Previously a child task.\n                      "
                                             )
                                           ]
                                         )
@@ -43676,9 +43699,9 @@ var render = function() {
                                 task.client
                                   ? _c("h3", { staticClass: "mb-2" }, [
                                       _vm._v(
-                                        "\n                    Client: " +
+                                        "\n                      Client: " +
                                           _vm._s(task.client.name) +
-                                          "\n                  "
+                                          "\n                    "
                                       )
                                     ])
                                   : _vm._e(),

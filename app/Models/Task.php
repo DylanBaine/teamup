@@ -138,7 +138,7 @@ class Task extends Model
 
     public function children()
     {
-        return $this->hasMany(Task::class, 'parent_id', 'id')->with('type', 'client');
+        return $this->hasMany(Task::class, 'parent_id', 'id')->with('type', 'client')->orderBy('start_date');
     }
 
     public function settings($name = null)

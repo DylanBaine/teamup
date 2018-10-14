@@ -117,12 +117,17 @@
                         <h2>{{column.value}}</h2>
                         </v-card-title>
                     </v-card>
-                    <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
+                    <v-card v-for="child in column.children" :key="child.start_date" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
                         <v-card-title>
                           <div>
                             <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
                             <h3 class="subheader">{{child.type.name}}</h3>
                             <p v-if="child.user">{{child.user}}</p>
+                            <p>
+                              Starts on: {{child.start_date_string}}
+                              <br>
+                              Due on: {{child.end_date_string}}
+                            </p>
                           </div>
                         </v-card-title>
                         <v-card-text v-if="child.type.name == 'Sprint'">
@@ -145,30 +150,30 @@
           </v-tooltip>
           <v-layout row wrap v-else>
               <v-flex md6 v-for="task in task.children" :key="task.key">
-              <v-card ripple :to="`/tasks/${task.id}/manage`">
-                  <v-card-title :class="task.parent_id == 0 ? 'blue lighten-2' : 'grey lighten-2'">
-                  <div>
-                      <h2 class="title black--text">
-                        {{task.name}} ({{task.type_id ? task.type.name : 'No type yet...'}})
-                        <v-icon color="black">{{task.icon}}</v-icon>
-                      </h2>
-                      <h3 class="subheading mt-1 black--text" v-if="task.parent_id == 0">
-                      Previously a child task.
+                <v-card ripple :to="`/tasks/${task.id}/manage`">
+                    <v-card-title :class="task.parent_id == 0 ? 'blue lighten-2' : 'grey lighten-2'">
+                    <div>
+                        <h2 class="title black--text">
+                          {{task.name}} ({{task.type_id ? task.type.name : 'No type yet...'}})
+                          <v-icon color="black">{{task.icon}}</v-icon>
+                        </h2>
+                        <h3 class="subheading mt-1 black--text" v-if="task.parent_id == 0">
+                        Previously a child task.
+                        </h3>
+                    </div>
+                    </v-card-title>
+                    <v-card-text>
+                      <h3 v-if="task.client" class="mb-2">
+                        Client: {{task.client.name}}
                       </h3>
-                  </div>
-                  </v-card-title>
-                  <v-card-text>
-                    <h3 v-if="task.client" class="mb-2">
-                      Client: {{task.client.name}}
-                    </h3>
-                  <p class="task-description" v-html="task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description">
-                  </p>
-                  <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
-                      <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
-                      <div class="primary" :style="`width:${task.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
-                      </div>
-                  </v-card-text>
-              </v-card>
+                    <p class="task-description" v-html="task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description">
+                    </p>
+                    <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
+                        <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
+                        <div class="primary" :style="`width:${task.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
+                        </div>
+                    </v-card-text>
+                </v-card>
               </v-flex>
           </v-layout>
           <basic-task-report v-if="task.type.name == 'Task'" :report="task.report"></basic-task-report>
