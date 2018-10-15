@@ -80,7 +80,9 @@ export default {
   methods: {
     init() {
       this.user = this.$root.user;
-      this.$user.find(this.$root.user.id);
+      this.$user.find(this.$root.user.id).then(() => {
+        this.user = this.user.user;
+      });
     },
     formatTasks() {
       if (this.user.columns && this.user.tasks) {

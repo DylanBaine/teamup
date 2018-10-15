@@ -117,7 +117,7 @@
                         <h2>{{column.value}}</h2>
                         </v-card-title>
                     </v-card>
-                    <v-card v-for="child in column.children" :key="child.start_date" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
+                    <v-card v-for="child in column.children" :key="child.start_date + child.id" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
                         <v-card-title>
                           <div>
                             <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>

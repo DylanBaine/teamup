@@ -37752,16 +37752,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     init: function init() {
+      var _this = this;
+
       this.user = this.$root.user;
-      this.$user.find(this.$root.user.id);
+      this.$user.find(this.$root.user.id).then(function () {
+        _this.user = _this.user.user;
+      });
     },
     formatTasks: function formatTasks() {
-      var _this = this;
+      var _this2 = this;
 
       if (this.user.columns && this.user.tasks) {
         this.user.columns.forEach(function (column) {
           column.children = [];
-          _this.user.tasks.forEach(function (task) {
+          _this2.user.tasks.forEach(function (task) {
             if (task.column && task.column.value == column.value) {
               column.children.push(task);
             }
@@ -40852,6 +40856,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -40865,6 +40872,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       step: 1,
       showing: false,
       allowedDates: [],
+      events: [],
       reoccur: {
         week: null,
         day: null,
@@ -41099,7 +41107,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this9 = this;
 
       axios.get(url + "/tasks/user_availability/" + this.task.user_id).then(function (res) {
-        _this9.user_tasks = res.data;
+        _this9.user_tasks = res.data.tasks;
+        _this9.events = res.data.events;
       });
     }
   }
@@ -41847,6 +41856,18 @@ var render = function() {
                                                                 _vm._v(" "),
                                                                 _c("li", [
                                                                   _vm._v(
+                                                                    "\n                                " +
+                                                                      _vm._s(
+                                                                        task
+                                                                          .type
+                                                                          .name
+                                                                      ) +
+                                                                      "\n                              "
+                                                                  )
+                                                                ]),
+                                                                _vm._v(" "),
+                                                                _c("li", [
+                                                                  _vm._v(
                                                                     "\n                                Start: " +
                                                                       _vm._s(
                                                                         task.start_date_string
@@ -41893,6 +41914,8 @@ var render = function() {
                                                     _vm._v(" "),
                                                     _c("v-date-picker", {
                                                       attrs: {
+                                                        events: _vm.events,
+                                                        "event-color": "red",
                                                         min: _vm.parent
                                                           ? _vm.parent
                                                               .start_date
@@ -41945,6 +41968,8 @@ var render = function() {
                                                     _vm._v(" "),
                                                     _c("v-date-picker", {
                                                       attrs: {
+                                                        events: _vm.events,
+                                                        "event-color": "red",
                                                         min: _vm.task.start_date
                                                           ? _vm.task.start_date
                                                           : _vm.parent
@@ -43592,7 +43617,7 @@ var render = function() {
                                         return _c(
                                           "v-card",
                                           {
-                                            key: child.start_date,
+                                            key: child.start_date + child.id,
                                             staticClass:
                                               "primary darken-1 mt-3 drag-me p-5 white--text",
                                             attrs: {
@@ -44499,190 +44524,209 @@ var render = function() {
                     "v-layout",
                     { attrs: { row: "", wrap: "" } },
                     [
-                      _c("v-flex", { attrs: { md6: "" } }, [
-                        _vm.task.columns && _vm.task.columns.length
-                          ? _c(
-                              "div",
-                              { ref: "scrollMe", staticClass: "scroll-me" },
-                              [
-                                _c("header", [
-                                  _c("h2", [
-                                    _vm._v(
-                                      "\n                                    Task columns.\n                                "
-                                    )
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "v-list",
-                                  { ref: "columnList" },
+                      _vm.task.columns.length
+                        ? _c("v-flex", { attrs: { md6: "" } }, [
+                            _vm.task.columns && _vm.task.columns.length
+                              ? _c(
+                                  "div",
+                                  { ref: "scrollMe", staticClass: "scroll-me" },
                                   [
+                                    _c("header", [
+                                      _c("h2", [
+                                        _vm._v(
+                                          "\n                                    Task columns.\n                                "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
                                     _c(
-                                      "draggable",
-                                      {
-                                        attrs: { items: _vm.task.columns },
-                                        on: { end: _vm.changeColumnOrder },
-                                        model: {
-                                          value: _vm.task.columns,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.task, "columns", $$v)
-                                          },
-                                          expression: "task.columns"
-                                        }
-                                      },
-                                      _vm._l(_vm.task.columns, function(
-                                        column
-                                      ) {
-                                        return _c(
-                                          "div",
+                                      "v-list",
+                                      { ref: "columnList" },
+                                      [
+                                        _c(
+                                          "draggable",
                                           {
-                                            key: column.position,
-                                            attrs: { id: column.id }
+                                            attrs: { items: _vm.task.columns },
+                                            on: { end: _vm.changeColumnOrder },
+                                            model: {
+                                              value: _vm.task.columns,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.task,
+                                                  "columns",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "task.columns"
+                                            }
                                           },
-                                          [
-                                            _c(
-                                              "v-list-tile",
+                                          _vm._l(_vm.task.columns, function(
+                                            column
+                                          ) {
+                                            return _c(
+                                              "div",
+                                              {
+                                                key: column.position,
+                                                attrs: { id: column.id }
+                                              },
                                               [
-                                                _c("v-list-tile-content", [
-                                                  column.value != "Finished"
-                                                    ? _c("input", {
-                                                        directives: [
-                                                          {
-                                                            name: "model",
-                                                            rawName: "v-model",
-                                                            value: column.value,
-                                                            expression:
-                                                              "column.value"
-                                                          }
-                                                        ],
-                                                        staticClass:
-                                                          "padded ghost",
-                                                        attrs: { type: "text" },
-                                                        domProps: {
-                                                          value: column.value
-                                                        },
-                                                        on: {
-                                                          keydown: function(
-                                                            $event
-                                                          ) {
-                                                            if (
-                                                              !(
-                                                                "button" in
-                                                                $event
-                                                              ) &&
-                                                              _vm._k(
-                                                                $event.keyCode,
-                                                                "enter",
-                                                                13,
-                                                                $event.key,
-                                                                "Enter"
-                                                              )
-                                                            ) {
-                                                              return null
-                                                            }
-                                                            _vm.$setting.update(
-                                                              column.id,
-                                                              column
-                                                            )
-                                                          },
-                                                          change: function(
-                                                            $event
-                                                          ) {
-                                                            _vm.$setting.update(
-                                                              column.id,
-                                                              column
-                                                            )
-                                                          },
-                                                          input: function(
-                                                            $event
-                                                          ) {
-                                                            if (
-                                                              $event.target
-                                                                .composing
-                                                            ) {
-                                                              return
-                                                            }
-                                                            _vm.$set(
-                                                              column,
-                                                              "value",
-                                                              $event.target
-                                                                .value
-                                                            )
-                                                          }
-                                                        }
-                                                      })
-                                                    : _c(
-                                                        "span",
-                                                        { staticClass: "ml-2" },
-                                                        [
-                                                          _vm._v(
-                                                            _vm._s(column.value)
-                                                          )
-                                                        ]
-                                                      )
-                                                ]),
-                                                _vm._v(" "),
                                                 _c(
-                                                  "v-list-tile-action",
+                                                  "v-list-tile",
                                                   [
-                                                    column.value != "Finished"
-                                                      ? _c(
-                                                          "v-btn",
-                                                          {
+                                                    _c("v-list-tile-content", [
+                                                      column.value != "Finished"
+                                                        ? _c("input", {
+                                                            directives: [
+                                                              {
+                                                                name: "model",
+                                                                rawName:
+                                                                  "v-model",
+                                                                value:
+                                                                  column.value,
+                                                                expression:
+                                                                  "column.value"
+                                                              }
+                                                            ],
+                                                            staticClass:
+                                                              "padded ghost",
                                                             attrs: {
-                                                              icon: "",
-                                                              flat: "",
-                                                              small: "",
-                                                              color: "grey"
+                                                              type: "text"
+                                                            },
+                                                            domProps: {
+                                                              value:
+                                                                column.value
                                                             },
                                                             on: {
-                                                              click: function(
+                                                              keydown: function(
                                                                 $event
                                                               ) {
-                                                                _vm.removeColumn(
-                                                                  column.id
+                                                                if (
+                                                                  !(
+                                                                    "button" in
+                                                                    $event
+                                                                  ) &&
+                                                                  _vm._k(
+                                                                    $event.keyCode,
+                                                                    "enter",
+                                                                    13,
+                                                                    $event.key,
+                                                                    "Enter"
+                                                                  )
+                                                                ) {
+                                                                  return null
+                                                                }
+                                                                _vm.$setting.update(
+                                                                  column.id,
+                                                                  column
+                                                                )
+                                                              },
+                                                              change: function(
+                                                                $event
+                                                              ) {
+                                                                _vm.$setting.update(
+                                                                  column.id,
+                                                                  column
+                                                                )
+                                                              },
+                                                              input: function(
+                                                                $event
+                                                              ) {
+                                                                if (
+                                                                  $event.target
+                                                                    .composing
+                                                                ) {
+                                                                  return
+                                                                }
+                                                                _vm.$set(
+                                                                  column,
+                                                                  "value",
+                                                                  $event.target
+                                                                    .value
                                                                 )
                                                               }
                                                             }
-                                                          },
-                                                          [
-                                                            _c("v-icon", [
+                                                          })
+                                                        : _c(
+                                                            "span",
+                                                            {
+                                                              staticClass:
+                                                                "ml-2"
+                                                            },
+                                                            [
                                                               _vm._v(
-                                                                "delete_forever"
+                                                                _vm._s(
+                                                                  column.value
+                                                                )
                                                               )
-                                                            ])
-                                                          ],
-                                                          1
-                                                        )
-                                                      : _vm._e()
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-list-tile-action",
-                                                  [
+                                                            ]
+                                                          )
+                                                    ]),
+                                                    _vm._v(" "),
                                                     _c(
-                                                      "v-btn",
-                                                      {
-                                                        attrs: {
-                                                          flat: "",
-                                                          icon: ""
-                                                        }
-                                                      },
+                                                      "v-list-tile-action",
+                                                      [
+                                                        column.value !=
+                                                        "Finished"
+                                                          ? _c(
+                                                              "v-btn",
+                                                              {
+                                                                attrs: {
+                                                                  icon: "",
+                                                                  flat: "",
+                                                                  small: "",
+                                                                  color: "grey"
+                                                                },
+                                                                on: {
+                                                                  click: function(
+                                                                    $event
+                                                                  ) {
+                                                                    _vm.removeColumn(
+                                                                      column.id
+                                                                    )
+                                                                  }
+                                                                }
+                                                              },
+                                                              [
+                                                                _c("v-icon", [
+                                                                  _vm._v(
+                                                                    "delete_forever"
+                                                                  )
+                                                                ])
+                                                              ],
+                                                              1
+                                                            )
+                                                          : _vm._e()
+                                                      ],
+                                                      1
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-list-tile-action",
                                                       [
                                                         _c(
-                                                          "v-icon",
+                                                          "v-btn",
                                                           {
                                                             attrs: {
-                                                              color: "grey"
+                                                              flat: "",
+                                                              icon: ""
                                                             }
                                                           },
                                                           [
-                                                            _vm._v(
-                                                              "drag_indicator"
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  color: "grey"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "drag_indicator"
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
+                                                          ],
+                                                          1
                                                         )
                                                       ],
                                                       1
@@ -44693,164 +44737,22 @@ var render = function() {
                                               ],
                                               1
                                             )
-                                          ],
-                                          1
-                                        )
-                                      })
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "relative" },
-                          [
-                            _c("v-text-field", {
-                              attrs: { label: "Add a task column." },
-                              nativeOn: {
-                                keyup: function($event) {
-                                  if (
-                                    !("button" in $event) &&
-                                    _vm._k(
-                                      $event.keyCode,
-                                      "enter",
-                                      13,
-                                      $event.key,
-                                      "Enter"
-                                    )
-                                  ) {
-                                    return null
-                                  }
-                                  return _vm.addColumn($event)
-                                }
-                              },
-                              model: {
-                                value: _vm.newColumn.value,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.newColumn, "value", $$v)
-                                },
-                                expression: "newColumn.value"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  absolute: "",
-                                  color: "primary",
-                                  fab: "",
-                                  bottom: "",
-                                  right: ""
-                                },
-                                on: { click: _vm.addColumn }
-                              },
-                              [_c("v-icon", [_vm._v("add")])],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("v-flex", { staticClass: "relative" }, [
-                        _vm.task.subscribers
-                          ? _c(
-                              "div",
-                              { staticClass: "scroll-me" },
-                              [
-                                _c("header", [
-                                  _c("h2", [
-                                    _vm._v(
-                                      '\n                                    Users subscribed to "' +
-                                        _vm._s(_vm.task.name) +
-                                        " ID: " +
-                                        _vm._s(_vm.task.id) +
-                                        '".\n                                '
-                                    )
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "v-list",
-                                  _vm._l(_vm.task.subscribers, function(
-                                    subbed
-                                  ) {
-                                    return _c(
-                                      "v-list-tile",
-                                      { key: subbed.key },
-                                      [
-                                        _c(
-                                          "v-list-tile-content",
-                                          [
-                                            _c("v-list-tile-title", [
-                                              _vm._v(
-                                                "\n                                            " +
-                                                  _vm._s(subbed.user.name) +
-                                                  "\n                                        "
-                                              )
-                                            ])
-                                          ],
-                                          1
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-list-tile-action",
-                                          [
-                                            _c(
-                                              "v-btn",
-                                              {
-                                                attrs: { flat: "", icon: "" },
-                                                on: {
-                                                  click: function($event) {
-                                                    _vm.removeSubscriber(
-                                                      subbed.id
-                                                    )
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _c(
-                                                  "v-icon",
-                                                  { attrs: { color: "grey" } },
-                                                  [_vm._v("delete_forever")]
-                                                )
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
+                                          })
                                         )
                                       ],
                                       1
                                     )
-                                  })
+                                  ],
+                                  1
                                 )
-                              ],
-                              1
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "relative" },
-                          [
+                              : _vm._e(),
+                            _vm._v(" "),
                             _c(
                               "div",
+                              { staticClass: "relative" },
                               [
-                                _c("v-autocomplete", {
-                                  attrs: {
-                                    label:
-                                      "Add users to notify when something changes with this task.",
-                                    items: _vm.users,
-                                    "item-text": "name",
-                                    "item-value": "id"
-                                  },
+                                _c("v-text-field", {
+                                  attrs: { label: "Add a task column." },
                                   nativeOn: {
                                     keyup: function($event) {
                                       if (
@@ -44865,40 +44767,189 @@ var render = function() {
                                       ) {
                                         return null
                                       }
-                                      return _vm.addSub($event)
+                                      return _vm.addColumn($event)
                                     }
                                   },
                                   model: {
-                                    value: _vm.newSub,
+                                    value: _vm.newColumn.value,
                                     callback: function($$v) {
-                                      _vm.newSub = $$v
+                                      _vm.$set(_vm.newColumn, "value", $$v)
                                     },
-                                    expression: "newSub"
+                                    expression: "newColumn.value"
                                   }
-                                })
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      absolute: "",
+                                      color: "primary",
+                                      fab: "",
+                                      bottom: "",
+                                      right: ""
+                                    },
+                                    on: { click: _vm.addColumn }
+                                  },
+                                  [_c("v-icon", [_vm._v("add")])],
+                                  1
+                                )
                               ],
                               1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  absolute: "",
-                                  color: "primary",
-                                  fab: "",
-                                  bottom: "",
-                                  right: ""
-                                },
-                                on: { click: _vm.addSub }
-                              },
-                              [_c("v-icon", [_vm._v("add")])],
-                              1
                             )
-                          ],
-                          1
-                        )
-                      ])
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "v-flex",
+                        {
+                          staticClass: "relative",
+                          attrs: { md6: _vm.task.columns.length > 1 }
+                        },
+                        [
+                          _vm.task.subscribers
+                            ? _c(
+                                "div",
+                                { staticClass: "scroll-me" },
+                                [
+                                  _c("header", [
+                                    _c("h2", [
+                                      _vm._v(
+                                        '\n                                    Users subscribed to "' +
+                                          _vm._s(_vm.task.name) +
+                                          " ID: " +
+                                          _vm._s(_vm.task.id) +
+                                          '".\n                                '
+                                      )
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list",
+                                    _vm._l(_vm.task.subscribers, function(
+                                      subbed
+                                    ) {
+                                      return _c(
+                                        "v-list-tile",
+                                        { key: subbed.key },
+                                        [
+                                          _c(
+                                            "v-list-tile-content",
+                                            [
+                                              _c("v-list-tile-title", [
+                                                _vm._v(
+                                                  "\n                                            " +
+                                                    _vm._s(subbed.user.name) +
+                                                    "\n                                        "
+                                                )
+                                              ])
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-list-tile-action",
+                                            [
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  attrs: { flat: "", icon: "" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.removeSubscriber(
+                                                        subbed.id
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-icon",
+                                                    {
+                                                      attrs: { color: "grey" }
+                                                    },
+                                                    [_vm._v("delete_forever")]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    })
+                                  )
+                                ],
+                                1
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "relative" },
+                            [
+                              _c(
+                                "div",
+                                [
+                                  _c("v-autocomplete", {
+                                    attrs: {
+                                      label:
+                                        "Add users to notify when something changes with this task.",
+                                      items: _vm.users,
+                                      "item-text": "name",
+                                      "item-value": "id"
+                                    },
+                                    nativeOn: {
+                                      keyup: function($event) {
+                                        if (
+                                          !("button" in $event) &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.addSub($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.newSub,
+                                      callback: function($$v) {
+                                        _vm.newSub = $$v
+                                      },
+                                      expression: "newSub"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: {
+                                    absolute: "",
+                                    color: "primary",
+                                    fab: "",
+                                    bottom: "",
+                                    right: ""
+                                  },
+                                  on: { click: _vm.addSub }
+                                },
+                                [_c("v-icon", [_vm._v("add")])],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ]
+                      )
                     ],
                     1
                   )

@@ -8,6 +8,14 @@ function company($prop = null)
     return $company;
 }
 
+function carbon_days_between($start, $end){
+    $datesBetween = [];
+    for($date = $start; $date->lte($end); $date->addDay()){
+        $datesBetween[] = $date->toDateString();
+    }
+    return $datesBetween;
+}
+
 function weekNumberInMonth($year = null, $month =null, $day = null) {
     $year = $year == null ? (int)date('Y'):$year;
     $month = $month == null ? (int)date('m'):$month;

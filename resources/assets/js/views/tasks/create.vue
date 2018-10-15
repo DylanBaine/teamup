@@ -182,6 +182,9 @@
                                 <ul>
                                   <h4>{{task.name}}</h4>
                                   <li>
+                                    {{task.type.name}}
+                                  </li>
+                                  <li>
                                     Start: {{task.start_date_string}}
                                   </li>
                                   <li>
@@ -194,13 +197,13 @@
                           <v-flex md4 style="display: flex; justify-content: center;">
                             <div>
                               <h3>Start:</h3>
-                              <v-date-picker v-model="task.start_date" :min="parent ? parent.start_date : null" :max="task.end_date ? task.end_date : parent ? parent.end_date : null" color="primary white--text"></v-date-picker>
+                              <v-date-picker :events="events" event-color="red" v-model="task.start_date" :min="parent ? parent.start_date : null" :max="task.end_date ? task.end_date : parent ? parent.end_date : null" color="primary white--text"></v-date-picker>
                             </div>
                           </v-flex>
                           <v-flex md4 style="display: flex; justify-content: center;">
                             <div>
                               <h3>End:</h3>
-                              <v-date-picker v-model="task.end_date" :min="task.start_date ? task.start_date : parent ? parent.start_date : null" :max="parent ? parent.end_date : null" color="primary white--text"></v-date-picker>
+                              <v-date-picker :events="events" event-color="red" v-model="task.end_date" :min="task.start_date ? task.start_date : parent ? parent.start_date : null" :max="parent ? parent.end_date : null" color="primary white--text"></v-date-picker>
                             </div>
                           </v-flex>
                         </v-layout>     
@@ -265,6 +268,7 @@ export default {
       step: 1,
       showing: false,
       allowedDates: [],
+      events: [],
       reoccur: {
         week: null,
         day: null,
@@ -491,7 +495,8 @@ export default {
       axios
         .get(url + "/tasks/user_availability/" + this.task.user_id)
         .then(res => {
-          this.user_tasks = res.data;
+          this.user_tasks = res.data.tasks;
+          this.events = res.data.events;
         });
     }
   }
