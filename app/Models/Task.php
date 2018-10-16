@@ -39,7 +39,7 @@ class Task extends Model
     }
 
     public function calcPercentFinished(){
-        if($this->columns()->count()){
+        if($this->columns()->count() && $this->children()->count()){
             $finishedId = $this->columns()->where('value', 'Finished')->first()->id;
             $finishedCount = $this->children()->where('column_id',  $finishedId)->count();
             return ceil(($finishedCount/$this->children()->count())*100);
