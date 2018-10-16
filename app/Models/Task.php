@@ -34,7 +34,14 @@ class Task extends Model
         $t['end_date'] = $this->end_date != null ? (new Carbon($t['end_date']))->toDateString() : null;
         $t['start_date_string'] = $this->start_date != null ? (new Carbon($t['start_date']))->toFormattedDateString() : null;
         $t['end_date_string'] = $this->end_date != null ? (new Carbon($t['end_date']))->toFormattedDateString() : null;
+        $t['calc_percent_finished'] = $this->calcPercentFinished();
         return $t;
+    }
+
+    public function calcPercentFinished(){
+        if($this->columns()->count()){
+            return ceil(($this->columns('Finished')->count()/$this->columns()->count())*100);
+        }
     }
 
     public function runReport(){

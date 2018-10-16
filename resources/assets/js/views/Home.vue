@@ -28,17 +28,18 @@
               </v-card>
               <v-card v-for="child in column.children" :key="child.key" :to="`/tasks/${child.id}/manage`" :id="`${child.id}`" class="primary darken-1 mt-3 drag-me p-5 white--text">
                 <v-card-title>
-                  <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
-                  <h3 class="subheader">{{child.type.name}}</h3>
+                  <div>
+                    <h2 class="title"> <v-icon color="white">{{child.icon}}</v-icon> {{child.name}}</h2>
+                    <h3 class="subheader">{{child.type.name}}</h3>
+                  </div>
                 </v-card-title>
-                <v-card-text v-if="child.type.name !== 'Task'">
-                  {{child.percent_finished}}% finished.
+                <v-card-text v-if="child.type.name == 'Sprint'">
+                  {{child.calc_percent_finished}}% finished.
                 <div class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
-                  <div class="grey darken-2" :style="`width:${child.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
+                  <div class="grey darken-2" :style="`width:${child.calc_percent_finished}%; height: 100%; border-radius: 50px;`"></div>
                 </div>
                 </v-card-text>
-                <v-card-text v-else>
-                  {{child.description}}
+                <v-card-text class="task-description" v-else v-html="child.description.shorten(200)">
                 </v-card-text>
               </v-card>
             </div>

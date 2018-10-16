@@ -33,7 +33,7 @@
                                     {{child.name}}
                                 </v-list-tile-title>
                                 <v-list-tile-sub-title>
-                                    {{child.percent_finished}}% finished
+                                    {{child.calc_percent_finished}}% finished
                                 </v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>

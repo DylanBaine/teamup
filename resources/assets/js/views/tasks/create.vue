@@ -170,7 +170,10 @@
                   </v-stepper-content>
                   <v-stepper-content v-if="setType != 'Team'" step="3">
                     <div class="padded">
-                      <div>
+                      <div v-if="user_tasks.length" class="text-xs-center">
+                        <div style="background: red; width: 10px; height: 10px; display: inline-block; border-radius: 100%;"></div>
+                        marks days that user has tasks.
+                      </div>
                         <v-layout row wrap justify-center>
                           <v-flex md2 v-if="user_tasks.length">
                             <h2 class="title text-xs-center">

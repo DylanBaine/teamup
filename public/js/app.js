@@ -37719,6 +37719,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -39008,28 +39009,32 @@ var render = function() {
                           },
                           [
                             _c("v-card-title", [
-                              _c(
-                                "h2",
-                                { staticClass: "title" },
-                                [
-                                  _c("v-icon", { attrs: { color: "white" } }, [
-                                    _vm._v(_vm._s(child.icon))
-                                  ]),
-                                  _vm._v(" " + _vm._s(child.name))
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("h3", { staticClass: "subheader" }, [
-                                _vm._v(_vm._s(child.type.name))
+                              _c("div", [
+                                _c(
+                                  "h2",
+                                  { staticClass: "title" },
+                                  [
+                                    _c(
+                                      "v-icon",
+                                      { attrs: { color: "white" } },
+                                      [_vm._v(_vm._s(child.icon))]
+                                    ),
+                                    _vm._v(" " + _vm._s(child.name))
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c("h3", { staticClass: "subheader" }, [
+                                  _vm._v(_vm._s(child.type.name))
+                                ])
                               ])
                             ]),
                             _vm._v(" "),
-                            child.type.name !== "Task"
+                            child.type.name == "Sprint"
                               ? _c("v-card-text", [
                                   _vm._v(
                                     "\n                " +
-                                      _vm._s(child.percent_finished) +
+                                      _vm._s(child.calc_percent_finished) +
                                       "% finished.\n              "
                                   ),
                                   _c(
@@ -39048,19 +39053,20 @@ var render = function() {
                                         staticClass: "grey darken-2",
                                         style:
                                           "width:" +
-                                          child.percent_finished +
+                                          child.calc_percent_finished +
                                           "%; height: 100%; border-radius: 50px;"
                                       })
                                     ]
                                   )
                                 ])
-                              : _c("v-card-text", [
-                                  _vm._v(
-                                    "\n                " +
-                                      _vm._s(child.description) +
-                                      "\n              "
-                                  )
-                                ])
+                              : _c("v-card-text", {
+                                  staticClass: "task-description",
+                                  domProps: {
+                                    innerHTML: _vm._s(
+                                      child.description.shorten(200)
+                                    )
+                                  }
+                                })
                           ],
                           1
                         )
@@ -40296,7 +40302,7 @@ var render = function() {
                         task.type.name == "Sprint"
                           ? _c("h2", { staticClass: "title mb-2" }, [
                               _vm._v(
-                                _vm._s(task.percent_finished) +
+                                _vm._s(task.calc_percent_finished) +
                                   "% Tasks Finished"
                               )
                             ])
@@ -40319,7 +40325,7 @@ var render = function() {
                                   staticClass: "primary",
                                   style:
                                     "width:" +
-                                    task.percent_finished +
+                                    task.calc_percent_finished +
                                     "%; height: 100%; border-radius: 50px;"
                                 })
                               ]
@@ -40600,6 +40606,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_models_Task__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_models_User__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_models_Group__ = __webpack_require__(7);
+//
+//
+//
 //
 //
 //
@@ -41795,221 +41804,230 @@ var render = function() {
                                 "v-stepper-content",
                                 { attrs: { step: "3" } },
                                 [
-                                  _c("div", { staticClass: "padded" }, [
-                                    _c(
-                                      "div",
-                                      [
-                                        _c(
-                                          "v-layout",
-                                          {
-                                            attrs: {
-                                              row: "",
-                                              wrap: "",
-                                              "justify-center": ""
-                                            }
-                                          },
-                                          [
-                                            _vm.user_tasks.length
-                                              ? _c(
-                                                  "v-flex",
-                                                  { attrs: { md2: "" } },
-                                                  [
-                                                    _c(
-                                                      "h2",
-                                                      {
-                                                        staticClass:
-                                                          "title text-xs-center"
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          Users other task dates.\n                        "
-                                                        )
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c("hr"),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "ul",
-                                                      {
-                                                        staticClass:
-                                                          "scroll-180px"
-                                                      },
-                                                      _vm._l(
-                                                        _vm.user_tasks,
-                                                        function(task) {
-                                                          return _c(
-                                                            "li",
-                                                            {
-                                                              key:
-                                                                task.start_date
-                                                            },
-                                                            [
-                                                              _c("ul", [
-                                                                _c("h4", [
-                                                                  _vm._v(
-                                                                    _vm._s(
-                                                                      task.name
-                                                                    )
-                                                                  )
-                                                                ]),
-                                                                _vm._v(" "),
-                                                                _c("li", [
-                                                                  _vm._v(
-                                                                    "\n                                " +
-                                                                      _vm._s(
-                                                                        task
-                                                                          .type
-                                                                          .name
-                                                                      ) +
-                                                                      "\n                              "
-                                                                  )
-                                                                ]),
-                                                                _vm._v(" "),
-                                                                _c("li", [
-                                                                  _vm._v(
-                                                                    "\n                                Start: " +
-                                                                      _vm._s(
-                                                                        task.start_date_string
-                                                                      ) +
-                                                                      "\n                              "
-                                                                  )
-                                                                ]),
-                                                                _vm._v(" "),
-                                                                _c("li", [
-                                                                  _vm._v(
-                                                                    "\n                                End: " +
-                                                                      _vm._s(
-                                                                        task.end_date_string
-                                                                      ) +
-                                                                      "\n                              "
-                                                                  )
-                                                                ])
-                                                              ])
-                                                            ]
-                                                          )
-                                                        }
-                                                      )
-                                                    )
-                                                  ]
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-flex",
-                                              {
+                                  _c(
+                                    "div",
+                                    { staticClass: "padded" },
+                                    [
+                                      _vm.user_tasks.length
+                                        ? _c(
+                                            "div",
+                                            { staticClass: "text-xs-center" },
+                                            [
+                                              _c("div", {
                                                 staticStyle: {
-                                                  display: "flex",
-                                                  "justify-content": "center"
-                                                },
-                                                attrs: { md4: "" }
+                                                  background: "red",
+                                                  width: "10px",
+                                                  height: "10px",
+                                                  display: "inline-block",
+                                                  "border-radius": "100%"
+                                                }
+                                              }),
+                                              _vm._v(
+                                                "\n                    marks days that user has tasks.\n                  "
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-layout",
+                                        {
+                                          attrs: {
+                                            row: "",
+                                            wrap: "",
+                                            "justify-center": ""
+                                          }
+                                        },
+                                        [
+                                          _vm.user_tasks.length
+                                            ? _c(
+                                                "v-flex",
+                                                { attrs: { md2: "" } },
+                                                [
+                                                  _c(
+                                                    "h2",
+                                                    {
+                                                      staticClass:
+                                                        "title text-xs-center"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          Users other task dates.\n                        "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c("hr"),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "ul",
+                                                    {
+                                                      staticClass:
+                                                        "scroll-180px"
+                                                    },
+                                                    _vm._l(
+                                                      _vm.user_tasks,
+                                                      function(task) {
+                                                        return _c(
+                                                          "li",
+                                                          {
+                                                            key: task.start_date
+                                                          },
+                                                          [
+                                                            _c("ul", [
+                                                              _c("h4", [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    task.name
+                                                                  )
+                                                                )
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _c("li", [
+                                                                _vm._v(
+                                                                  "\n                                " +
+                                                                    _vm._s(
+                                                                      task.type
+                                                                        .name
+                                                                    ) +
+                                                                    "\n                              "
+                                                                )
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _c("li", [
+                                                                _vm._v(
+                                                                  "\n                                Start: " +
+                                                                    _vm._s(
+                                                                      task.start_date_string
+                                                                    ) +
+                                                                    "\n                              "
+                                                                )
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _c("li", [
+                                                                _vm._v(
+                                                                  "\n                                End: " +
+                                                                    _vm._s(
+                                                                      task.end_date_string
+                                                                    ) +
+                                                                    "\n                              "
+                                                                )
+                                                              ])
+                                                            ])
+                                                          ]
+                                                        )
+                                                      }
+                                                    )
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              staticStyle: {
+                                                display: "flex",
+                                                "justify-content": "center"
                                               },
-                                              [
-                                                _c(
-                                                  "div",
-                                                  [
-                                                    _c("h3", [
-                                                      _vm._v("Start:")
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("v-date-picker", {
-                                                      attrs: {
-                                                        events: _vm.events,
-                                                        "event-color": "red",
-                                                        min: _vm.parent
+                                              attrs: { md4: "" }
+                                            },
+                                            [
+                                              _c(
+                                                "div",
+                                                [
+                                                  _c("h3", [_vm._v("Start:")]),
+                                                  _vm._v(" "),
+                                                  _c("v-date-picker", {
+                                                    attrs: {
+                                                      events: _vm.events,
+                                                      "event-color": "red",
+                                                      min: _vm.parent
+                                                        ? _vm.parent.start_date
+                                                        : null,
+                                                      max: _vm.task.end_date
+                                                        ? _vm.task.end_date
+                                                        : _vm.parent
+                                                          ? _vm.parent.end_date
+                                                          : null,
+                                                      color:
+                                                        "primary white--text"
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.task.start_date,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.task,
+                                                          "start_date",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "task.start_date"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              staticStyle: {
+                                                display: "flex",
+                                                "justify-content": "center"
+                                              },
+                                              attrs: { md4: "" }
+                                            },
+                                            [
+                                              _c(
+                                                "div",
+                                                [
+                                                  _c("h3", [_vm._v("End:")]),
+                                                  _vm._v(" "),
+                                                  _c("v-date-picker", {
+                                                    attrs: {
+                                                      events: _vm.events,
+                                                      "event-color": "red",
+                                                      min: _vm.task.start_date
+                                                        ? _vm.task.start_date
+                                                        : _vm.parent
                                                           ? _vm.parent
                                                               .start_date
                                                           : null,
-                                                        max: _vm.task.end_date
-                                                          ? _vm.task.end_date
-                                                          : _vm.parent
-                                                            ? _vm.parent
-                                                                .end_date
-                                                            : null,
-                                                        color:
-                                                          "primary white--text"
-                                                      },
-                                                      model: {
-                                                        value:
-                                                          _vm.task.start_date,
-                                                        callback: function(
+                                                      max: _vm.parent
+                                                        ? _vm.parent.end_date
+                                                        : null,
+                                                      color:
+                                                        "primary white--text"
+                                                    },
+                                                    model: {
+                                                      value: _vm.task.end_date,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.task,
+                                                          "end_date",
                                                           $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.task,
-                                                            "start_date",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "task.start_date"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-flex",
-                                              {
-                                                staticStyle: {
-                                                  display: "flex",
-                                                  "justify-content": "center"
-                                                },
-                                                attrs: { md4: "" }
-                                              },
-                                              [
-                                                _c(
-                                                  "div",
-                                                  [
-                                                    _c("h3", [_vm._v("End:")]),
-                                                    _vm._v(" "),
-                                                    _c("v-date-picker", {
-                                                      attrs: {
-                                                        events: _vm.events,
-                                                        "event-color": "red",
-                                                        min: _vm.task.start_date
-                                                          ? _vm.task.start_date
-                                                          : _vm.parent
-                                                            ? _vm.parent
-                                                                .start_date
-                                                            : null,
-                                                        max: _vm.parent
-                                                          ? _vm.parent.end_date
-                                                          : null,
-                                                        color:
-                                                          "primary white--text"
+                                                        )
                                                       },
-                                                      model: {
-                                                        value:
-                                                          _vm.task.end_date,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.task,
-                                                            "end_date",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "task.end_date"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ])
+                                                      expression:
+                                                        "task.end_date"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
                                 ]
                               )
                             : _vm._e(),
@@ -42462,7 +42480,7 @@ var render = function() {
                                   _c("v-list-tile-sub-title", [
                                     _vm._v(
                                       "\r\n                                    " +
-                                        _vm._s(child.percent_finished) +
+                                        _vm._s(child.calc_percent_finished) +
                                         "% finished\r\n                                "
                                     )
                                   ])
@@ -43696,7 +43714,7 @@ var render = function() {
                                                   _vm._v(
                                                     "\n                        " +
                                                       _vm._s(
-                                                        child.percent_finished
+                                                        child.calc_percent_finished
                                                       ) +
                                                       "% finished.\n                        "
                                                   ),
@@ -43718,7 +43736,7 @@ var render = function() {
                                                           "grey darken-2",
                                                         style:
                                                           "width:" +
-                                                          child.percent_finished +
+                                                          child.calc_percent_finished +
                                                           "%; height: 100%; border-radius: 50px;"
                                                       })
                                                     ]
@@ -43852,7 +43870,7 @@ var render = function() {
                                 task.type.name == "Sprint"
                                   ? _c("h2", { staticClass: "title mb-2" }, [
                                       _vm._v(
-                                        _vm._s(task.percent_finished) +
+                                        _vm._s(task.calc_percent_finished) +
                                           "% Tasks Finished"
                                       )
                                     ])
@@ -43875,7 +43893,7 @@ var render = function() {
                                           staticClass: "primary",
                                           style:
                                             "width:" +
-                                            task.percent_finished +
+                                            task.calc_percent_finished +
                                             "%; height: 100%; border-radius: 50px;"
                                         })
                                       ]

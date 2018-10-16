@@ -131,9 +131,9 @@
                           </div>
                         </v-card-title>
                         <v-card-text v-if="child.type.name == 'Sprint'">
-                          {{child.percent_finished}}% finished.
+                          {{child.calc_percent_finished}}% finished.
                           <div class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
-                          <div class="grey darken-2" :style="`width:${child.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
+                          <div class="grey darken-2" :style="`width:${child.calc_percent_finished}%; height: 100%; border-radius: 50px;`"></div>
                           </div>
                         </v-card-text>
                         <v-card-text v-else>
@@ -168,9 +168,9 @@
                       </h3>
                     <p class="task-description" v-html="task.description.length >= 40 ? task.description.substr(0, 40)+'...[Click to read more]' : task.description">
                     </p>
-                    <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.percent_finished}}% Tasks Finished</h2>
+                    <h2 v-if="task.type.name == 'Sprint'" class="title mb-2">{{task.calc_percent_finished}}% Tasks Finished</h2>
                         <div v-if="task.type.name == 'Sprint'" class="grey darken-1" style="padding: 0; width: 100%; height: 20px; border-radius: 50px;">
-                        <div class="primary" :style="`width:${task.percent_finished}%; height: 100%; border-radius: 50px;`"></div>
+                        <div class="primary" :style="`width:${task.calc_percent_finished}%; height: 100%; border-radius: 50px;`"></div>
                         </div>
                     </v-card-text>
                 </v-card>
