@@ -31,16 +31,17 @@ class ProjectReport extends Report {
 
     public function breakTaskIntoColumns(){
         $children = $this->repository->recursivGetChildrenOfTaskByType($this->repository->getSpecifiedModel(),'task');
-        $columns = [];
+        $columns = collect([]);
         $results = [
             ['Status', 'Task Count']
         ];
         foreach($children as $child){
             if($child->column){
-                $columns[] = $child->column->value;
+                $columns->push($child->column);
             }
         }
-        foreach(array_unique($columns) as $column){
+        $orderedCols = $columns->unique()->sortBy('position')->pluck('value')->toArray();
+        foreach($orderedCols as $column){
             $results[] = [
                 $column, $children->where('column.value', $column)->count()
             ];

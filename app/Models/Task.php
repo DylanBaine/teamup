@@ -43,6 +43,8 @@ class Task extends Model
             $finishedId = $this->columns()->where('value', 'Finished')->first()->id;
             $finishedCount = $this->children()->where('column_id',  $finishedId)->count();
             return ceil(($finishedCount/$this->children()->count())*100);
+        }else{
+            return 0;
         }
     }
 
