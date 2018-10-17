@@ -7,7 +7,7 @@ Route::get('tasks/user_availability/{user}', function($user){
     $tasks = App\Models\Task::with('type')->where('user_id', $user)
         ->whereHas('type', function($type){
             return $type->where('name', 'Task');
-        })->get();
+        })->orderBy('start_date')->get();
     $events = [];
     $unfinishedTasks = [];
     foreach($tasks as $task){
