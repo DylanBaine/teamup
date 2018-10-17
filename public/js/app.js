@@ -40915,6 +40915,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -40965,7 +40976,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return _this.step > 1 ? _this.task.name != null : true;
       }, function () {
         return _this.step > 1 ? _this.task.type_id != null : true;
-      }]
+      }],
+      parent_options: []
     };
   },
 
@@ -41095,6 +41107,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           if (p.task.type.name == "Reoccurring") {
             _this6.reoccur = p.task.schedule;
           }
+          _this6.parent_options = p.parent_options;
           _this6.date = [p.task.start_date, p.task.end_date];
         }
         /* if (this.$route.params.task) {
@@ -41340,6 +41353,48 @@ var render = function() {
                               "div",
                               { staticClass: "padded" },
                               [
+                                _c(
+                                  "v-layout",
+                                  {
+                                    attrs: {
+                                      row: "",
+                                      wrap: "",
+                                      "justify-center": ""
+                                    }
+                                  },
+                                  [
+                                    _vm.editing
+                                      ? _c(
+                                          "v-flex",
+                                          { attrs: { md6: "" } },
+                                          [
+                                            _c("v-autocomplete", {
+                                              attrs: {
+                                                label: "Parent",
+                                                items: _vm.parent_options,
+                                                "item-value": "id",
+                                                "item-text": "name"
+                                              },
+                                              model: {
+                                                value: _vm.task.parent_id,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.task,
+                                                    "parent_id",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "task.parent_id"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e()
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
                                 _c(
                                   "v-layout",
                                   {

@@ -39,6 +39,18 @@ class TaskController extends Controller
     }
 
     public function edit($id){
+        $parentOptions = [
+            plain_object([
+                'id' => null,
+                'name' => 'No Parent'
+            ])
+        ];
+        foreach(company()->tasks as $task){
+            $parentOptions[] = plain_object([
+                'id' => $task->id,
+                'name' => $task->name . ' (' . $task->type->name . ')'
+            ]);
+        }
         return response()->json([
             'users' => company()->users,
             'groups' => company()->groups,
@@ -46,6 +58,7 @@ class TaskController extends Controller
             'task' => Task::find($id)->load('user', 'group', 'schedule', 'type'),
             'parent' => Task::find($id)->parent,
             'clients' => company()->clients,
+            'parent_options' => $parentOptions
         ]);
     }
 

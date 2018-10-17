@@ -32,6 +32,17 @@
                   <v-stepper-content step="1">
                     <div class="padded">
                       <v-layout row wrap justify-center>
+                        <v-flex md6 v-if="editing">
+                          <v-autocomplete
+                            label="Parent"
+                            :items="parent_options"
+                            v-model="task.parent_id"
+                            item-value="id"
+                            item-text="name"
+                          ></v-autocomplete>
+                        </v-flex>
+                      </v-layout>
+                      <v-layout row wrap justify-center>
                         <v-flex md4>
                           <v-select
                             v-model="task.type_id"
@@ -306,7 +317,8 @@ export default {
       metaRules: [
         () => (this.step > 1 ? this.task.name != null : true),
         () => (this.step > 1 ? this.task.type_id != null : true)
-      ]
+      ],
+      parent_options: []
     };
   },
   watch: {
@@ -434,6 +446,7 @@ export default {
           if (p.task.type.name == "Reoccurring") {
             this.reoccur = p.task.schedule;
           }
+          this.parent_options = p.parent_options;
           this.date = [p.task.start_date, p.task.end_date];
         }
         /* if (this.$route.params.task) {
