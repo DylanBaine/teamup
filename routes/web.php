@@ -3,10 +3,9 @@
 Route::get('app-redirect', function(){
     $ref = request()->query('ref');
     $to = request()->query('to');
-/*     \App\Models\Administration\TrackedLink::create([
-        'referer' => $ref,
-        'route' => $to
-    ]); */
+    \App\Models\Administration\TrackedLink::create([
+        'data' => json_encode(plain_object(request()->query())) 
+    ]);
     return redirect(url('app#/'.$to));
 });
 // Set users last page with every request
