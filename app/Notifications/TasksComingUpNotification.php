@@ -2,15 +2,15 @@
 
 namespace App\Notifications;
 
-use App\Models\Setting;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Notifications\Markup\Tasks\TaskUpdatedMarkup;
 use Illuminate\Contracts\Queue\ShouldQueue;
-class TaskUpdated extends Notification implements ShouldQueue
-{
+use Illuminate\Notifications\Messages\MailMessage;
+use App\Mail\TasksCommingUp;
+use Mail;
 
+class TasksComingUpNotification extends Notification implements ShouldQueue
+{
     use Queueable;
 
     /**
@@ -18,13 +18,10 @@ class TaskUpdated extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public $parent, $task, $type, $by;
-    public function __construct($task, $parent = null, $type, $by)
+    public $notifications;
+    public function __construct($notifications)
     {
-        $this->parent = $parent;
-        $this->task = $task;
-        $this->type = $type;
-        $this->by = $by;
+        $this->notifications = $notifications;
     }
 
     /**
@@ -46,7 +43,7 @@ class TaskUpdated extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new TaskUpdatedMarkup($this->task, $this->by))->markup($this->type);
+        return (new MailMessage)->from('task-watcher@timatik.com')->markdown('mail.task-notifications.task-commingup', ['notifications' => $this->notifications]);
     }
 
     /**

@@ -26,7 +26,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('reoccurring:tasks')->hourly();
+        $schedule->command('cron:create_reoccurring_tasks')->hourly();
+        $schedule->command('cron:clean_files_dir')->daily();
+        $schedule->command('cron:notify_users_of_started_and_due_tasks')->daily();
     }
 
     /**

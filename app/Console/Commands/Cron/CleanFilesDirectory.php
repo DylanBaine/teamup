@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Cron;
 
 use Illuminate\Console\Command;
 use App\Models\File;
@@ -14,7 +14,7 @@ class CleanFilesDirectory extends Command
      *
      * @var string
      */
-    protected $signature = 'file:clean';
+    protected $signature = 'cron:clean_files_dir';
 
     /**
      * The console command description.

@@ -220,8 +220,7 @@
                               <v-date-picker :events="events" event-color="red" v-model="task.end_date" :min="task.start_date ? task.start_date : parent ? parent.start_date : null" :max="parent ? parent.end_date : null" color="primary white--text"></v-date-picker>
                             </div>
                           </v-flex>
-                        </v-layout>     
-                      </div>
+                        </v-layout>
                     </div>
                   </v-stepper-content>
                   <v-stepper-content class="padded" step="4">

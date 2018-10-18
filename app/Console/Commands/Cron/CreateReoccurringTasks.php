@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Cron;
 
 use Illuminate\Console\Command;
 use App\Models\Task;
@@ -14,7 +14,7 @@ class CreateReoccurringTasks extends Command
      *
      * @var string
      */
-    protected $signature = 'reoccurring:tasks';
+    protected $signature = 'cron:create_reoccurring_tasks';
 
     /**
      * The console command description.
