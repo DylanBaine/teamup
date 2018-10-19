@@ -1,8 +1,13 @@
 <?php
 //dd(bcrypt('secret'));
 Route::get('app-redirect', function(){
+    $to = request()->query('to');
+    $data = plain_object(request()->query());
+    if(user()){
+        $data->user_id = user()->id;
+    }
     \App\Models\Administration\TrackedLink::create([
-        'data' => json_encode(plain_object(request()->query())) 
+        'data' => json_encode($data) 
     ]);
     return redirect(url('app#/'.$to));
 });

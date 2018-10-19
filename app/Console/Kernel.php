@@ -27,8 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('cron:create_reoccurring_tasks')->hourly();
-        $schedule->command('cron:clean_files_dir')->dailyAt('1:00');
-        $schedule->command('cron:notify_users_of_started_and_due_tasks')->dailyAt('5:00');
+        $schedule->command('cron:clean_files_dir')->dailyAt('1:00')->emailOutputTo('dylan.baine@yahoo.com');
+        $schedule->command('cron:notify_users_of_started_and_due_tasks')->dailyAt('7:00')->emailOutputTo('dylan.baine@yahoo.com');
     }
 
     /**

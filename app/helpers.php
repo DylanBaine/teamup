@@ -23,7 +23,8 @@ function weekNumberInMonth($year = null, $month =null, $day = null) {
     return ceil(($day + date("w",mktime(0,0,0,$month,1,$year)))/7);   
    }
 
-function manifest($string){
+function manifest($string, $br = false){
+    $br ? $string .= "\n---------------------------------------" : '';
     echo "$string\n";
     \Log::info("$string\r\n");
 }

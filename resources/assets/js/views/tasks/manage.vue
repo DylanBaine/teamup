@@ -400,13 +400,21 @@ export default {
       let name = file.name.split(".")[0];
       data.append("file", file);
       data.append("file_name", name);
-      axios.post(`${url}/files`, data, config).then(res => {
-        this.attachFile(res.data);
-        this.$root.$refs.app.$refs.alert.run(
-          "File added to this task.",
-          "info"
-        );
-      });
+      axios
+        .post(`${url}/files`, data, config)
+        .then(res => {
+          this.attachFile(res.data);
+          this.$root.$refs.app.$refs.alert.run(
+            "File added to this task.",
+            "info"
+          );
+        })
+        .catch(err => {
+          this.$root.$refs.app.$refs.alert.run(
+            "There was an error uploading your file... It may have been too big.",
+            "error"
+          );
+        });
     }
   }
 };

@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use App\Mail\TasksCommingUp;
 use Mail;
 
-class TasksComingUpNotification extends Notification implements ShouldQueue
+class TasksComingUp extends Notification implements ShouldQueue
 {
     use Queueable;
 

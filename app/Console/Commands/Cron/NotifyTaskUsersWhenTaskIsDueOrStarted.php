@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Task;
 use Carbon\Carbon;
-use App\Notifications\TasksComingUpNotification;
+use App\Notifications\TasksComingUp;
 
 class NotifyTaskUsersWhenTaskIsDueOrStarted extends Command
 {
@@ -41,18 +41,25 @@ class NotifyTaskUsersWhenTaskIsDueOrStarted extends Command
      */
     public function handle()
     {
+        manifest("Starting to notify users of task that are due or started.", true);
         foreach(User::get() as $user){
+            manifest("Checking $user->name ($user->email) for tasks comming up.");
             $nofications = $this->tasksComingUpForUser($user);
             //dd($nofications);
             $hasNotifications = count($nofications->startingTomorrow) || count($nofications->dueTomorrow)
             || count($nofications->startingToday) || count($nofications->dueToday);
             if($hasNotifications){
-                $user->notify(new TasksComingUpNotification($nofications));
+                manifest("$user->name has notifcations.", true);
+                $user->notify(new TasksComingUp($nofications));
+            }else{
+                manifest("$user->name has no notifications.", true);
             }
         }
+        manifest("Notify users of tasks is finnished!");
     }
 
     private function tasksComingUpForUser(User $user){
+        manifest("Querying tasks for $user->name");
         $tasks = $user->tasks()->orderBy('start_date', 'desc')->get();
         $commingUp = plain_object([
             'startingTomorrow' => [],

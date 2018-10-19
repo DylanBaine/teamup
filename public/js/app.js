@@ -43163,6 +43163,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       axios.post(url + "/files", data, config).then(function (res) {
         _this6.attachFile(res.data);
         _this6.$root.$refs.app.$refs.alert.run("File added to this task.", "info");
+      }).catch(function (err) {
+        _this6.$root.$refs.app.$refs.alert.run("There was an error uploading your file... It may have been too big.", "error");
       });
     }
   }
