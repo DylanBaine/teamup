@@ -16,11 +16,13 @@ class BasicTaskReport extends Report {
     }
 
     protected function format(){
-        return[
-            'percent' => $this->percents(),
-            'days' => $this->days(),
-            'changes' => $this->repository->getSpecifiedModel()->changes
-        ];
+        if(count($this->repository->getSpecifiedModel()->columns)){
+            return[
+                'percent' => $this->percents(),
+                'days' => $this->days(),
+                'changes' => $this->repository->getSpecifiedModel()->changes
+            ];
+        }
     }
 
     private function percents(){

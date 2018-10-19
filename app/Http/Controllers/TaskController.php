@@ -96,7 +96,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = company()->tasks()->find($id)
+        $task = Task::find($id)
             ->load('columns', 'user', 'subscribers', 'children', 'type', 'changes', 'group', 'client', 'schedule', 'files');
         $task->report = $task->runReport();
         return $task;
