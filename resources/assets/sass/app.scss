@@ -146,7 +146,7 @@ img {
   background: url("/images/task_board.png");
   background-repeat: no-repeat;
   background-size: fill;
-  background-position: center -66px;
+  background-position: -70px -156px;
 }
 .image_inner_div {
   background: rgba(48, 48, 48, 0.93);
@@ -159,11 +159,12 @@ img {
 @media only screen and (max-width: 700px) {
   .image_inner_div {
     width: 100vw;
+    background: rgba(48, 48, 48, 0.63);
   }
 }
 #mobile_scalable_adjustable .layout {
   background: url("/images/task_view.png");
-  background-position: center -120px;
+  background-position: center -320px;
   height: 50vh;
 }
 #under_header {
