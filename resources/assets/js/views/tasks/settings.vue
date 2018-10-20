@@ -11,7 +11,7 @@
             <v-card-text>
                 <v-container fluid grid-list-lg>
                     <v-layout row wrap>
-                        <v-flex v-if="task.columns.length" md6>
+                        <v-flex v-if="task.columns && task.columns.length" md6>
                             <div ref="scrollMe" class="scroll-me" v-if="task.columns && task.columns.length">
                                 <header>
                                     <h2>

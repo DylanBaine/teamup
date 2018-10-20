@@ -55,7 +55,7 @@ class UpdateTaskResponse implements Responsable
     protected function notifyOfEdit($task){
         $users = User::whereHas('subscriptions', function ($sub) use ($task) {
             $sub->where('subscribable_id', $task->id)->orWhere('subscribable_id', $task->parent_id)->where('subscribable_type', 'App\Models\Task');
-        })->get();
+        })->where('id', '!=',user('id'))->get();
         Notification::send($users, new TaskUpdated($task, null, 'dataUpdated', user()));
     }
 
