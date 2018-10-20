@@ -1,7 +1,7 @@
 @extends('layouts.marketing')
 
 @section('content')
-    <v-content>
+    <v-content style="background: rgba(38, 166, 154, 0.05);">
       <!-- <section id="header" v-if="$vuetify.breakpoint.lgAndUp">
         <v-parallax src="{{url('/images/task_view.png')}}" height="800">
           <v-layout
@@ -114,8 +114,9 @@
         <section id="mobile_scalable_adjustable">
             <v-layout column align-center justify-center>
               <div class="image_inner_div">
-                <div class="headline white--text mb-3 text-xs-center">Scalable Adjustable Maintainable</div>
+                <div class="headline white--text mb-3 text-xs-center">Adjustable - Maintainable - Scalable</div>
                 <em>Easy organization between tasks, projects, and teams.</em>
+                <br>
               <v-btn
                 class="primary"
                 dark large
