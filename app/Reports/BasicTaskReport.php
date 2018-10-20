@@ -16,7 +16,10 @@ class BasicTaskReport extends Report {
     }
 
     protected function format(){
-        if(count($this->repository->getSpecifiedModel()->columns)){
+        if(
+            count($this->repository->getSpecifiedModel()->columns) 
+            || $this->repository->getSpecifiedModel()->column_id != null
+        ){
             return[
                 'percent' => $this->percents(),
                 'days' => $this->days(),
