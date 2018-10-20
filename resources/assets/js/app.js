@@ -20,7 +20,8 @@ const app = new Vue({
     page: null,
     route: null,
     loading: false,
-    mounted: false
+    mounted: false,
+    drawer: false
   },
   watch: {
     $route() {

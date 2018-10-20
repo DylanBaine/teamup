@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card class="elevation-6" style="margin: auto;" width="800px">
+        <v-card class="elevation-6" style="margin: auto; max-width: 800px;">
           <v-card-title>
             <h2 class="title">
               Login

@@ -115,6 +115,11 @@ img {
     #3b4758 51%
   );
 }
+@media (max-width: 600px) {
+  .header-from-builder {
+    min-height: 35vh;
+  }
+}
 .post-page .container,
 .post-blog .container {
   max-width: 900px;
@@ -136,8 +141,27 @@ img {
 .task-description a {
   color: white !important;
 }
-@media (max-width: 600px) {
-  .header-from-builder {
-    min-height: 35vh;
-  }
+.marketing-mobile-header {
+  height: 70vh;
+  background: url("/images/task_board.png");
+  background-size: cover;
+  background-position: center;
+}
+.marketing-mobile-header > div {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  width: 100vw;
+  text-align: center;
+  padding: 30px 0;
+}
+#mobile_scalable_adjustable .layout {
+  background: url("/images/task_view.png");
+  height: 50vh;
+}
+#mobile_scalable_adjustable .layout > div {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  width: 100vw;
+  text-align: center;
+  padding: 30px 0;
 }

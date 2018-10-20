@@ -36,7 +36,7 @@
                 {{session('error')}}
             </v-snackbar>
             @endif
-            <v-toolbar class="white" dark color="primary">
+            <v-toolbar class="white" dark color="primary" v-if="$vuetify.breakpoint.mdAndUp">
                 <v-btn flat class="btn__fill-height" large href="{{url('/')}}">timatik</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn flat class="btn__fill-height" href="{{url('/pricing')}}">Pricing</v-btn>
@@ -47,10 +47,42 @@
                 <v-btn flat class="btn__fill-height" href="{{url('/app#/'.user('last_route'))}}">App</v-btn>
                 @endif
             </v-toolbar>
+            <v-toolbar v-else color="primary">
+                <v-btn flat icon color="white" @click="drawer = !drawer">
+                    <v-icon>menu</v-icon>
+                </v-btn>
+            </v-toolbar>
+            <v-navigation-drawer 
+                :clipped="$vuetify.breakpoint.lgAndUp"
+                v-model="drawer"
+                fixed
+                app>
+                <v-list>
+                    <v-list-tile href="{{url('/')}}">
+                        Timatik
+                    </v-list-tile>
+                    <v-divider></v-divider>
+                    <v-list-tile href="{{url('/pricing')}}">
+                        Pricing
+                    </v-list-tile>
+                    @if(!user())
+                    <v-list-tile href="{{url('/login')}}">
+                        Login
+                    </v-list-tile>
+                    <v-list-tile href="{{url('/register')}}">
+                        Register
+                    </v-list-tile>
+                    @else
+                    <v-list-tile href="{{url('/app#/'.user('last_route'))}}">
+                        App
+                    </v-list-tile>
+                    @endif
+                </v-list>
+            </v-navigation-drawer>
             <v-container fluid grid-list-md style="padding: 0;">
                 @yield('content')
             </v-container>
-            <div class="white--text primary padded">
+<!--             <div class="white--text primary padded">
                 <v-layout class="padded">
                     <v-flex md3>
                     </v-flex>
@@ -64,12 +96,12 @@
                         </ul>
                     </v-flex>
                 </v-layout>
-            </div>
+            </div> -->
             <v-footer class="white--text primary darken-2">
                 <v-layout>
                     <v-spacer></v-spacer>
                     <div class="mr-4">
-                        Developed by <a class="white--text" target="_blank" href="https://pencilrocketcreative.com">RocketWare</a> &copy; - {{date('Y')}}
+                        &copy; - {{date('Y')}} Timatik 
                     </div>
                 </v-layout>
             </v-footer>
