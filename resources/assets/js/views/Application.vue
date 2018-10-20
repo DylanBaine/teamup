@@ -77,6 +77,9 @@
 			<v-container fluid fill-height>
 				<v-layout>
 						<router-view ref="router"></router-view>
+						<div class="fixed bottom left" style="opacity: .5; z-index: 99999;">
+							<h1>Timatik - Beta</h1>
+						</div>
 				</v-layout>
 			</v-container>
 		</v-content>

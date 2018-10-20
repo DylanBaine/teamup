@@ -74999,6 +74999,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -75311,7 +75314,24 @@ var render = function() {
           _c(
             "v-container",
             { attrs: { fluid: "", "fill-height": "" } },
-            [_c("v-layout", [_c("router-view", { ref: "router" })], 1)],
+            [
+              _c(
+                "v-layout",
+                [
+                  _c("router-view", { ref: "router" }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "fixed bottom left",
+                      staticStyle: { opacity: ".5", "z-index": "99999" }
+                    },
+                    [_c("h1", [_vm._v("Timatik - Beta")])]
+                  )
+                ],
+                1
+              )
+            ],
             1
           )
         ],

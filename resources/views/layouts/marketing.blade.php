@@ -37,7 +37,7 @@
             </v-snackbar>
             @endif
             <v-toolbar class="white" dark color="primary" v-if="$vuetify.breakpoint.mdAndUp">
-                <v-btn flat class="btn__fill-height" large href="{{url('/')}}">timatik</v-btn>
+                <v-btn flat class="btn__fill-height" large href="{{url('/')}}">timatik (beta)</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn flat class="btn__fill-height" href="{{url('/pricing')}}">Pricing</v-btn>
                 @if(!user())
@@ -47,17 +47,18 @@
                 <v-btn flat class="btn__fill-height" href="{{url('/app#/'.user('last_route'))}}">App</v-btn>
                 @endif
             </v-toolbar>
-            <v-toolbar v-else color="primary">
+            <v-toolbar v-else color="primary" fixed>
                 <v-btn flat icon color="white" @click="drawer = !drawer">
                     <v-icon>menu</v-icon>
                 </v-btn>
+                <v-btn flat class="btn__fill-height white--text" large href="{{url('/')}}">timatik</v-btn>
             </v-toolbar>
-            <v-navigation-drawer 
-                :clipped="$vuetify.breakpoint.lgAndUp"
+            <v-navigation-drawer
                 v-model="drawer"
+                class="primary"
                 fixed
                 app>
-                <v-list>
+                <v-list dark>
                     <v-list-tile href="{{url('/')}}">
                         Timatik
                     </v-list-tile>

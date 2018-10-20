@@ -142,26 +142,37 @@ img {
   color: white !important;
 }
 .marketing-mobile-header {
-  height: 70vh;
+  height: 80vh;
   background: url("/images/task_board.png");
-  background-size: cover;
-  background-position: center;
+  background-repeat: no-repeat;
+  background-size: fill;
+  background-position: center -66px;
 }
-.marketing-mobile-header > div {
-  background: rgba(0, 0, 0, 0.5);
+.image_inner_div {
+  background: rgba(48, 48, 48, 0.93);
   color: white;
-  width: 100vw;
+  width: auto;
+  min-width: 50vw;
   text-align: center;
-  padding: 30px 0;
+  padding: 30px 50px;
+}
+@media only screen and (max-width: 700px) {
+  .image_inner_div {
+    width: 100vw;
+  }
 }
 #mobile_scalable_adjustable .layout {
   background: url("/images/task_view.png");
+  background-position: center -120px;
   height: 50vh;
 }
-#mobile_scalable_adjustable .layout > div {
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  width: 100vw;
-  text-align: center;
-  padding: 30px 0;
+#under_header {
+  position: relative;
+  top: -15vh;
+}
+@media only screen and (max-width: 1500px) {
+  #under_header {
+    position: relative;
+    top: -30vh;
+  }
 }

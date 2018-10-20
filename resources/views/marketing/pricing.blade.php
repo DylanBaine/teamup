@@ -6,15 +6,14 @@
             <v-layout row wrap justify-center>
                 <v-flex md4>
                     <v-card>
-                        <v-card-title class="accent white--text">
+                        <v-card-title>
                             <h1>Basic Account</h1>
                         </v-card-title>
+                        <v-divider></v-divider>
                         <v-card-text>
-                            FREE for unlimited users of your company for 14 days.
+                            FREE while in beta.
                             <br>
                             No credit card needed at signup.
-                            <br>
-                            $5 per user after free trial ends.
                         </v-card-text>
                         <v-card-actions>
                             <v-btn block href="{{url('/register')}}" class="accent">
