@@ -1,2 +1,3 @@
 <?php
-exec('php artisan schedule:run');
+echo "Running schedule\n";
+echo exec('php artisan schedule:run');
