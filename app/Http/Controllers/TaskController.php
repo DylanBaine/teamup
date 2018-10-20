@@ -55,7 +55,7 @@ class TaskController extends Controller
             'users' => company()->users,
             'groups' => company()->groups,
             'types' => company()->types()->where('model', 'Task')->get(),
-            'task' => Task::find($id)->load('user', 'group', 'schedule', 'type'),
+            'task' => Task::find($id)->load('user', 'group', 'schedule', 'type', 'columns'),
             'parent' => Task::find($id)->parent,
             'clients' => company()->clients,
             'parent_options' => $parentOptions

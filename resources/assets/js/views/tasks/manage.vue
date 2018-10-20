@@ -104,7 +104,7 @@
             <router-link to="/tasks">Tasks</router-link> <task-breadcrumb :icon-size="14" :item="task.parent" :original="task"></task-breadcrumb>
             <v-divider class="mt-3 mb-2"></v-divider>
           </header>
-          <v-tooltip :disabled="!shouldShowScrollTip()" top color="info" v-if="task.type.name == 'Sprint'" >
+          <v-tooltip :disabled="!shouldShowScrollTip()" top color="info" v-if="task.columns.length" >
             <div ref="columnScroller" slot="activator" class="padded" style="width: 100%; min-height: 500px; overflow: auto; overflow-y: hidden;" @scroll="scroll">
               <div ref="columnContainer" :style="rowsContainerStyle">
                 <v-layout row>

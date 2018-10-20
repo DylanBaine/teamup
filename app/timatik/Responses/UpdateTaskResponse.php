@@ -37,8 +37,10 @@ class UpdateTaskResponse implements Responsable
         if($request->user_id){
             $this->subscribeUserToTask($t);
         }
-        if($type == 'Sprint'){
+        if($request->wants_columns){
             $t->createDefaultSettings();
+        }else{
+            $t->settings()->delete();
         }
         if($type == 'Reoccurring'){
             $this->scheduleReoccurringActivity(json_decode($request->schedule), $t->id);

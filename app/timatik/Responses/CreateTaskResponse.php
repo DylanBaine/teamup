@@ -27,7 +27,7 @@ class CreateTaskResponse implements Responsable{
         $t->end_date = $request->end_date ? carbon_format($request->end_date) : null;
         $t->save();
         $t->linkReport();
-        if ($t->type->name === 'Sprint') {
+        if ($request->wants_columns) {
             $t->createDefaultSettings();
         }
         if($t->type->name == 'Reoccurring'){

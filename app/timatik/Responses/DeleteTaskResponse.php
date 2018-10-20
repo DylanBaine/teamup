@@ -16,22 +16,8 @@ class DeleteTaskResponse implements Responsable{
                 $child->save();
             }
         }
-        $this->deleteAttachments($task);
+        $task->deleteAttachments();
         $task->delete();
-    }
-
-    private function deleteAttachments($task){
-        foreach($task->subscribers as $sub){
-            $sub->delete();
-        }
-
-        foreach(ProgressChange::where('task_id', $task->id) as $progChange){
-            $progChange->delete();
-        }
-        $schedule = ScheduledActivity::where('schedulable_type', 'Task')->where('schedulable_id', $task->id)->first();
-        if($schedule){
-            $schedule->delete();
-        }
     }
 
 }

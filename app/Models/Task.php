@@ -77,7 +77,6 @@ class Task extends Model
     }
     public function createDefaultSettings()
     {
-
         if(!$this->columns->count()){
             Setting::create([
                 'company_id' => company('id'),
@@ -104,6 +103,18 @@ class Task extends Model
                 'settable_type' => 'App\Models\Task',
             ]);
         }
+    }
+
+    public function deleteAttachments(){
+        
+        $this->subscribers()->delete();
+
+        ProgressChange::where('task_id', $this->id)->delete();
+
+        ScheduledActivity::where('schedulable_type', 'Task')->where('schedulable_id', $this->id)->delete();
+
+        $this->settings()->delete();
+
     }
 
     public function files(){

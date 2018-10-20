@@ -51,9 +51,9 @@
                             item-avatar="icon"
                             item-text="name"
                             persistent-hint
-                            hint="A sprint task type will generate progress columns."
                             item-value="id">
                           </v-select>
+                          <v-checkbox v-model="task.wants_columns" label="Generate Columns"></v-checkbox>
                         </v-flex>
                         <v-flex md4 v-if="$root.$user.can('assign', 'tasks') || $root.$user.can('manage', 'tasks')">
                             <v-autocomplete
@@ -297,7 +297,8 @@ export default {
         name: null,
         description: null,
         group: null,
-        user: null
+        user: null,
+        wants_columns: 0
       },
       clients: [],
       editing: this.$route.meta.editing,
@@ -445,6 +446,7 @@ export default {
           if (p.task.type.name == "Reoccurring") {
             this.reoccur = p.task.schedule;
           }
+          if (p.task.columns.length) this.task.wants_columns = 1;
           this.parent_options = p.parent_options;
           this.date = [p.task.start_date, p.task.end_date];
         }
@@ -483,6 +485,7 @@ export default {
         start_date: t.start_date,
         end_date: t.end_date,
         client_id: t.client_id,
+        wants_columns: t.wants_columns,
         schedule: JSON.stringify(this.reoccur)
       };
       this.$task.update(this.task.id, data).then(() => {
