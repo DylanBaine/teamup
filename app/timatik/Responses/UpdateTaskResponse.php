@@ -54,11 +54,19 @@ class UpdateTaskResponse implements Responsable
         }
     }
 
-    protected function notifyOfEdit($task){
-        $users = User::whereHas('subscriptions', function ($sub) use ($task) {
+    protected function getUsersToNotify($task, $parent = null){
+        if($parent){
+            return User::whereHas('subscriptions', function ($sub) use ($parent, $task) {
+                $sub->where('subscribable_id', $parent->id)->where('subscribable_type', 'App\Models\Task')->orWhere('subscribable_id', $task->id);
+            })->where('id', '!=', user('id'))->get();
+        }
+        return User::whereHas('subscriptions', function ($sub) use ($task) {
             $sub->where('subscribable_id', $task->id)->orWhere('subscribable_id', $task->parent_id)->where('subscribable_type', 'App\Models\Task');
-        })->where('id', '!=',user('id'))->get();
-        Notification::send($users, new TaskUpdated($task, null, 'dataUpdated', user()));
+        })->where('id', '!=', user('id'))->get();
+    }
+
+    protected function notifyOfEdit($task){
+        Notification::send($this->getUsersToNotify($task), new TaskUpdated($task, null, 'dataUpdated', user()));
     }
 
     protected function updateProgress($task)
@@ -73,11 +81,8 @@ class UpdateTaskResponse implements Responsable
         $percent = ($finishedTaskCount / $childrentCount) * 100;
         $parent->percent_finished = $percent;
         $parent->save();
-        $users = User::whereHas('subscriptions', function ($sub) use ($parent, $task) {
-            $sub->where('subscribable_id', $parent->id)->where('subscribable_type', 'App\Models\Task')->orWhere('subscribable_id', $task->id);
-        })->get();
-        $this->logProgressChange($task);
-        Notification::send($users, new TaskUpdated($task, $parent, 'progressUpdated', user()));
+        $this->logProgressChange($task, $parent);
+        Notification::send($this->getUsersToNotify($task, $parent), new TaskUpdated($task, $parent, 'progressUpdated', user()));
     }
 
     protected function logProgressChange($task){
