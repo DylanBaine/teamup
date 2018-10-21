@@ -29,3 +29,5 @@ Route::post('set-password', function(){
         return redirect('/login')->with('success', 'Password reset link sent! Check your email.');
     }
 })->middleware('guest');
+
+Route::get('/users/calendar/{user}/{month?}', 'UserController@calendar');

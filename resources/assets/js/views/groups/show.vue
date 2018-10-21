@@ -69,6 +69,9 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <v-container>
+      <task-calendar v-if="group.id" owner-type="group" :owner="group.id"></task-calendar>
+    </v-container>
   </v-container>
 </v-container>
 </template>

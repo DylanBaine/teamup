@@ -1,8 +1,9 @@
 <?php
 namespace App\Reports;
-use App\Repositories\TeamReportRepository;
-use App\Models\Task;
-class TeamReport extends Report {
+use App\Repositories\GroupReportRepository;
+use App\Models\Group;
+
+class GroupReport extends Report {
     public static $name = "Report Name";
     public function __construct($arg){
         $this->arg = $arg;
@@ -10,13 +11,13 @@ class TeamReport extends Report {
          * @param Model $model the model that the repository is responsable for
          * @param Array $arg array of arguments used in the request
          */
-        $this->repository = new TeamReportRepository(new Task, $arg);
+        $this->repository = new GroupReportRepository(new Group, $arg);
     }
 
     public function format(){
         return [
-            'all_children' => $this->repository->getSpecifiedModel()->recursivGetChildren(),
-            'calendar' => (new TaskCalendar)->show(date('F'), $this->repository->getSpecifiedModel()->recursivGetChildren())
+            'tasks' => $this->repository->getSpecifiedModel()->recursivGetTasks(),
+            'callendar' => (new TaskCalendar)->show(date('F'), $this->repository->getSpecifiedModel()->recursivGetTasks())
         ];
     }
 

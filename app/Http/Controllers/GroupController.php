@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\User;
+use App\Reports\TaskCalendar;
 //use App\timatik\AssertIsSet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,12 @@ class GroupController extends Controller
 
     public function __construct()
     {
+    }
+
+    public function calendar(Group $group, $month){
+        return response()->json(
+            (new TaskCalendar)->show(date('F'), $group->recursivGetTasks())
+        );
     }
 
     public function addUser(Request $request, $user)

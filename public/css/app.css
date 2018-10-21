@@ -13226,6 +13226,17 @@ input.ghost:focus {
   }
 }
 
+.scroll-300px {
+  max-height: 300px;
+  overflow: auto;
+}
+
+@media only screen and (max-width: 600px) {
+  .scroll-300px {
+    max-height: 300px;
+  }
+}
+
 .capitalize {
   text-transform: capitalize;
 }

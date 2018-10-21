@@ -20,12 +20,15 @@
                     <v-tab href="#permissions">
                         Permissions
                     </v-tab>
+                    <v-tab href="#calendar">
+                        Calendar
+                    </v-tab>
                 </v-tabs>
                 <v-btn flat color="white" icon to="/users">
                     <v-icon>close</v-icon>
                 </v-btn>
             </v-toolbar>
-            <v-tabs-items v-model="tab" style="height: 70vh; overflow: auto">
+            <v-tabs-items v-model="tab" style="height: 100%; overflow-x: hidden">
                 <v-tab-item v-if="user.tasks.length" id="tasks">
                     <v-card flat v-if="user.tasks.length">
                       <v-card-title>
@@ -181,6 +184,9 @@
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
+                <v-tab-item id="calendar">
+                    <task-calendar v-if="user.id" owner-type="user" :owner="user.id"></task-calendar>
+                </v-tab-item>
             </v-tabs-items>
             <v-slide-x-reverse-transition>
                 <div style="position: absolute; top: 20px; width: 50vw; z-index: 999; left: 25vw;" class="elevation-6" v-if="addingPermissions">
@@ -240,6 +246,7 @@ import Permission from "../../app/models/Permission";
 export default {
   data() {
     return {
+      calendar: null,
       tab: "tasks",
       addingPermissions: false,
       user: {
@@ -305,6 +312,7 @@ export default {
         this.modes = p.modes;
         this.types = p.types;
         this.showing = true;
+        this.calendar = p.calendar;
       });
     },
     assignUser() {

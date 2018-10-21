@@ -207,6 +207,15 @@
                                 </ul>
                               </li>
                             </ul>
+                            <v-dialog>
+                              <v-btn slot="activator" flat color="primary">See full calendar</v-btn>
+                              <v-card>
+                                <v-card-title>
+                                  Click away to exit.
+                                </v-card-title>
+                              <task-calendar v-if="task.user_id" owner-type="user" :owner="task.user_id"></task-calendar>
+                              </v-card>
+                            </v-dialog>
                           </v-flex>
                           <v-flex md4 style="display: flex; justify-content: center;">
                             <div>
@@ -449,6 +458,7 @@ export default {
           if (p.task.columns.length) this.task.wants_columns = 1;
           this.parent_options = p.parent_options;
           this.date = [p.task.start_date, p.task.end_date];
+          this.getUsersAvailability();
         }
         /* if (this.$route.params.task) {
             this.parent = p.parent;

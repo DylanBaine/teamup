@@ -48,6 +48,14 @@ class Task extends Model
         }
     }
 
+    public function recursivGetChildren($task = null){
+        $children = $task == null ? $this->children()->with('children')->get() : $task->children()->with('children')->get();
+            foreach($children as $child){
+                $children->push($this->recursivGetChildren($child));
+            }
+            return ($children->flatten(1));
+    }
+
     public function runReport(){
         if($this->report){
             $file_name = "App\Reports\\".$this->report;

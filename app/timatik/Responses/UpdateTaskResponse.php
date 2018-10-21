@@ -85,6 +85,7 @@ class UpdateTaskResponse implements Responsable
         Notification::send($this->getUsersToNotify($task, $parent), new TaskUpdated($task, $parent, 'progressUpdated', user()));
     }
 
+    // i wish i would have just made this a task change so i could just log any edits to the task....
     protected function logProgressChange($task){
         $previous = $task->changes()->orderBy('created_at', 'desc')->first();
         if($previous){

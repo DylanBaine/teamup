@@ -38,7 +38,7 @@ export default {
 #loader {
   position: fixed;
   width: 200px;
-  bottom: 0;
+  bottom: 20px;
   left: 0;
   text-align: center;
 }

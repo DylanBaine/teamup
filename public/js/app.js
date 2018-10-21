@@ -13973,6 +13973,8 @@ Vue.component("generic-chart", __webpack_require__(224));
 Vue.component("basic-task-report", __webpack_require__(227));
 Vue.component("project-report", __webpack_require__(230));
 
+Vue.component("task-calendar", __webpack_require__(241));
+
 Vue.component("task-preview", __webpack_require__(26));
 Vue.component("task-settings", __webpack_require__(27));
 Vue.component("add-post-type", __webpack_require__(28));
@@ -37768,12 +37770,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      tab: "calendar",
       user: {
         tasks: []
       },
@@ -39009,120 +39025,184 @@ var render = function() {
           ),
           _vm._v(" "),
           _c(
-            "v-container",
-            { attrs: { fluid: "", "grid-list-lg": "" } },
+            "v-tabs",
+            {
+              attrs: { color: "transparent" },
+              model: {
+                value: _vm.tab,
+                callback: function($$v) {
+                  _vm.tab = $$v
+                },
+                expression: "tab"
+              }
+            },
             [
-              _c("header", [
-                _c("h2", { staticClass: "title" }, [
-                  _vm._v(
-                    "\n            " +
-                      _vm._s(_vm.user.tasks ? "Your" : "No") +
-                      " Tasks\n          "
-                  )
-                ])
+              _c("v-tab", { attrs: { href: "#calendar" } }, [
+                _vm._v("Calendar")
+              ]),
+              _vm._v(" "),
+              _c("v-tab", { attrs: { href: "#board" } }, [
+                _vm._v("Task Board")
               ]),
               _vm._v(" "),
               _c(
-                "v-layout",
-                { attrs: { row: "", wrap: "" } },
-                _vm._l(_vm.user.columns, function(column) {
-                  return _c(
-                    "div",
-                    {
-                      key: column.position,
-                      staticClass: "task-row flex md3 mt-2"
-                    },
+                "v-tabs-items",
+                [
+                  _c(
+                    "v-tab-item",
+                    { attrs: { id: "calendar" } },
                     [
                       _c(
-                        "v-card",
+                        "v-container",
                         [
-                          _c("v-card-title", [
-                            _c("h2", [_vm._v(_vm._s(column.value))])
-                          ])
+                          _vm.user.id
+                            ? _c("task-calendar", {
+                                attrs: {
+                                  "owner-type": "user",
+                                  owner: _vm.user.id
+                                }
+                              })
+                            : _vm._e()
                         ],
                         1
-                      ),
-                      _vm._v(" "),
-                      _vm._l(column.children, function(child) {
-                        return _c(
-                          "v-card",
-                          {
-                            key: child.key,
-                            staticClass:
-                              "primary darken-1 mt-3 drag-me p-5 white--text",
-                            attrs: {
-                              to: "/tasks/" + child.id + "/manage",
-                              id: "" + child.id
-                            }
-                          },
-                          [
-                            _c("v-card-title", [
-                              _c("div", [
-                                _c(
-                                  "h2",
-                                  { staticClass: "title" },
-                                  [
-                                    _c(
-                                      "v-icon",
-                                      { attrs: { color: "white" } },
-                                      [_vm._v(_vm._s(child.icon))]
-                                    ),
-                                    _vm._v(" " + _vm._s(child.name))
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c("h3", { staticClass: "subheader" }, [
-                                  _vm._v(_vm._s(child.type.name))
-                                ])
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            child.type.name == "Sprint"
-                              ? _c("v-card-text", [
-                                  _vm._v(
-                                    "\n                " +
-                                      _vm._s(child.calc_percent_finished) +
-                                      "% finished.\n              "
-                                  ),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "grey darken-1",
-                                      staticStyle: {
-                                        padding: "0",
-                                        width: "100%",
-                                        height: "20px",
-                                        "border-radius": "50px"
-                                      }
-                                    },
-                                    [
-                                      _c("div", {
-                                        staticClass: "grey darken-2",
-                                        style:
-                                          "width:" +
-                                          child.calc_percent_finished +
-                                          "%; height: 100%; border-radius: 50px;"
-                                      })
-                                    ]
-                                  )
-                                ])
-                              : _c("v-card-text", {
-                                  staticClass: "task-description",
-                                  domProps: {
-                                    innerHTML: _vm._s(
-                                      child.description.shorten(200)
-                                    )
-                                  }
-                                })
-                          ],
-                          1
-                        )
-                      })
+                      )
                     ],
-                    2
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-tab-item",
+                    { attrs: { id: "board" } },
+                    [
+                      _c(
+                        "v-container",
+                        { attrs: { fluid: "", "grid-list-lg": "" } },
+                        [
+                          _c("header", [
+                            _c("h2", { staticClass: "title" }, [
+                              _vm._v(
+                                "\n                " +
+                                  _vm._s(_vm.user.tasks ? "Your" : "No") +
+                                  " Tasks\n              "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "", wrap: "" } },
+                            _vm._l(_vm.user.columns, function(column) {
+                              return _c(
+                                "div",
+                                {
+                                  key: column.position,
+                                  staticClass: "task-row flex md3 mt-2"
+                                },
+                                [
+                                  _c(
+                                    "v-card",
+                                    [
+                                      _c("v-card-title", [
+                                        _c("h2", [_vm._v(_vm._s(column.value))])
+                                      ])
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._l(column.children, function(child) {
+                                    return _c(
+                                      "v-card",
+                                      {
+                                        key: child.key,
+                                        staticClass:
+                                          "primary darken-1 mt-3 drag-me p-5 white--text",
+                                        attrs: {
+                                          to: "/tasks/" + child.id + "/manage",
+                                          id: "" + child.id
+                                        }
+                                      },
+                                      [
+                                        _c("v-card-title", [
+                                          _c("div", [
+                                            _c(
+                                              "h2",
+                                              { staticClass: "title" },
+                                              [
+                                                _c(
+                                                  "v-icon",
+                                                  { attrs: { color: "white" } },
+                                                  [_vm._v(_vm._s(child.icon))]
+                                                ),
+                                                _vm._v(" " + _vm._s(child.name))
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "h3",
+                                              { staticClass: "subheader" },
+                                              [_vm._v(_vm._s(child.type.name))]
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        child.type.name == "Sprint"
+                                          ? _c("v-card-text", [
+                                              _vm._v(
+                                                "\n                    " +
+                                                  _vm._s(
+                                                    child.calc_percent_finished
+                                                  ) +
+                                                  "% finished.\n                  "
+                                              ),
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass: "grey darken-1",
+                                                  staticStyle: {
+                                                    padding: "0",
+                                                    width: "100%",
+                                                    height: "20px",
+                                                    "border-radius": "50px"
+                                                  }
+                                                },
+                                                [
+                                                  _c("div", {
+                                                    staticClass:
+                                                      "grey darken-2",
+                                                    style:
+                                                      "width:" +
+                                                      child.calc_percent_finished +
+                                                      "%; height: 100%; border-radius: 50px;"
+                                                  })
+                                                ]
+                                              )
+                                            ])
+                                          : _c("v-card-text", {
+                                              staticClass: "task-description",
+                                              domProps: {
+                                                innerHTML: _vm._s(
+                                                  child.description.shorten(200)
+                                                )
+                                              }
+                                            })
+                                      ],
+                                      1
+                                    )
+                                  })
+                                ],
+                                2
+                              )
+                            })
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
                   )
-                })
+                ],
+                1
               )
             ],
             1
@@ -39730,6 +39810,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -40014,6 +40097,18 @@ var render = function() {
                 1
               )
             })
+          ),
+          _vm._v(" "),
+          _c(
+            "v-container",
+            [
+              _vm.group.id
+                ? _c("task-calendar", {
+                    attrs: { "owner-type": "group", owner: _vm.group.id }
+                  })
+                : _vm._e()
+            ],
+            1
           )
         ],
         1
@@ -40926,6 +41021,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -41111,6 +41215,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           if (p.task.columns.length) _this6.task.wants_columns = 1;
           _this6.parent_options = p.parent_options;
           _this6.date = [p.task.start_date, p.task.end_date];
+          _this6.getUsersAvailability();
         }
         /* if (this.$route.params.task) {
             this.parent = p.parent;
@@ -42036,8 +42141,59 @@ var render = function() {
                                                         )
                                                       }
                                                     )
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-dialog",
+                                                    [
+                                                      _c(
+                                                        "v-btn",
+                                                        {
+                                                          attrs: {
+                                                            slot: "activator",
+                                                            flat: "",
+                                                            color: "primary"
+                                                          },
+                                                          slot: "activator"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "See full calendar"
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-card",
+                                                        [
+                                                          _c("v-card-title", [
+                                                            _vm._v(
+                                                              "\n                              Click away to exit.\n                            "
+                                                            )
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _vm.task.user_id
+                                                            ? _c(
+                                                                "task-calendar",
+                                                                {
+                                                                  attrs: {
+                                                                    "owner-type":
+                                                                      "user",
+                                                                    owner:
+                                                                      _vm.task
+                                                                        .user_id
+                                                                  }
+                                                                }
+                                                              )
+                                                            : _vm._e()
+                                                        ],
+                                                        1
+                                                      )
+                                                    ],
+                                                    1
                                                   )
-                                                ]
+                                                ],
+                                                1
                                               )
                                             : _vm._e(),
                                           _vm._v(" "),
@@ -48150,6 +48306,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -48158,6 +48320,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      calendar: null,
       tab: "tasks",
       addingPermissions: false,
       user: {
@@ -48227,6 +48390,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.modes = p.modes;
         _this.types = p.types;
         _this.showing = true;
+        _this.calendar = p.calendar;
       });
     },
     assignUser: function assignUser() {
@@ -48333,6 +48497,10 @@ var render = function() {
                     _vm._v(
                       "\n                    Permissions\n                "
                     )
+                  ]),
+                  _vm._v(" "),
+                  _c("v-tab", { attrs: { href: "#calendar" } }, [
+                    _vm._v("\n                    Calendar\n                ")
                   ])
                 ],
                 1
@@ -48351,7 +48519,7 @@ var render = function() {
           _c(
             "v-tabs-items",
             {
-              staticStyle: { height: "70vh", overflow: "auto" },
+              staticStyle: { height: "100%", "overflow-x": "hidden" },
               model: {
                 value: _vm.tab,
                 callback: function($$v) {
@@ -49144,6 +49312,19 @@ var render = function() {
                     ],
                     1
                   )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-tab-item",
+                { attrs: { id: "calendar" } },
+                [
+                  _vm.user.id
+                    ? _c("task-calendar", {
+                        attrs: { "owner-type": "user", owner: _vm.user.id }
+                      })
+                    : _vm._e()
                 ],
                 1
               )
@@ -75834,7 +76015,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n#container {\r\n  z-index: 999;\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100vw;\r\n  height: 100vh;\n}\n#loader {\r\n  position: fixed;\r\n  width: 200px;\r\n  bottom: 0;\r\n  left: 0;\r\n  text-align: center;\n}\r\n", ""]);
+exports.push([module.i, "\n#container {\r\n  z-index: 999;\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100vw;\r\n  height: 100vh;\n}\n#loader {\r\n  position: fixed;\r\n  width: 200px;\r\n  bottom: 20px;\r\n  left: 0;\r\n  text-align: center;\n}\r\n", ""]);
 
 // exports
 
@@ -94400,6 +94581,463 @@ module.exports = {"categories":[{"name":"action","key":"action","icons":[{"id":"
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 240 */,
+/* 241 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(244)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(242)
+/* template */
+var __vue_template__ = __webpack_require__(243)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Calendar.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5700b516", Component.options)
+  } else {
+    hotAPI.reload("data-v-5700b516", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 242 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      loading: false,
+      modal: false,
+      month: new Date().getMonth() + 1,
+      calendar: null,
+      showing: {
+        date: null
+      }
+    };
+  },
+
+  watch: {
+    month: function month() {
+      this.getMonth();
+    }
+  },
+  props: ["owner", "ownerType"],
+  mounted: function mounted() {
+    console.log(new Date().getMonth());
+    this.getMonth();
+  },
+
+  methods: {
+    getMonth: function getMonth() {
+      var _this = this;
+
+      var month = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+      if (month == null) {
+        this.$root.$refs.app.$refs.loader.run("Loading calendar");
+        this.loading = true;
+        axios.get(url + "/" + this.ownerType + "s/calendar/" + this.owner + "/" + this.month).then(function (res) {
+          _this.calendar = res.data;
+          _this.$root.$refs.app.$refs.loader.run();
+          _this.loading = false;
+        });
+      } else {
+        console.log(month);
+        if (month == "add") {
+          this.month++;
+        }
+        if (month == "sub") {
+          this.month--;
+        }
+      }
+    },
+    see: function see(date) {
+      this.modal = true;
+      this.showing = date;
+    }
+  }
+});
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.calendar
+    ? _c(
+        "v-card",
+        [
+          _c(
+            "v-card-title",
+            [
+              _c(
+                "v-btn",
+                {
+                  attrs: { flat: "", white: "", icon: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.getMonth("sub")
+                    }
+                  }
+                },
+                [_c("v-icon", [_vm._v("chevron_left")])],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c("h2", { staticClass: "title" }, [
+                _vm._v(
+                  "\n            " + _vm._s(_vm.calendar.month) + "\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { flat: "", white: "", icon: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.getMonth("add")
+                    }
+                  }
+                },
+                [_c("v-icon", [_vm._v("chevron_right")])],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-container",
+            { attrs: { "grid-list-xl": "" } },
+            [
+              _c(
+                "v-layout",
+                { attrs: { row: "", wrap: "" } },
+                _vm._l(_vm.calendar.rows, function(col, key) {
+                  return _c(
+                    "v-flex",
+                    { key: key, staticClass: "cal-column" },
+                    [
+                      _c("header", { staticClass: "week-day" }, [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(col.day) +
+                            "\n                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(col.dates, function(day, key) {
+                        return _c(
+                          "a",
+                          {
+                            key: key,
+                            on: {
+                              click: function($event) {
+                                _vm.see(day)
+                              }
+                            }
+                          },
+                          [
+                            day.month == _vm.calendar.month
+                              ? _c(
+                                  "div",
+                                  { staticStyle: { height: "100px" } },
+                                  [
+                                    _c(
+                                      "v-card",
+                                      {
+                                        class:
+                                          "mt-2 elevation-3 fch " +
+                                          (day.is_today ? "today" : "")
+                                      },
+                                      [
+                                        _c("v-card-text", [
+                                          _c("div", [
+                                            _vm._v(
+                                              "\n                                    " +
+                                                _vm._s(day.date) +
+                                                "\n                                "
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          day.tasks.length
+                                            ? _c("div", [
+                                                _vm._v(
+                                                  "\n                                    " +
+                                                    _vm._s(day.tasks.length) +
+                                                    " Tasks\n                                "
+                                                )
+                                              ])
+                                            : _vm._e()
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _c("div", {
+                                  staticClass: "mt-2",
+                                  staticStyle: { height: "100px" }
+                                })
+                          ]
+                        )
+                      })
+                    ],
+                    2
+                  )
+                })
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { width: "400" },
+              model: {
+                value: _vm.modal,
+                callback: function($$v) {
+                  _vm.modal = $$v
+                },
+                expression: "modal"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "primary white--text" }, [
+                    _c("h2", { staticClass: "title" }, [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm.showing.date_string) +
+                          "\n                "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    { staticClass: "scroll-300px" },
+                    [
+                      _c(
+                        "v-list",
+                        { attrs: { "two-line": "" } },
+                        _vm._l(_vm.showing.tasks, function(task) {
+                          return _c(
+                            "v-list-tile",
+                            {
+                              key: task.id,
+                              staticClass: "mb-2 elevation-3",
+                              attrs: { to: "/tasks/" + task.id + "/manage" }
+                            },
+                            [
+                              _c(
+                                "v-list-tile-content",
+                                [
+                                  _c("v-list-tile-title", [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(task.name) +
+                                        " (" +
+                                        _vm._s(task.type.name) +
+                                        ")\n                            "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("v-list-tile-sub-title", [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(task.start_date_string) +
+                                        " -> " +
+                                        _vm._s(task.end_date_string) +
+                                        "\n                            "
+                                    )
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        })
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5700b516", module.exports)
+  }
+}
+
+/***/ }),
+/* 244 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(245);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(6)("9316197a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5700b516\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Calendar.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5700b516\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Calendar.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 245 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(4)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.today {\r\n  border: solid 1px white;\n}\r\n/* .week-day {\r\n  padding: 30px;\r\n  border-top: solid 1px white;\r\n  border-bottom: solid 1px white;\r\n}\r\n.cal-column:first-of-type {\r\n  border-left: solid 1px white;\r\n}\r\n.cal-column {\r\n  border-right: solid 1px white;\r\n} */\r\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

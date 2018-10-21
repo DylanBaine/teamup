@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Notifications\UserCreated;
 use Illuminate\Http\Request;
 use Notification;
+use App\Reports\TaskCalendar;
 
 class UserController extends Controller
 {
@@ -24,6 +25,12 @@ class UserController extends Controller
     {
         return company()->users()->with('tasks')->get();
 
+    }
+    public function calendar(User $user, $month = null){
+        $month = \Carbon\Carbon::createFromFormat('m',$month)->format("F")??date("F");
+        return response()->json(
+            (new TaskCalendar(User::find($user)))->show($month, collect($user->tasks))
+        );
     }
     /**
      * Display the specified resource.

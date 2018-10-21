@@ -8,6 +8,11 @@ function company($prop = null)
     return $company;
 }
 
+function carbon_day_of_month($day, $month = null){
+    $month = $month??date('F');
+    return Carbon\Carbon::parse($day.' day of '. " $month ".date('Y'));
+}
+
 function carbon_days_between($start, $end){
     $datesBetween = [];
     for($date = $start; $date->lte($end); $date->addDay()){
